@@ -1,4 +1,4 @@
-package db.test;
+package com.example.wps.db;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
@@ -16,7 +16,7 @@ import org.w3c.dom.Text;
 
 import java.io.File;
 
-import db.test.Account;
+import  com.example.wps.db.Account;
 
 public class ReadXMLFile {
 

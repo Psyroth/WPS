@@ -1,4 +1,4 @@
-package db.test;
+package com.example.wps.db;
 
 public class Account {
 	private String name;
