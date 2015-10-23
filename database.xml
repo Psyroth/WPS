@@ -1,29 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <WPS-database>
-	<accounts>
-		<account1>
-			<name>Facebook</name>
-			<id>facebookUser@hotmail.com</id>
-			<password>facebook</password>
-			<url>https://www.facebook.com</url>
-			<lastAccess>Sat, 12 Aug 2005 13:30:00 GMT</lastAccess>
-			<note>Less useful than Linkedin</note>
-		</account1>
-		<account2>
-			<name>Gmail</name>
-			<id>gmailUser@hotmail.com</id>
-			<password>gmail</password>
-			<url>https://www.gmail.com</url>
-			<lastAccess>Mon,20 Oct 2015 17:40:00 GMT</lastAccess>
-			<note>Avoid Spam please</note>
-		</account2>
-		<account3>
-			<name>Youtube</name>
-			<id>youtubeUser</id>
-			<password>youtube</password>
-			<url>https://www.youtube.com</url>
-			<lastAccess>Sun,19 Oct 2015 9:20:00 GMT</lastAccess>
-			<note>Best Channel Ever</note>
-		</account3>
-	</accounts>
+<accounts>
+<FacebookBisAccount>
+<name>FacebookBis</name>
+<id>facebookUser@gmail.com</id>
+<password>facebook</password>
+<url>https://www.facebook.com</url>
+<lastAccess>Mon, 13 Aug 2012 17:30:00 GMT</lastAccess>
+<note>Less useful than Linkedin</note>
+</FacebookBisAccount>
+<GmailAccount>
+<name>Gmail</name>
+<id>gmailUser@hotmail.com</id>
+<password>gmail</password>
+<url>https://www.gmail.com</url>
+<lastAccess>Mon,20 Oct 2015 17:40:00 GMT</lastAccess>
+<note>Avoid Spam please</note>
+</GmailAccount>
+<YoutubeAccount>
+<name>Youtube</name>
+<id>youtubeUser</id>
+<password>youtube</password>
+<url>https://www.youtube.com</url>
+<lastAccess>Sun,19 Oct 2015 9:20:00 GMT</lastAccess>
+<note>Best Channel Ever</note>
+</YoutubeAccount>
+</accounts>
 </WPS-database>
