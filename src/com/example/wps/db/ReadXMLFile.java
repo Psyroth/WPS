@@ -2,11 +2,6 @@ package com.example.wps.db;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -16,17 +11,29 @@ import org.w3c.dom.Text;
 
 import java.io.File;
 
-import  com.example.wps.db.Account;
+import com.example.wps.db.Account;
 
 public class ReadXMLFile {
 
 	public static void main(String argv[]) {
-		readXml();
-//		Account account = new Account("Webmail", "webmailUser@ulb.ac.be",
-//				"webmail", "https://webmail.ulb.ac.be/",
-//				"Thu, 20 Aug 2005 9:30:00 GMT", "E-mail delivery system");
-//      writeInXmlFile(account);
-//		readXml();
+		File fXmlFile = new File(
+				"database.xml");
+		readXml(fXmlFile);
+		// testWriteXML(fXmlFile);
+	}
+
+	public static Document getDocument(File fXmlFile) {
+		Document document = null;
+
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbf.newDocumentBuilder();
+			document = dBuilder.parse(fXmlFile);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return document;
 	}
 
 	public static Account xmlToObject(Element element) {
@@ -45,14 +52,10 @@ public class ReadXMLFile {
 		return new Account(name, id, password, url, lastAccess, note);
 	}
 
-	public static void writeInXmlFile(Account account) {
+	public static void writeInXmlFile(File fXmlFile, Account account) {
 
 		try {
-			File fXmlFile = new File(
-					"/Users/nicoomer/Desktop/VUB/MA2/NextGenerationUserInterface/Exercices/Session2/NGUI_tangible/db/test/databaseTest.xml");
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder = dbf.newDocumentBuilder();
-			Document document = dBuilder.parse(fXmlFile);
+			Document document = getDocument(fXmlFile);
 
 			Element element = document.createElement("account4");
 
@@ -86,42 +89,24 @@ public class ReadXMLFile {
 			NodeList myNodeList = document.getElementsByTagName("accounts");
 			myNodeList.item(0).appendChild(element);
 
-			TransformerFactory tf = TransformerFactory.newInstance();
-			Transformer t = tf.newTransformer();
-			t.setOutputProperty(OutputKeys.INDENT, "yes");
-
-			File ff = new File(
-					"/Users/nicoomer/Desktop/VUB/MA2/NextGenerationUserInterface/Exercices/Session2/NGUI_tangible/db/test/databaseTest.xml");
-			StreamResult srf = new StreamResult(ff);
-			Node nodef = document.getDocumentElement();
-			DOMSource srcf = new DOMSource(nodef);
-			t.transform(srcf, srf);
-			t.setOutputProperty(OutputKeys.INDENT, "yes");
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
-	public static void readXml() {
+	public static void readXml(File fXmlFile) {
 
 		try {
 
-			File fXmlFile = new File(
-					"/Users/nicoomer/Desktop/VUB/MA2/NextGenerationUserInterface/Exercices/Session2/NGUI_tangible/db/test/databaseTest.xml");
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
-					.newInstance();
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(fXmlFile);
+			Document document = getDocument(fXmlFile);
 
-			doc.getDocumentElement().normalize();
+			document.getDocumentElement().normalize();
 
-			Element racine = doc.getDocumentElement();
+			Element racine = document.getDocumentElement();
 
 			System.out.println("Root element : " + racine.getNodeName());
 
-			NodeList myNodeList = doc.getElementsByTagName("accounts");
+			NodeList myNodeList = document.getElementsByTagName("accounts");
 
 			System.out.println("----------------------------");
 
@@ -171,5 +156,12 @@ public class ReadXMLFile {
 				.println("Note : "
 						+ element.getElementsByTagName("note").item(0)
 								.getTextContent());
+	}
+
+	public static void testWriteXML(File fXmlFile) {
+		Account account = new Account("Webmail", "webmailUser@ulb.ac.be",
+				"webmail", "https://webmail.ulb.ac.be/",
+				"Thu, 20 Aug 2005 9:30:00 GMT", "E-mail delivery system");
+		writeInXmlFile(fXmlFile, account);
 	}
 }
