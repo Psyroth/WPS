@@ -7,15 +7,17 @@ public class Account {
 	private String url;
 	private String lastAccess;
 	private String note;
+	private String category;
 
 	public Account(String name, String id, String password, String url,
-			String lastAccess, String note) {
+			String lastAccess, String note, String category) {
 		this.name = name;
 		this.id = id;
 		this.password = password;
 		this.url = url;
 		this.lastAccess = lastAccess;
 		this.note = note;
+		this.category = category;
 	}
 
 	public String getName() {
@@ -64,5 +66,13 @@ public class Account {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 }
