@@ -253,7 +253,7 @@ public class ReadXMLFile {
 	public static void modifyAccount(Account oldAccount, Account newAccount) {
 
 		try {
-			if (accountExists(oldAccount)) { // TODO modify internaly
+			if (accountExists(oldAccount)) {
 				removeAccount(oldAccount);
 				addAccount(newAccount);
 
@@ -280,8 +280,10 @@ public class ReadXMLFile {
 				.getTextContent();
 		String note = element.getElementsByTagName("note").item(0)
 				.getTextContent();
+		String category = element.getElementsByTagName("category").item(0)
+				.getTextContent();
 
-		return new Account(name, id, password, url, lastAccess, note);
+		return new Account(name, id, password, url, lastAccess, note, category);
 	}
 
 	/* Saves the created DOM tree to .xml file */
@@ -328,6 +330,9 @@ public class ReadXMLFile {
 			System.out.println("Note : "
 					+ elementList.get(i).getElementsByTagName("note").item(0)
 							.getTextContent());
+			System.out.println("Category : "
+					+ elementList.get(i).getElementsByTagName("category").item(0)
+							.getTextContent());
 		}
 	}
 
@@ -336,20 +341,20 @@ public class ReadXMLFile {
 		Account testAccount1 = new Account("Facebook",
 				"facebookUser@hotmail.com", "facebook",
 				"https://www.facebook.com", "Sat, 12 Aug 2005 13:30:00 GMT",
-				"Less useful than Linkedin");
+				"Less useful than Linkedin", "Social Network");
 		Account testAccount1Bis = new Account("FacebookBis",
 				"facebookUser@gmail.com", "facebook",
 				"https://www.facebook.com", "Mon, 13 Aug 2012 17:30:00 GMT",
-				"Less useful than Linkedin");
+				"Less useful than Linkedin", "Social Network");
 		Account testAccount2 = new Account("Gmail", "gmailUser@hotmail.com",
 				"gmail", "https://www.gmail.com",
-				"Mon,20 Oct 2015 17:40:00 GMT", "Avoid Spam please");
+				"Mon,20 Oct 2015 17:40:00 GMT", "Avoid Spam please", "E-Mail");
 		Account testAccount3 = new Account("Youtube", "youtubeUser", "youtube",
 				"https://www.youtube.com", "Sun,19 Oct 2015 9:20:00 GMT",
-				"Best Channel Ever");
+				"Best Channel Ever", "Entertainment");
 		Account testAccount4 = new Account("Webmail", "webmailUser@ulb.ac.be",
 				"webmail", "https://webmail.ulb.ac.be/",
-				"Thu, 20 Aug 2005 9:30:00 GMT", "E-mail delivery system");
+				"Thu, 20 Aug 2005 9:30:00 GMT", "E-mail delivery system", "E-Mail");
 
 		testAddAccount(testAccount1);
 		testModifyAccount(testAccount1, testAccount1Bis);
@@ -398,5 +403,9 @@ public class ReadXMLFile {
 				+ " account in database.");
 
 		removeAccount(account);
+	}
+	
+	public static void testSearchAccountByCategory(String category) { // TODO
+
 	}
 }
