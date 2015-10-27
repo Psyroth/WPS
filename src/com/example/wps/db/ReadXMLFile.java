@@ -416,12 +416,12 @@ public class ReadXMLFile {
 		// testAccountExists(testAccount1Bis);
 		//
 		// testRemoveAccount(testAccount2);
-		// testAddAccount(testAccount2);
+		 testAddAccount(testAccount2);
 		// testAccountExists(testAccount2);
 		//
-		// testAddAccount(testAccount3);
+		 testAddAccount(testAccount3);
 		//
-		// testAddAccount(testAccount4);
+		 testAddAccount(testAccount4);
 		// testRemoveAccount(testAccount4);
 		// testAccountExists(testAccount4);
 		//
