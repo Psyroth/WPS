@@ -3,7 +3,6 @@ package com.example.wps;
 import com.example.wps.gui.ListOfAccounts;
 
 import android.support.v7.app.ActionBarActivity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
