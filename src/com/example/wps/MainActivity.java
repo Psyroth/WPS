@@ -1,10 +1,9 @@
 package com.example.wps;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
+import com.example.wps.db.Account;
 import com.example.wps.db.ReadXMLFile;
 import com.example.wps.gui.ListOfAccounts;
 
@@ -28,36 +27,42 @@ public class MainActivity extends ActionBarActivity {
 
 		// check if NFC is active
 		checkNFCActive();
+		testDatabase();
+	}
+
+	public void testDatabase() {
 
 		String FILENAME = "database";
-		String xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
-				+ "<WPS-database><accounts>"
-				+ "<FacebookAccount>"
-				+ "<name>Facebook</name>"
-				+ "<id>facebookUser@hotmail.com</id>"
-				+ "<password>facebook</password>"
-				+ "<url>https://www.facebook.com</url>"
-				+ "<lastAccess>2015-10-26 22:00:00</lastAccess>"
-				+ "<note>Less useful than Linkedin</note>"
-				+ "<category>Social Network</category>"
-				+ "</FacebookAccount>"
-				+ "</accounts></WPS-database>";
+		String xmlStringDatabase = ReadXMLFile.createEmptyDatabase();
+
+		Account testAccount1 = new Account("Facebook",
+				"facebookUser@hotmail.com", "facebook",
+				"https://www.facebook.com", "2014-09-12 22:00:00",
+				"Less useful than Linkedin", "Social Network");
+
+		Account testAccount1Bis = new Account("FacebookBis",
+				"facebookUser@gmail.com", "facebook",
+				"https://www.facebook.com", "2009-06-01 18:45:00",
+				"Less useful than Linkedin", "Social Network");
+		Account testAccount2 = new Account("Gmail", "gmailUser@hotmail.com",
+				"gmail", "https://www.gmail.com", "2012-02-24 13:42:00",
+				"Avoid Spam please", "E-Mail");
+
+		Account testAccount3 = new Account("Youtube", "youtubeUser", "youtube",
+				"https://www.youtube.com", "2010-12-13 12:30:00",
+				"Best Channel Ever", "Entertainment");
+
+		Account testAccount4 = new Account("Webmail", "webmailUser@ulb.ac.be",
+				"webmail", "https://webmail.ulb.ac.be/", "2005-08-20 09:30:00",
+				"E-mail delivery system", "E-Mail");
 
 		FileOutputStream fos = null;
 
 		try {
 			fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		try {
-			fos.write(xmlString.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
+			fos.write(xmlStringDatabase.getBytes());
 			fos.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -65,25 +70,24 @@ public class MainActivity extends ActionBarActivity {
 
 		try {
 			fis = openFileInput(FILENAME);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		try {
 			StringBuilder builder = new StringBuilder();
 			int ch;
 			while ((ch = fis.read()) != -1) {
 				builder.append((char) ch);
 			}
 
-			System.out.println("+++++++++++++++" + builder.toString()
-					+ "+++++++++++");
 			ReadXMLFile.initDatabase(builder.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
+
+			ReadXMLFile.addAccount(testAccount1);
+			ReadXMLFile.addAccount(testAccount1Bis);
+			ReadXMLFile.addAccount(testAccount2);
+			ReadXMLFile.addAccount(testAccount3);
+			ReadXMLFile.addAccount(testAccount4);
+			System.out.println("--------------");
+			ReadXMLFile.printDatabase();
+
 			fis.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -99,12 +103,11 @@ public class MainActivity extends ActionBarActivity {
 		if (adapter != null && adapter.isEnabled()) {
 			// adapter exists and is enabled.
 
-			// start scannnig for RFID tag
+			// start scanning for RFID tag
 
 			// if successful then we ask the user what he wants to look for
 			Intent i = new Intent(MainActivity.this, ListOfAccounts.class);
 			startActivity(i);
-
 		}
 		// if not active, take the user to wireless settings to enable NFC
 		else {
@@ -150,7 +153,6 @@ public class MainActivity extends ActionBarActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-
 		// if (id == R.id.action_settings) {
 		// return true;
 		// }

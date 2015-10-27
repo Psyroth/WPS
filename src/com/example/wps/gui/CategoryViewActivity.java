@@ -1,7 +1,5 @@
 package com.example.wps.gui;
 
-import com.example.wps.R;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;

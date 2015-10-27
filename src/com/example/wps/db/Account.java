@@ -1,7 +1,5 @@
 package com.example.wps.db;
 
-import org.w3c.dom.Element;
-
 public class Account {
 	private String name;
 	private String id;

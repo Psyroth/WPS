@@ -19,7 +19,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 
-import java.io.FileWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,30 +28,23 @@ import com.example.wps.db.Account;
 
 public class ReadXMLFile {
 
-	private static String xmlStr = null;
+	private static String xmlStringDatabase = null;
 	private static List<Element> elementList = null;
 	private static Document document = null;
 
+	/* Main Entry point */
 	public static void main(String[] args) {
-		Account testAccount1 = new Account("Facebook",
-				"facebookUser@hotmail.com", "facebook",
-				"https://www.facebook.com", "2014-09-12 22:00:00",
-				"Less useful than Linkedin", "Social Network");
-
-		System.out.println(testAccount1.toXmlString());
 	}
 
 	/*
 	 * Initializes the Document and the elementList given the whole .xml file as
 	 * a string in parameter.
 	 */
-	public static void initDatabase(String theXmlStr) {
+	public static void initDatabase(String xmlSD) {
 
-		xmlStr = theXmlStr;
-
+		xmlStringDatabase = xmlSD;
 		initDocument();
 		readXml();
-		printDatabase();
 	}
 
 	/*
@@ -76,9 +68,10 @@ public class ReadXMLFile {
 		try {
 
 			builder = factory.newDocumentBuilder();
-			document = builder.parse(new InputSource(new StringReader(xmlStr)));
+			document = builder.parse(new InputSource(new StringReader(
+					xmlStringDatabase)));
 			document.getDocumentElement().normalize();
-			
+
 		} catch (Exception e) {
 			System.out
 					.println("Failed to get create a document for the .xml file.");
@@ -195,8 +188,7 @@ public class ReadXMLFile {
 
 				NodeList nodeList = document.getElementsByTagName("accounts");
 				nodeList.item(0).appendChild(rootElement);
-
-				saveChanges(document);
+				readXml();
 			}
 
 		} catch (Exception e) {
@@ -256,8 +248,7 @@ public class ReadXMLFile {
 				Element parentElement = (Element) element.getParentNode();
 				element.getParentNode().getParentNode()
 						.removeChild(parentElement);
-
-				saveChanges(document);
+				readXml();
 			}
 		}
 
@@ -275,8 +266,6 @@ public class ReadXMLFile {
 			if (accountExists(oldAccount)) {
 				removeAccount(oldAccount);
 				addAccount(newAccount);
-
-				saveChanges(document);
 			}
 		} catch (Exception e) {
 			System.out.println("Failed to modify " + oldAccount.getName()
@@ -320,15 +309,18 @@ public class ReadXMLFile {
 		return allAccounts;
 	}
 
-	/* Saves the created DOM tree to .xml file. */
-	public static void saveChanges(Document document) {
+	/*
+	 * Saves the created DOM tree to .xml file. Only when using local .xml file
+	 */
+	@Deprecated
+	public static void saveChanges() {
 
 		try {
 
 			Transformer transformer = TransformerFactory.newInstance()
 					.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			StreamResult result = new StreamResult(new FileWriter(xmlStr));
+			StreamResult result = new StreamResult();
 			DOMSource source = new DOMSource(document);
 			transformer.transform(source, result);
 			document.normalize();
@@ -389,9 +381,10 @@ public class ReadXMLFile {
 
 	/* Launch the basic tests. */
 	public static void runTests() {
+
 		Account testAccount1 = new Account("Facebook",
 				"facebookUser@hotmail.com", "facebook",
-				"https://www.facebook.com", "2014-09-12 22:00:00",
+				"https://www.facebook.com", "2015-09-12 22:00:00",
 				"Less useful than Linkedin", "Social Network");
 		Account testAccount1Bis = new Account("FacebookBis",
 				"facebookUser@gmail.com", "facebook",
@@ -407,25 +400,26 @@ public class ReadXMLFile {
 				"webmail", "https://webmail.ulb.ac.be/", "2005-08-20 09:30:00",
 				"E-mail delivery system", "E-Mail");
 
-		// testAddAccount(testAccount1);
-		// testModifyAccount(testAccount1, testAccount1Bis);
-		//
-		// testAccountExists(testAccount1);
-		// testAccountExists(testAccount1Bis);
-		//
-		// testRemoveAccount(testAccount2);
-		// testAddAccount(testAccount2);
-		// testAccountExists(testAccount2);
-		//
-		// testAddAccount(testAccount3);
-		//
-		// testAddAccount(testAccount4);
-		// testRemoveAccount(testAccount4);
-		// testAccountExists(testAccount4);
-		//
-		// testGetAllAccounts();
-		// testSearchAccountByCategory("E-Mail");
-		// testLastAccess(testAccount1);
+		testAddAccount(testAccount1);
+		testModifyAccount(testAccount1, testAccount1Bis);
+
+		testAccountExists(testAccount1);
+		testAccountExists(testAccount1Bis);
+
+		testRemoveAccount(testAccount2);
+		testAddAccount(testAccount2);
+		testAccountExists(testAccount2);
+
+		testAddAccount(testAccount3);
+
+		testAddAccount(testAccount4);
+		testRemoveAccount(testAccount4);
+		testAccountExists(testAccount4);
+
+		testGetAllAccounts();
+		testSearchAccountByCategory("E-Mail");
+		testLastAccess(testAccount1);
+		testLastAccess(testAccount2);
 	}
 
 	public static void testAccountExists(Account account) {
