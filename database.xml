@@ -1,5 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <WPS-database>
 <accounts>
+<FacebookAccount>
+<name>Facebook</name>
+<id>facebookUser@hotmail.com</id>
+<password>facebook</password>
+<url>https://www.facebook.com</url>
+<lastAccess>2015-10-26 22:00:00</lastAccess>
+<note>Less useful than Linkedin</note>
+<category>Social Network</category>
+</FacebookAccount>
+<GmailAccount>
+<name>Gmail</name>
+<id>gmailUser@hotmail.com</id>
+<password>gmail</password>
+<url>https://www.gmail.com</url>
+<lastAccess>2012-02-24 13:42:00</lastAccess>
+<note>Avoid Spam please</note>
+<category>E-Mail</category>
+</GmailAccount>
+<YoutubeAccount>
+<name>Youtube</name>
+<id>youtubeUser</id>
+<password>youtube</password>
+<url>https://www.youtube.com</url>
+<lastAccess>2010-12-13 12:30:00</lastAccess>
+<note>Best Channel Ever</note>
+<category>Entertainment</category>
+</YoutubeAccount>
+<WebmailAccount>
+<name>Webmail</name>
+<id>webmailUser@ulb.ac.be</id>
+<password>webmail</password>
+<url>https://webmail.ulb.ac.be/</url>
+<lastAccess>2005-08-20 09:30:00</lastAccess>
+<note>E-mail delivery system</note>
+<category>E-Mail</category>
+</WebmailAccount>
 </accounts>
 </WPS-database>

@@ -10,27 +10,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.wps.db.Account;
+import com.example.wps.db.ReadXMLFile;
 
 public class ListViewActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Account testAccount1 = new Account("Facebook",
-				"facebookUser@hotmail.com", "facebook",
-				"https://www.facebook.com", "Sat, 12 Aug 2005 13:30:00 GMT",
-				"Less useful than Linkedin", "Social Network");
+
         
-        Account testAccount2 = new Account("Gmail", "gmailUser@hotmail.com",
-				"gmail", "https://www.gmail.com",
-				"Mon,20 Oct 2015 17:40:00 GMT", "Avoid Spam please", "E-Mail");
+//        ReadXMLFile.initDatabase();
+//        ArrayList<Account> listOfAcc = (ArrayList<Account>) ReadXMLFile.getAllAccounts();
         
-        ArrayList<Account> listOfAcc = new ArrayList<Account>();
-        listOfAcc.add(testAccount1);
-        listOfAcc.add(testAccount2);
+//        System.out.println("!!!!!!!!!!!!"+listOfAcc.size());
         
 		setContentView(R.layout.account_list_scrollview_layout);
         
-		addAccountsToLinearLayout(listOfAcc);
+//		addAccountsToLinearLayout(listOfAcc);
 
     }
     

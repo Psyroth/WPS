@@ -38,7 +38,7 @@ public class ReadXMLFile {
 		initDatabase();
 		printDatabase();
 		
-		// runTests();
+		 runTests();
 		// printDatabase();
 	}
 
@@ -392,21 +392,21 @@ public class ReadXMLFile {
 				"webmail", "https://webmail.ulb.ac.be/", "2005-08-20 09:30:00",
 				"E-mail delivery system", "E-Mail");
 
-		testCompareDates(testAccount1);
+//		testCompareDates(testAccount1);
 
-		// testAddAccount(testAccount1);
+		 testAddAccount(testAccount1);
 		// testModifyAccount(testAccount1, testAccount1Bis);
 		//
 		// testAccountExists(testAccount1);
 		// testAccountExists(testAccount1Bis);
 		//
 		// testRemoveAccount(testAccount2);
-		// testAddAccount(testAccount2);
+		 testAddAccount(testAccount2);
 		// testAccountExists(testAccount2);
 		//
-		// testAddAccount(testAccount3);
+		 testAddAccount(testAccount3);
 		//
-		// testAddAccount(testAccount4);
+		 testAddAccount(testAccount4);
 		// testRemoveAccount(testAccount4);
 		// testAccountExists(testAccount4);
 		//

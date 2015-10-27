@@ -1,5 +1,13 @@
 package com.example.wps;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+
 import com.example.wps.gui.ListOfAccounts;
 
 import android.support.v7.app.ActionBarActivity;
@@ -22,6 +30,60 @@ public class MainActivity extends ActionBarActivity {
 		
 		//check if NFC is active
 		checkNFCActive();
+		
+		//create database if not available
+		String FILENAME = "hello_file";
+		String string = "hello world!";
+
+		FileOutputStream fos = null;
+		try {
+			fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			fos.write(string.getBytes());
+			fos.write("loltest".getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			fos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		FileInputStream fis = null;
+		
+		try {
+			fis =  openFileInput(FILENAME);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			StringBuilder builder = new StringBuilder();
+			int ch;
+			while((ch = fis.read()) != -1){
+			    builder.append((char)ch);
+			}
+
+			System.out.println("+++++++++++++++"+builder.toString()+"+++++++++++");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			fis.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	public void checkNFCActive(){
