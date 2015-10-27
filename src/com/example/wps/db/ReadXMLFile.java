@@ -17,10 +17,10 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
+import org.xml.sax.InputSource;
 
-import java.io.File;
 import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,70 +29,64 @@ import com.example.wps.db.Account;
 
 public class ReadXMLFile {
 
-	private static File fXmlFile = new File("database.xml");
+	private static String xmlStr = null;
 	private static List<Element> elementList = null;
 	private static Document document = null;
 
-	/* Main entry point */
-	public static void main(String argv[]) {
+	public static void main(String[] args) {
+		Account testAccount1 = new Account("Facebook",
+				"facebookUser@hotmail.com", "facebook",
+				"https://www.facebook.com", "2014-09-12 22:00:00",
+				"Less useful than Linkedin", "Social Network");
 
-		initDatabase();
-		printDatabase();
-
-		runTests();
-		// printDatabase();
-	}
-
-	/* Initializes the Database, the Document and the elementList */
-	public static void initDatabase() {
-
-		createDatabase();
-		initDocument();
-		readXml();
+		System.out.println(testAccount1.toXmlString());
 	}
 
 	/*
-	 * Creates an empty .xml file for the database, does not do anything if it
-	 * already exists
+	 * Initializes the Document and the elementList given the whole .xml file as
+	 * a string in parameter.
 	 */
-	public static void createDatabase() {
+	public static void initDatabase(String theXmlStr) {
 
-		PrintWriter writer;
+		xmlStr = theXmlStr;
 
-		try {
-			if (!fXmlFile.exists() || fXmlFile.isDirectory()) {
-				writer = new PrintWriter("database.xml", "UTF-8");
-				writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
-				writer.println("<WPS-database>");
-				writer.println("<accounts>");
-				writer.println("</accounts>");
-				writer.println("</WPS-database>");
-				writer.close();
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Failed to create the .xml file.");
-		}
+		initDocument();
+		readXml();
+		printDatabase();
 	}
 
-	/* Initializes the DOM of the .xml file */
+	/*
+	 * Returns an empty .xml file as a String as the database.
+	 */
+	public static String createEmptyDatabase() {
+
+		String database = "<?xml version=\"1.0\""
+				+ "encoding=\"UTF-8\" standalone=\"no\"?>" + "<WPS-database>"
+				+ "<accounts>" + "</accounts>" + "</WPS-database>";
+
+		return database;
+	}
+
+	/* Initializes the DOM of the .xml file. */
 	public static void initDocument() {
 
-		try {
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder = dbf.newDocumentBuilder();
-			document = dBuilder.parse(fXmlFile);
-			document.getDocumentElement().normalize();
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder;
 
+		try {
+
+			builder = factory.newDocumentBuilder();
+			document = builder.parse(new InputSource(new StringReader(xmlStr)));
+			document.getDocumentElement().normalize();
+			
 		} catch (Exception e) {
-			e.printStackTrace();
 			System.out
 					.println("Failed to get create a document for the .xml file.");
+			e.printStackTrace();
 		}
 	}
 
-	/* Returns the node named "tagName" in the nodeList, null otherwise */
+	/* Returns the node named "tagName" in the nodeList, null otherwise. */
 	public static Node getNodeByName(String tagName, NodeList nodeList) {
 
 		for (int i = 0; i < nodeList.getLength(); i++) {
@@ -105,7 +99,7 @@ public class ReadXMLFile {
 		return null;
 	}
 
-	/* Returns the node with the "value" in the nodeList, null otherwise */
+	/* Returns the node with the "value" in the nodeList, null otherwise. */
 	public static Node getNodeByValue(String value, NodeList nodeList) {
 
 		for (int i = 0; i < nodeList.getLength(); i++) {
@@ -127,7 +121,7 @@ public class ReadXMLFile {
 		return null;
 	}
 
-	/* Adds a node named "tagName" with "value" as value and "parent" as parent */
+	/* Adds a node named "tagName" with "value" as value and "parent" as parent. */
 	public static void addNode(String tagName, String value, Node parent) {
 
 		// Create a new Node with the given tag name
@@ -141,12 +135,11 @@ public class ReadXMLFile {
 		parent.appendChild(node);
 	}
 
-	/* Updates the elementList with the nodes in the "nodeList" */
+	/* Updates the elementList with the nodes in the "nodeList". */
 	public static void addNodesValueToElementList(NodeList nodeList) {
 
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node node = nodeList.item(i);
-
 			NodeList childNodes = node.getChildNodes();
 
 			for (int j = 0; j < childNodes.getLength(); j++) {
@@ -159,14 +152,14 @@ public class ReadXMLFile {
 		}
 	}
 
-	/* Adds an element (representing the node "data") to the elementList */
+	/* Adds an element (representing the node "data") to the elementList. */
 	public static void addToElementList(Node data) {
 
 		Element element = (Element) data;
 		elementList.add(element);
 	}
 
-	/* Updates the elementList according to the .xml file */
+	/* Updates the elementList according to the .xml file. */
 	public static void readXml() {
 
 		elementList = new ArrayList<Element>();
@@ -182,10 +175,11 @@ public class ReadXMLFile {
 		}
 	}
 
-	/* Adds the "account" to the database */
+	/* Adds the "account" to the database. */
 	public static void addAccount(Account account) {
 
 		try {
+
 			if (!accountExists(account)) {
 
 				Element rootElement = document.createElement(account.getName()
@@ -212,7 +206,7 @@ public class ReadXMLFile {
 		}
 	}
 
-	/* Returns if the account exists or not */
+	/* Returns if the account exists or not. */
 	public static boolean accountExists(Account account) {
 
 		for (int i = 0; i < elementList.size(); i++) {
@@ -229,8 +223,9 @@ public class ReadXMLFile {
 		return false;
 	}
 
-	/* Returns all the accounts in a given category */
+	/* Returns all the accounts in a given category. */
 	public static List<Account> accountsInCategory(String category) {
+
 		List<Account> retrievedAccounts = new ArrayList<Account>();
 
 		for (int i = 0; i < elementList.size(); i++) {
@@ -247,7 +242,7 @@ public class ReadXMLFile {
 		return retrievedAccounts;
 	}
 
-	/* Removes the account from the database */
+	/* Removes the account from the database. */
 	public static void removeAccount(Account account) {
 
 		NodeList nodeList = document.getElementsByTagName("accounts").item(0)
@@ -273,7 +268,7 @@ public class ReadXMLFile {
 		}
 	}
 
-	/* Modify the oldAccount to the newAccount */
+	/* Modify the oldAccount to the newAccount. */
 	public static void modifyAccount(Account oldAccount, Account newAccount) {
 
 		try {
@@ -290,7 +285,7 @@ public class ReadXMLFile {
 		}
 	}
 
-	/* Returns an account made from the element */
+	/* Returns an account made from the element. */
 	public static Account elementToObject(Element element) {
 
 		String name = element.getElementsByTagName("name").item(0)
@@ -310,7 +305,9 @@ public class ReadXMLFile {
 		return new Account(name, id, password, url, lastAccess, note, category);
 	}
 
+	/* Returns the list of all the accounts in database. */
 	public static List<Account> getAllAccounts() {
+
 		List<Account> allAccounts = new ArrayList<Account>();
 
 		for (int i = 0; i < elementList.size(); i++) {
@@ -323,7 +320,7 @@ public class ReadXMLFile {
 		return allAccounts;
 	}
 
-	/* Saves the created DOM tree to .xml file */
+	/* Saves the created DOM tree to .xml file. */
 	public static void saveChanges(Document document) {
 
 		try {
@@ -331,7 +328,7 @@ public class ReadXMLFile {
 			Transformer transformer = TransformerFactory.newInstance()
 					.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			StreamResult result = new StreamResult(new FileWriter(fXmlFile));
+			StreamResult result = new StreamResult(new FileWriter(xmlStr));
 			DOMSource source = new DOMSource(document);
 			transformer.transform(source, result);
 			document.normalize();
@@ -345,9 +342,10 @@ public class ReadXMLFile {
 		}
 	}
 
+	/* Returns true if the account was accessed more than 4 months ago. */
 	public static boolean accessedLongAgo(Account account) {
-		Boolean accessedLongAgo = false;
 
+		Boolean accessedLongAgo = false;
 		DateTime today = new DateTime();
 		DateTimeFormatter formatter = DateTimeFormat
 				.forPattern("yyyy-MM-dd HH:mm:ss");
@@ -361,7 +359,7 @@ public class ReadXMLFile {
 		return accessedLongAgo;
 	}
 
-	/* Print the database using the elementList */
+	/* Print the database using the elementList. */
 	public static void printDatabase() {
 
 		for (int i = 0; i < elementList.size(); i++) {
@@ -389,7 +387,7 @@ public class ReadXMLFile {
 		}
 	}
 
-	/* Launch the basic tests */
+	/* Launch the basic tests. */
 	public static void runTests() {
 		Account testAccount1 = new Account("Facebook",
 				"facebookUser@hotmail.com", "facebook",
@@ -416,12 +414,12 @@ public class ReadXMLFile {
 		// testAccountExists(testAccount1Bis);
 		//
 		// testRemoveAccount(testAccount2);
-		 testAddAccount(testAccount2);
+		// testAddAccount(testAccount2);
 		// testAccountExists(testAccount2);
 		//
-		 testAddAccount(testAccount3);
+		// testAddAccount(testAccount3);
 		//
-		 testAddAccount(testAccount4);
+		// testAddAccount(testAccount4);
 		// testRemoveAccount(testAccount4);
 		// testAccountExists(testAccount4);
 		//
@@ -472,12 +470,14 @@ public class ReadXMLFile {
 	}
 
 	public static void testGetAllAccounts() {
+
 		System.out.println("\nRetrieving all accounts from database.\n");
 		List<Account> allAccounts = getAllAccounts();
 		System.out.println(Arrays.toString(allAccounts.toArray()));
 	}
 
 	public static void testLastAccess(Account account) {
+
 		if (accessedLongAgo(account)) {
 			System.out
 					.println("\nIt is a long time you have accessed this account, you might want to change your password.");

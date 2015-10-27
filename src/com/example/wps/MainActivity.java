@@ -1,13 +1,11 @@
 package com.example.wps;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 
+import com.example.wps.db.ReadXMLFile;
 import com.example.wps.gui.ListOfAccounts;
 
 import android.support.v7.app.ActionBarActivity;
@@ -25,99 +23,108 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//shows initial app window
+		// shows initial app window
 		setContentView(R.layout.activity_main);
-		
-		//check if NFC is active
+
+		// check if NFC is active
 		checkNFCActive();
-		
-		//create database if not available
-		String FILENAME = "hello_file";
-		String string = "hello world!";
+
+		String FILENAME = "database";
+		String xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
+				+ "<WPS-database><accounts>"
+				+ "<FacebookAccount>"
+				+ "<name>Facebook</name>"
+				+ "<id>facebookUser@hotmail.com</id>"
+				+ "<password>facebook</password>"
+				+ "<url>https://www.facebook.com</url>"
+				+ "<lastAccess>2015-10-26 22:00:00</lastAccess>"
+				+ "<note>Less useful than Linkedin</note>"
+				+ "<category>Social Network</category>"
+				+ "</FacebookAccount>"
+				+ "</accounts></WPS-database>";
 
 		FileOutputStream fos = null;
+
 		try {
 			fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
-			fos.write(string.getBytes());
-			fos.write("loltest".getBytes());
+			fos.write(xmlString.getBytes());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
 			fos.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
 		FileInputStream fis = null;
-		
+
 		try {
-			fis =  openFileInput(FILENAME);
+			fis = openFileInput(FILENAME);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
 			StringBuilder builder = new StringBuilder();
 			int ch;
-			while((ch = fis.read()) != -1){
-			    builder.append((char)ch);
+			while ((ch = fis.read()) != -1) {
+				builder.append((char) ch);
 			}
 
-			System.out.println("+++++++++++++++"+builder.toString()+"+++++++++++");
+			System.out.println("+++++++++++++++" + builder.toString()
+					+ "+++++++++++");
+			ReadXMLFile.initDatabase(builder.toString());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
 			fis.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
-	public void checkNFCActive(){
+	public void checkNFCActive() {
 		Context context = this.getApplicationContext();
-		
-		//check if NFC is active
-		NfcManager manager = (NfcManager) context.getSystemService(Context.NFC_SERVICE);
+
+		// check if NFC is active
+		NfcManager manager = (NfcManager) context
+				.getSystemService(Context.NFC_SERVICE);
 		NfcAdapter adapter = manager.getDefaultAdapter();
-		//if active, launch NFC scan 
+		// if active, launch NFC scan
 		if (adapter != null && adapter.isEnabled()) {
-		    // adapter exists and is enabled.
-			
-			//start scannnig for RFID tag
-			
-			//if successful then we ask the user what he wants to look for
+			// adapter exists and is enabled.
+
+			// start scannnig for RFID tag
+
+			// if successful then we ask the user what he wants to look for
 			Intent i = new Intent(MainActivity.this, ListOfAccounts.class);
 			startActivity(i);
-			
+
 		}
-		//if not active, take the user to wireless settings to enable NFC
-		else{
-			Toast.makeText(getApplicationContext(), "Please activate NFC and press Back to return to the application!", Toast.LENGTH_LONG).show();
-	        startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-	        
-	        //TODO dialog box to make sure he wants to go to settings maybe?
-//			final Dialog dialog = new Dialog(this);
-//
-//            dialog.setContentView(R.layout.activity_dialog_nfc_inactive);
-//            dialog.setTitle("NFC disabled");
-//            
-//            dialog.show();
+		// if not active, take the user to wireless settings to enable NFC
+		else {
+			Toast.makeText(
+					getApplicationContext(),
+					"Please activate NFC and press Back to return to the application!",
+					Toast.LENGTH_LONG).show();
+			startActivity(new Intent(
+					android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+
+			// TODO dialog box to make sure he wants to go to settings maybe?
+			// final Dialog dialog = new Dialog(this);
+			//
+			// dialog.setContentView(R.layout.activity_dialog_nfc_inactive);
+			// dialog.setTitle("NFC disabled");
+			//
+			// dialog.show();
 		}
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -131,23 +138,22 @@ public class MainActivity extends ActionBarActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		
-		switch (id)
-        {
-        	case R.id.action_settings:
-        		//settings();
-        		checkNFCActive();
-        		return true;
-        	case R.id.action_exit:
-        		System.exit(1);
-        		return true;
-        	default:
-        		return super.onOptionsItemSelected(item);
-        }
-		
-//		if (id == R.id.action_settings) {
-//			return true;
-//		}
-//		return super.onOptionsItemSelected(item);
+
+		switch (id) {
+		case R.id.action_settings:
+			// settings();
+			checkNFCActive();
+			return true;
+		case R.id.action_exit:
+			System.exit(1);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+
+		// if (id == R.id.action_settings) {
+		// return true;
+		// }
+		// return super.onOptionsItemSelected(item);
 	}
 }

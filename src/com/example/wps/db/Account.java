@@ -1,5 +1,7 @@
 package com.example.wps.db;
 
+import org.w3c.dom.Element;
+
 public class Account {
 	private String name;
 	private String id;
@@ -74,6 +76,15 @@ public class Account {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public String toXmlString() {
+		return ("<" + this.getName() + "Account><name>" + this.getName()
+				+ "</name><id>" + this.getId() + "</id><password>"
+				+ this.getPassword() + "</password><url>" + this.getUrl()
+				+ "</url><lastAccess>" + this.getLastAccess()
+				+ "</lastAccess><note>" + this.getNote() + "</note><category>"
+				+ this.getCategory() + "</category></" + this.getName() + "Account>");
 	}
 
 	@Override
