@@ -9,6 +9,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.w3c.dom.Document;
@@ -37,8 +38,8 @@ public class ReadXMLFile {
 
 		initDatabase();
 		printDatabase();
-		
-		// runTests();
+
+		runTests();
 		// printDatabase();
 	}
 
@@ -344,6 +345,22 @@ public class ReadXMLFile {
 		}
 	}
 
+	public static boolean accessedLongAgo(Account account) {
+		Boolean accessedLongAgo = false;
+
+		DateTime today = new DateTime();
+		DateTimeFormatter formatter = DateTimeFormat
+				.forPattern("yyyy-MM-dd HH:mm:ss");
+
+		DateTime lastAccess = formatter.parseDateTime(account.getLastAccess());
+		Interval i = new Interval(lastAccess, today);
+
+		if ((i.toPeriod().getYears() > 0) || (i.toPeriod().getMonths() > 4)) {
+			accessedLongAgo = true;
+		}
+		return accessedLongAgo;
+	}
+
 	/* Print the database using the elementList */
 	public static void printDatabase() {
 
@@ -376,7 +393,7 @@ public class ReadXMLFile {
 	public static void runTests() {
 		Account testAccount1 = new Account("Facebook",
 				"facebookUser@hotmail.com", "facebook",
-				"https://www.facebook.com", "2015-10-26 22:00:00",
+				"https://www.facebook.com", "2014-09-12 22:00:00",
 				"Less useful than Linkedin", "Social Network");
 		Account testAccount1Bis = new Account("FacebookBis",
 				"facebookUser@gmail.com", "facebook",
@@ -391,8 +408,6 @@ public class ReadXMLFile {
 		Account testAccount4 = new Account("Webmail", "webmailUser@ulb.ac.be",
 				"webmail", "https://webmail.ulb.ac.be/", "2005-08-20 09:30:00",
 				"E-mail delivery system", "E-Mail");
-
-		testCompareDates(testAccount1);
 
 		// testAddAccount(testAccount1);
 		// testModifyAccount(testAccount1, testAccount1Bis);
@@ -412,6 +427,7 @@ public class ReadXMLFile {
 		//
 		// testGetAllAccounts();
 		// testSearchAccountByCategory("E-Mail");
+		// testLastAccess(testAccount1);
 	}
 
 	public static void testAccountExists(Account account) {
@@ -461,18 +477,12 @@ public class ReadXMLFile {
 		System.out.println(Arrays.toString(allAccounts.toArray()));
 	}
 
-	public static void testCompareDates(Account account) {
-
-		DateTime today = new DateTime();
-		DateTimeFormatter formatter = DateTimeFormat
-				.forPattern("yyyy-MM-dd HH:mm:ss");
-
-		System.out.println("\nToday's time : " + today.toString(formatter));
-
-		DateTime lastAccess = formatter.parseDateTime(account.getLastAccess());
-
-		System.out.println("\nLast access to the account on : "
-				+ lastAccess.toString(formatter));
-
+	public static void testLastAccess(Account account) {
+		if (accessedLongAgo(account)) {
+			System.out
+					.println("\nIt is a long time you have accessed this account, you might want to change your password.");
+		} else {
+			System.out.println("\nThe last access is quite recent.");
+		}
 	}
 }
