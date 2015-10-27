@@ -8,6 +8,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
@@ -18,6 +21,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.example.wps.db.Account;
@@ -33,7 +37,7 @@ public class ReadXMLFile {
 
 		initDatabase();
 		printDatabase();
-
+		
 		// runTests();
 		// printDatabase();
 	}
@@ -47,7 +51,7 @@ public class ReadXMLFile {
 	}
 
 	/*
-	 * Creates the .xml file for the database, does not do anything if it
+	 * Creates an empty .xml file for the database, does not do anything if it
 	 * already exists
 	 */
 	public static void createDatabase() {
@@ -71,7 +75,7 @@ public class ReadXMLFile {
 		}
 	}
 
-	/* Initializes the document of the .xml file */
+	/* Initializes the DOM of the .xml file */
 	public static void initDocument() {
 
 		try {
@@ -192,6 +196,7 @@ public class ReadXMLFile {
 				addNode("url", account.getUrl(), rootElement);
 				addNode("lastAccess", account.getLastAccess(), rootElement);
 				addNode("note", account.getNote(), rootElement);
+				addNode("category", account.getCategory(), rootElement);
 
 				NodeList nodeList = document.getElementsByTagName("accounts");
 				nodeList.item(0).appendChild(rootElement);
@@ -221,6 +226,24 @@ public class ReadXMLFile {
 		System.out.println("\nA " + account.getName()
 				+ " account does not exist yet.");
 		return false;
+	}
+
+	/* Returns all the accounts in a given category */
+	public static List<Account> accountsInCategory(String category) {
+		List<Account> retrievedAccounts = new ArrayList<Account>();
+
+		for (int i = 0; i < elementList.size(); i++) {
+
+			Element currentElement = elementList.get(i);
+			String retrievedCategory = currentElement
+					.getElementsByTagName("category").item(0).getTextContent();
+
+			if (category.equals(retrievedCategory)) {
+				Account retrievedAccount = elementToObject(currentElement);
+				retrievedAccounts.add(retrievedAccount);
+			}
+		}
+		return retrievedAccounts;
 	}
 
 	/* Removes the account from the database */
@@ -286,6 +309,19 @@ public class ReadXMLFile {
 		return new Account(name, id, password, url, lastAccess, note, category);
 	}
 
+	public static List<Account> getAllAccounts() {
+		List<Account> allAccounts = new ArrayList<Account>();
+
+		for (int i = 0; i < elementList.size(); i++) {
+
+			Element currentElement = elementList.get(i);
+			Account anAccount = elementToObject(currentElement);
+			allAccounts.add(anAccount);
+		}
+
+		return allAccounts;
+	}
+
 	/* Saves the created DOM tree to .xml file */
 	public static void saveChanges(Document document) {
 
@@ -331,8 +367,8 @@ public class ReadXMLFile {
 					+ elementList.get(i).getElementsByTagName("note").item(0)
 							.getTextContent());
 			System.out.println("Category : "
-					+ elementList.get(i).getElementsByTagName("category").item(0)
-							.getTextContent());
+					+ elementList.get(i).getElementsByTagName("category")
+							.item(0).getTextContent());
 		}
 	}
 
@@ -340,37 +376,42 @@ public class ReadXMLFile {
 	public static void runTests() {
 		Account testAccount1 = new Account("Facebook",
 				"facebookUser@hotmail.com", "facebook",
-				"https://www.facebook.com", "Sat, 12 Aug 2005 13:30:00 GMT",
+				"https://www.facebook.com", "2015-10-26 22:00:00",
 				"Less useful than Linkedin", "Social Network");
 		Account testAccount1Bis = new Account("FacebookBis",
 				"facebookUser@gmail.com", "facebook",
-				"https://www.facebook.com", "Mon, 13 Aug 2012 17:30:00 GMT",
+				"https://www.facebook.com", "2009-06-01 18:45:00",
 				"Less useful than Linkedin", "Social Network");
 		Account testAccount2 = new Account("Gmail", "gmailUser@hotmail.com",
-				"gmail", "https://www.gmail.com",
-				"Mon,20 Oct 2015 17:40:00 GMT", "Avoid Spam please", "E-Mail");
+				"gmail", "https://www.gmail.com", "2012-02-24 13:42:00",
+				"Avoid Spam please", "E-Mail");
 		Account testAccount3 = new Account("Youtube", "youtubeUser", "youtube",
-				"https://www.youtube.com", "Sun,19 Oct 2015 9:20:00 GMT",
+				"https://www.youtube.com", "2010-12-13 12:30:00",
 				"Best Channel Ever", "Entertainment");
 		Account testAccount4 = new Account("Webmail", "webmailUser@ulb.ac.be",
-				"webmail", "https://webmail.ulb.ac.be/",
-				"Thu, 20 Aug 2005 9:30:00 GMT", "E-mail delivery system", "E-Mail");
+				"webmail", "https://webmail.ulb.ac.be/", "2005-08-20 09:30:00",
+				"E-mail delivery system", "E-Mail");
 
-		testAddAccount(testAccount1);
-		testModifyAccount(testAccount1, testAccount1Bis);
+		testCompareDates(testAccount1);
 
-		testAccountExists(testAccount1);
-		testAccountExists(testAccount1Bis);
-
-		testRemoveAccount(testAccount2);
-		testAddAccount(testAccount2);
-		testAccountExists(testAccount2);
-
-		testAddAccount(testAccount3);
-
-		testAddAccount(testAccount4);
-		testRemoveAccount(testAccount4);
-		testAccountExists(testAccount4);
+		// testAddAccount(testAccount1);
+		// testModifyAccount(testAccount1, testAccount1Bis);
+		//
+		// testAccountExists(testAccount1);
+		// testAccountExists(testAccount1Bis);
+		//
+		// testRemoveAccount(testAccount2);
+		// testAddAccount(testAccount2);
+		// testAccountExists(testAccount2);
+		//
+		// testAddAccount(testAccount3);
+		//
+		// testAddAccount(testAccount4);
+		// testRemoveAccount(testAccount4);
+		// testAccountExists(testAccount4);
+		//
+		// testGetAllAccounts();
+		// testSearchAccountByCategory("E-Mail");
 	}
 
 	public static void testAccountExists(Account account) {
@@ -404,8 +445,34 @@ public class ReadXMLFile {
 
 		removeAccount(account);
 	}
-	
-	public static void testSearchAccountByCategory(String category) { // TODO
+
+	public static void testSearchAccountByCategory(String category) {
+
+		System.out.println("\nRetrieving accounts in database from the "
+				+ category + " category.\n");
+
+		List<Account> retrievedAccounts = accountsInCategory(category);
+		System.out.println(Arrays.toString(retrievedAccounts.toArray()));
+	}
+
+	public static void testGetAllAccounts() {
+		System.out.println("\nRetrieving all accounts from database.\n");
+		List<Account> allAccounts = getAllAccounts();
+		System.out.println(Arrays.toString(allAccounts.toArray()));
+	}
+
+	public static void testCompareDates(Account account) {
+
+		DateTime today = new DateTime();
+		DateTimeFormatter formatter = DateTimeFormat
+				.forPattern("yyyy-MM-dd HH:mm:ss");
+
+		System.out.println("\nToday's time : " + today.toString(formatter));
+
+		DateTime lastAccess = formatter.parseDateTime(account.getLastAccess());
+
+		System.out.println("\nLast access to the account on : "
+				+ lastAccess.toString(formatter));
 
 	}
 }

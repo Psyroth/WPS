@@ -75,4 +75,13 @@ public class Account {
 	public void setCategory(String category) {
 		this.category = category;
 	}
+
+	@Override
+	public String toString() {
+		return ("\nName : " + this.getName() + "\nId : " + this.getId()
+				+ "\nPassword : " + this.getPassword() + "\nUrl : "
+				+ this.getUrl() + "\nLast Access : " + this.getLastAccess()
+				+ "\nNote : " + this.getNote() + "\nCategory : " + this
+					.getCategory());
+	}
 }
