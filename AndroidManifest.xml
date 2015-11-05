@@ -17,6 +17,7 @@
         <activity android:name="com.example.wps.gui.ListOfAccounts" />
         <activity android:name="com.example.wps.gui.ListViewActivity" />
         <activity android:name="com.example.wps.gui.CategoryViewActivity" />
+        <activity android:name="com.example.wps.gui.FrequencyViewActivity" />
         
         <activity
             android:name=".MainActivity"

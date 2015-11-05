@@ -23,7 +23,7 @@ public class ListOfAccounts extends TabActivity{
 		Resources ressources = getResources(); 
 		TabHost tabHost = getTabHost(); 
 		
-		// List View tab
+		// A_Z List View tab
 		Intent intentListView = new Intent().setClass(this, ListViewActivity.class);
 		TabSpec tabSpecListView = tabHost
 		  .newTabSpec("List View")
@@ -37,11 +37,19 @@ public class ListOfAccounts extends TabActivity{
 			.setIndicator("", ressources.getDrawable(R.drawable.ic_launcher))
 			.setContent(intentCategoryView);
 		
+		// Category View tab
+		Intent intentFrequencyView = new Intent().setClass(this, FrequencyViewActivity.class);
+		TabSpec tabSpecFrequencyView = tabHost
+			.newTabSpec("Frequency View")
+			.setIndicator("", ressources.getDrawable(R.drawable.ic_launcher))
+			.setContent(intentFrequencyView);
+		
 		// add all tabs 
 		tabHost.addTab(tabSpecListView);
 		tabHost.addTab(tabSpecCategoryView);
+		tabHost.addTab(tabSpecFrequencyView);
 		
-		//set Windows tab as default (zero based)
+		//set A_Z tab as default (zero based)
 		tabHost.setCurrentTab(0);
 	}
 
