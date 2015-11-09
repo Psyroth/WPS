@@ -26,19 +26,17 @@ public class FrequencyViewActivity extends Activity {
 				.getAllAccounts();
 
 		setContentView(R.layout.account_list_scrollview_layout);
-		// addAccountsToLinearLayout(listOfAcc);
-
 		addAccountsToLinearLayout(listOfAcc);
 	}
 
 	public void addAccountsToLinearLayout(ArrayList<Account> listOfAccounts) {
 
-		ArrayList<Account> orderedListOfAccounts = makeOrderedListOfAccounts(listOfAccounts);
-
-		for (int acc = 0; acc < orderedListOfAccounts.size(); acc++) {
-			String userTitle = orderedListOfAccounts.get(acc).getName();
-			String userID = orderedListOfAccounts.get(acc).getId();
-			String userPass = orderedListOfAccounts.get(acc).getPassword();
+		ReadXMLFile.sortAccountList(listOfAccounts);
+		
+		for (int acc = 0; acc < listOfAccounts.size(); acc++) {
+			String userTitle = listOfAccounts.get(acc).getName();
+			String userID = listOfAccounts.get(acc).getId();
+			String userPass = listOfAccounts.get(acc).getPassword();
 
 			TextView tv = new TextView(this);
 			tv.setId(acc);
