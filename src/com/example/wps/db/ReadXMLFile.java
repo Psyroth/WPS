@@ -23,7 +23,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import com.example.wps.db.Account;
@@ -311,8 +310,12 @@ public class ReadXMLFile {
 		return allAccounts;
 	}
 
-	public static void sortAccountList(ArrayList<Account> accountsList) {
-		Collections.sort(accountsList);
+	public static void sortAccountListByLastAccess(ArrayList<Account> accountsList) {
+		Collections.sort(accountsList, Account.COMPARE_BY_LASTACCESS);
+	}
+	
+	public static void sortAccountListByAlphabeticOrder(ArrayList<Account> accountsList) {
+		Collections.sort(accountsList, Account.COMPARE_BY_NAME);
 	}
 
 	/*

@@ -1,10 +1,6 @@
 package com.example.wps.gui;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-
 import com.example.wps.R;
 
 import android.app.Activity;
@@ -31,8 +27,8 @@ public class FrequencyViewActivity extends Activity {
 
 	public void addAccountsToLinearLayout(ArrayList<Account> listOfAccounts) {
 
-		ReadXMLFile.sortAccountList(listOfAccounts);
-		
+		ReadXMLFile.sortAccountListByLastAccess(listOfAccounts);
+
 		for (int acc = 0; acc < listOfAccounts.size(); acc++) {
 			String userTitle = listOfAccounts.get(acc).getName();
 			String userID = listOfAccounts.get(acc).getId();
@@ -58,66 +54,9 @@ public class FrequencyViewActivity extends Activity {
 			}
 			tv.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null,
 					null, null);
-			
+
 			System.out.println(tv.getText());
 			linearLayout.addView(tv);
 		}
-	}
-
-	public ArrayList<Account> makeOrderedListOfAccounts(
-			ArrayList<Account> listOfAccounts) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		ArrayList<Account> orderedListOfAccounts = new ArrayList<Account>();
-		// we first order the accounts by last date used
-		for (int acc = 0; acc < listOfAccounts.size(); acc++) {
-
-			Account currentAccount = listOfAccounts.get(acc);
-
-			if (orderedListOfAccounts.size() == 0) {
-				orderedListOfAccounts.add(currentAccount);
-				System.out.println("Adding cz 0" + currentAccount.getName());
-			} else {
-				
-//				TODO comparison of dates not working as intended (just checking hour?).
-//				Use joda?
-				
-				
-				Account firstAccount = orderedListOfAccounts.get(0);
-
-				Date currentAccountLastAccessed = null;
-				try {
-					currentAccountLastAccessed = formatter.parse(currentAccount
-							.getLastAccess());
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				Date firstAccountLastAccessed = null;
-				try {
-					firstAccountLastAccessed = formatter.parse(firstAccount
-							.getLastAccess());
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				// we compare the account to the most recently used (ie the
-				// first
-				// account in the list) if it was used more recently, it will be
-				// added
-				// as the new first account
-				if (currentAccountLastAccessed.before(firstAccountLastAccessed)) {
-					orderedListOfAccounts.add(0, currentAccount);
-
-					System.out.println("Adding first" + currentAccount.getName());
-				}
-				// else it gets added at end 
-				else {
-					orderedListOfAccounts.add(currentAccount);
-					System.out.println("Adding last" + currentAccount.getName());
-				}
-
-			}
-		}
-		return orderedListOfAccounts;
 	}
 }
