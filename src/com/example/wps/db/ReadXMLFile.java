@@ -311,24 +311,8 @@ public class ReadXMLFile {
 		return allAccounts;
 	}
 
-	public static List<Account> sortAccountList(ArrayList<Account> accountsList) {
-		Collections.sort(accountsList, new CustomComparator());
-		return accountsList;
-	}
-
-	private static class CustomComparator implements Comparator<Account> {
-		@Override
-		public int compare(Account account1, Account account2) {
-			DateTimeFormatter formatter = DateTimeFormat
-					.forPattern("yyyy-MM-dd HH:mm:ss");
-
-			DateTime lastAccess1 = formatter.parseDateTime(account1
-					.getLastAccess());
-			DateTime lastAccess2 = formatter.parseDateTime(account2
-					.getLastAccess());
-
-			return (lastAccess1.compareTo(lastAccess2));
-		}
+	public static void sortAccountList(ArrayList<Account> accountsList) {
+		Collections.sort(accountsList);
 	}
 
 	/*
