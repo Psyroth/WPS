@@ -1903,10 +1903,14 @@ containing a value of this type.
         public static final int abc_textfield_search_material=0x7f02003a;
         public static final int ic_action=0x7f02003b;
         public static final int ic_face_black_24dp=0x7f02003c;
-        public static final int ic_launcher=0x7f02003d;
-        public static final int ic_listicon=0x7f02003e;
-        public static final int ic_phonelink_lock_black_24dp=0x7f02003f;
-        public static final int ic_timeicon=0x7f020040;
+        public static final int ic_fb=0x7f02003d;
+        public static final int ic_games=0x7f02003e;
+        public static final int ic_internet=0x7f02003f;
+        public static final int ic_launcher=0x7f020040;
+        public static final int ic_listicon=0x7f020041;
+        public static final int ic_phonelink_lock_black_24dp=0x7f020042;
+        public static final int ic_search=0x7f020043;
+        public static final int ic_timeicon=0x7f020044;
     }
     public static final class id {
         public static final int AlphabeticCheckBox=0x7f090056;
@@ -2061,11 +2065,12 @@ containing a value of this type.
         public static final int account_list_scrollview_layout=0x7f030019;
         public static final int activity_main=0x7f03001a;
         public static final int password_generator_viewer=0x7f03001b;
-        public static final int search_or_category_layout=0x7f03001c;
-        public static final int select_dialog_item_material=0x7f03001d;
-        public static final int select_dialog_multichoice_material=0x7f03001e;
-        public static final int select_dialog_singlechoice_material=0x7f03001f;
-        public static final int support_simple_spinner_dropdown_item=0x7f030020;
+        public static final int search_layout=0x7f03001c;
+        public static final int search_or_category_layout=0x7f03001d;
+        public static final int select_dialog_item_material=0x7f03001e;
+        public static final int select_dialog_multichoice_material=0x7f03001f;
+        public static final int select_dialog_singlechoice_material=0x7f030020;
+        public static final int support_simple_spinner_dropdown_item=0x7f030021;
     }
     public static final class menu {
         public static final int main=0x7f0c0000;

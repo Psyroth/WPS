@@ -44,10 +44,18 @@ public class ListOfAccounts extends TabActivity{
 			.setIndicator("", ressources.getDrawable(R.drawable.ic_timeicon))
 			.setContent(intentFrequencyView);
 		
+		// Search tab
+		Intent intentSearch = new Intent().setClass(this, SearchActivity.class);
+		TabSpec tabSpecSearch = tabHost
+			.newTabSpec("Search")
+			.setIndicator("", ressources.getDrawable(R.drawable.ic_search))
+			.setContent(intentSearch);
+		
 		// add all tabs 
 		tabHost.addTab(tabSpecListView);
 		tabHost.addTab(tabSpecCategoryView);
 		tabHost.addTab(tabSpecFrequencyView);
+		tabHost.addTab(tabSpecSearch);
 		
 		//set A_Z tab as default (zero based)
 		tabHost.setCurrentTab(0);
