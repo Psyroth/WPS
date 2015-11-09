@@ -403,9 +403,12 @@ int drawable abc_textfield_default_mtrl_alpha 0x7f020037
 int drawable abc_textfield_search_activated_mtrl_alpha 0x7f020038
 int drawable abc_textfield_search_default_mtrl_alpha 0x7f020039
 int drawable abc_textfield_search_material 0x7f02003a
-int drawable ic_face_black_24dp 0x7f02003b
-int drawable ic_launcher 0x7f02003c
-int drawable ic_phonelink_lock_black_24dp 0x7f02003d
+int drawable ic_action 0x7f02003b
+int drawable ic_face_black_24dp 0x7f02003c
+int drawable ic_launcher 0x7f02003d
+int drawable ic_listicon 0x7f02003e
+int drawable ic_phonelink_lock_black_24dp 0x7f02003f
+int drawable ic_timeicon 0x7f020040
 int id AlphabeticCheckBox 0x7f090056
 int id GeneratePasswordButton 0x7f090059
 int id LinearLayout1 0x7f090051

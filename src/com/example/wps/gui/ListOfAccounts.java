@@ -27,21 +27,21 @@ public class ListOfAccounts extends TabActivity{
 		Intent intentListView = new Intent().setClass(this, ListViewActivity.class);
 		TabSpec tabSpecListView = tabHost
 		  .newTabSpec("List View")
-		  .setIndicator("", ressources.getDrawable(R.drawable.ic_launcher))
+		  .setIndicator("", ressources.getDrawable(R.drawable.ic_listicon))
 		  .setContent(intentListView);
 		
 		// Category View tab
 		Intent intentCategoryView = new Intent().setClass(this, CategoryViewActivity.class);
 		TabSpec tabSpecCategoryView = tabHost
 			.newTabSpec("Category View")
-			.setIndicator("", ressources.getDrawable(R.drawable.ic_launcher))
+			.setIndicator("", ressources.getDrawable(R.drawable.ic_action))
 			.setContent(intentCategoryView);
 		
-		// Category View tab
+		// Frequency View tab
 		Intent intentFrequencyView = new Intent().setClass(this, FrequencyViewActivity.class);
 		TabSpec tabSpecFrequencyView = tabHost
 			.newTabSpec("Frequency View")
-			.setIndicator("", ressources.getDrawable(R.drawable.ic_launcher))
+			.setIndicator("", ressources.getDrawable(R.drawable.ic_timeicon))
 			.setContent(intentFrequencyView);
 		
 		// add all tabs 

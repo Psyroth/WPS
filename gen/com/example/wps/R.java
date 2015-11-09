@@ -1901,9 +1901,12 @@ containing a value of this type.
         public static final int abc_textfield_search_activated_mtrl_alpha=0x7f020038;
         public static final int abc_textfield_search_default_mtrl_alpha=0x7f020039;
         public static final int abc_textfield_search_material=0x7f02003a;
-        public static final int ic_face_black_24dp=0x7f02003b;
-        public static final int ic_launcher=0x7f02003c;
-        public static final int ic_phonelink_lock_black_24dp=0x7f02003d;
+        public static final int ic_action=0x7f02003b;
+        public static final int ic_face_black_24dp=0x7f02003c;
+        public static final int ic_launcher=0x7f02003d;
+        public static final int ic_listicon=0x7f02003e;
+        public static final int ic_phonelink_lock_black_24dp=0x7f02003f;
+        public static final int ic_timeicon=0x7f020040;
     }
     public static final class id {
         public static final int AlphabeticCheckBox=0x7f090056;
