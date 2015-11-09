@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import com.example.wps.db.Account;
 import com.example.wps.db.ReadXMLFile;
 import com.example.wps.gui.ListOfAccounts;
+import com.example.wps.gui.PasswordGenViewActivity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.content.Context;
@@ -127,6 +128,11 @@ public class MainActivity extends ActionBarActivity {
 			// dialog.show();
 		}
 	}
+	
+	public void showPassGen(){
+		   Intent i = new Intent(MainActivity.this, PasswordGenViewActivity.class);
+		   startActivity(i);
+	   } 
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -147,15 +153,14 @@ public class MainActivity extends ActionBarActivity {
 			// settings();
 			checkNFCActive();
 			return true;
+		case R.id.action_passgen:
+			showPassGen();
+			return true;
 		case R.id.action_exit:
 			System.exit(1);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-		// if (id == R.id.action_settings) {
-		// return true;
-		// }
-		// return super.onOptionsItemSelected(item);
 	}
 }
