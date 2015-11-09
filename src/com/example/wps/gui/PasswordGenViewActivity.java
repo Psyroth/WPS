@@ -11,6 +11,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.NumberPicker.OnValueChangeListener;
 
 import com.example.wps.encryption.PasswordGenerator;
 
@@ -21,6 +23,8 @@ public class PasswordGenViewActivity extends Activity {
 	CheckBox mCbShowPwd;
 	CheckBox mCbWithNumbers;
 	CheckBox mCbWithSpecial;
+	CheckBox mCbWithAlphabet;
+	NumberPicker np;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,8 +35,32 @@ public class PasswordGenViewActivity extends Activity {
 	    mEtPwd = (EditText) findViewById(R.id.PasswordGenerated);
 	    // get the show/hide password Checkbox
 	    mCbShowPwd = (CheckBox) findViewById(R.id.ShowPwdCheckBox);
+	    mCbWithSpecial = (CheckBox) findViewById(R.id.SpecialCharCheckBox);
+	    mCbWithAlphabet = (CheckBox) findViewById(R.id.AlphabeticCheckBox);
+	    
+	    
+	    np = (NumberPicker) findViewById(R.id.lengthOfPwdNumberPicker);
+	    np.setMinValue(0);
+        np.setMaxValue(30);
+        np.setWrapSelectorWheel(false); 
+	    
+        np.setOnValueChangedListener(new OnValueChangeListener() {
+			
+    		@Override
+    		public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+    			// TODO Auto-generated method stub
+    			
+    			String Old = "Old Value : ";
+    			String New = "New Value : ";
+    			
+//    			tv1.setText(Old.concat(String.valueOf(oldVal)));
+//    			tv2.setText(New.concat(String.valueOf(newVal)));
+    		}
+    	});
+        
 	    
 	    mCbWithNumbers = (CheckBox) findViewById(R.id.NumberCheckBox);
+	    mCbWithAlphabet = (CheckBox) findViewById(R.id.AlphabeticCheckBox);
 	    mCbWithSpecial = (CheckBox) findViewById(R.id.SpecialCharCheckBox);
 	    
 	    // add onCheckedListener on checkbox
