@@ -1,10 +1,12 @@
 package com.example.wps.db;
 
+import java.util.Comparator;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-public class Account implements Comparable<Account>{
+public class Account {
 	private String name;
 	private String id;
 	private String password;
@@ -97,21 +99,27 @@ public class Account implements Comparable<Account>{
 				+ "\nNote : " + this.getNote() + "\nCategory : " + this
 					.getCategory());
 	}
-	
-	@Override
-	public int compareTo(Account another) {
-		DateTimeFormatter formatter = DateTimeFormat
-				.forPattern("yyyy-MM-dd HH:mm:ss");
 
-		DateTime lastAccess1 = formatter.parseDateTime(this
-				.getLastAccess());
-		DateTime lastAccess2 = formatter.parseDateTime(another
-				.getLastAccess());
-		
-		// -1 this is before another
-		// 0 this has the same date that another
-		// 1 this is after another
-		
-		return (lastAccess1.compareTo(lastAccess2));
-	}
+	public static Comparator<Account> COMPARE_BY_NAME = new Comparator<Account>() {
+		public int compare(Account one, Account other) {
+			return (one.getName().compareTo(other.getName()));
+		}
+	};
+
+	public static Comparator<Account> COMPARE_BY_LASTACCESS = new Comparator<Account>() {
+		public int compare(Account one, Account other) {
+			DateTimeFormatter formatter = DateTimeFormat
+					.forPattern("yyyy-MM-dd HH:mm:ss");
+
+			DateTime lastAccess1 = formatter.parseDateTime(one.getLastAccess());
+			DateTime lastAccess2 = formatter.parseDateTime(other
+					.getLastAccess());
+
+			// -1 this is before another
+			// 0 this has the same date that another
+			// 1 this is after another
+
+			return (lastAccess1.compareTo(lastAccess2));
+		}
+	};
 }

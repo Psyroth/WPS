@@ -23,12 +23,12 @@ public class ListViewActivity extends Activity {
 				.getAllAccounts();
 
 		setContentView(R.layout.account_list_scrollview_layout);
-		// addAccountsToLinearLayout(listOfAcc);
-
 		addAccountsToLinearLayout(listOfAcc);
 	}
 
 	public void addAccountsToLinearLayout(ArrayList<Account> listOfAccounts) {
+		
+		ReadXMLFile.sortAccountListByAlphabeticOrder(listOfAccounts);
 
 		for (int acc = 0; acc < listOfAccounts.size(); acc++) {
 			String userTitle = listOfAccounts.get(acc).getName();
