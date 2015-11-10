@@ -16,12 +16,19 @@ public class ListOfAccounts extends TabActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		//shows initial app window
+
 		setContentView(R.layout.search_or_category_layout);
 		
 		
 		Resources ressources = getResources(); 
 		TabHost tabHost = getTabHost(); 
+		
+		// Favorite List View tab
+		Intent intentFavoriteView = new Intent().setClass(this, FavoriteViewActivity.class);
+		TabSpec tabSpecFavoriteView = tabHost
+		  .newTabSpec("Favorite View")
+		  .setIndicator("", ressources.getDrawable(R.drawable.ic_favorite))
+		  .setContent(intentFavoriteView);
 		
 		// A_Z List View tab
 		Intent intentListView = new Intent().setClass(this, ListViewActivity.class);
@@ -52,12 +59,13 @@ public class ListOfAccounts extends TabActivity{
 			.setContent(intentSearch);
 		
 		// add all tabs 
+		tabHost.addTab(tabSpecFavoriteView);
 		tabHost.addTab(tabSpecListView);
 		tabHost.addTab(tabSpecCategoryView);
 		tabHost.addTab(tabSpecFrequencyView);
 		tabHost.addTab(tabSpecSearch);
 		
-		//set A_Z tab as default (zero based)
+		//set Favortie tab as default (zero based)
 		tabHost.setCurrentTab(0);
 	}
 
