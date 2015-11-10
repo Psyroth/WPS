@@ -38,24 +38,25 @@ public class MainActivity extends ActionBarActivity {
 
 		Account testAccount1 = new Account("Facebook",
 				"facebookUser@hotmail.com", "facebook",
-				"https://www.facebook.com", "2014-09-12 22:00:00",
-				"Less useful than Linkedin", "Social Network");
-
+				"https://www.facebook.com", "2015-09-12 22:00:00",
+				"Less useful than Linkedin", "Social Network", true);
+		
 		Account testAccount1Bis = new Account("FacebookBis",
 				"facebookUser@gmail.com", "facebook",
 				"https://www.facebook.com", "2009-06-01 18:45:00",
-				"Less useful than Linkedin", "Social Network");
+				"Less useful than Linkedin", "Social Network", false);
+		
 		Account testAccount2 = new Account("Gmail", "gmailUser@hotmail.com",
 				"gmail", "https://www.gmail.com", "2012-02-24 13:42:00",
-				"Avoid Spam please", "E-Mail");
-
+				"Avoid Spam please", "E-Mail", false);
+		
 		Account testAccount3 = new Account("Youtube", "youtubeUser", "youtube",
 				"https://www.youtube.com", "2010-12-13 12:30:00",
-				"Best Channel Ever", "Entertainment");
-
+				"Best Channel Ever", "Entertainment", true);
+		
 		Account testAccount4 = new Account("Webmail", "webmailUser@ulb.ac.be",
 				"webmail", "https://webmail.ulb.ac.be/", "2005-08-20 09:30:00",
-				"E-mail delivery system", "E-Mail");
+				"E-mail delivery system", "E-Mail", false);
 
 		FileOutputStream fos = null;
 

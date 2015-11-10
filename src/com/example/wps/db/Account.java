@@ -7,6 +7,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 public class Account {
+	
 	private String name;
 	private String id;
 	private String password;
@@ -14,9 +15,10 @@ public class Account {
 	private String lastAccess;
 	private String note;
 	private String category;
+	private Boolean isFavorite;
 
 	public Account(String name, String id, String password, String url,
-			String lastAccess, String note, String category) {
+			String lastAccess, String note, String category, Boolean isFavorite) {
 		this.name = name;
 		this.id = id;
 		this.password = password;
@@ -24,6 +26,7 @@ public class Account {
 		this.lastAccess = lastAccess;
 		this.note = note;
 		this.category = category;
+		this.isFavorite = isFavorite;
 	}
 
 	public String getName() {
@@ -80,6 +83,14 @@ public class Account {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public Boolean getIsFavorite() {
+		return isFavorite;
+	}
+
+	public void setIsFavorite(Boolean isFavorite) {
+		this.isFavorite = isFavorite;
 	}
 
 	public String toXmlString() {
