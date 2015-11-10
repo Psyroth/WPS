@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.wps.R;
 import com.example.wps.db.Account;
-import com.example.wps.db.ReadXMLFile;
+import com.example.wps.db.DatabaseHandler;
 
 public class FavoriteViewActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class FavoriteViewActivity extends Activity {
 
 	public void addAccountsToLinearLayout() {
 
-		ArrayList<Account> favAccounts = (ArrayList<Account>) ReadXMLFile.getAllFavoriteAccounts();
+		ArrayList<Account> favAccounts = (ArrayList<Account>) DatabaseHandler.getAllFavoriteAccounts();
 		
 		for (int acc = 0; acc < favAccounts.size(); acc++) {
 				String userTitle = favAccounts.get(acc).getName();
