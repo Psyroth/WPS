@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import com.example.wps.db.Account;
-import com.example.wps.db.ReadXMLFile;
+import com.example.wps.db.DatabaseHandler;
 import com.example.wps.gui.ListOfAccounts;
 import com.example.wps.gui.PasswordGenViewActivity;
 
@@ -34,7 +34,8 @@ public class MainActivity extends ActionBarActivity {
 	public void testDatabase() {
 
 		String FILENAME = "database";
-		String xmlStringDatabase = ReadXMLFile.createEmptyDatabase();
+		DatabaseHandler.initDatabaseHandler();
+		String xmlStringDatabase = DatabaseHandler.createEmptyDatabase();
 
 		Account testAccount1 = new Account("Facebook",
 				"facebookUser@hotmail.com", "facebook",
@@ -78,15 +79,15 @@ public class MainActivity extends ActionBarActivity {
 				builder.append((char) ch);
 			}
 
-			ReadXMLFile.initDatabase(builder.toString());
+			DatabaseHandler.initDatabaseHandler(builder.toString());
 
-			ReadXMLFile.addAccount(testAccount1);
-			ReadXMLFile.addAccount(testAccount1Bis);
-			ReadXMLFile.addAccount(testAccount2);
-			ReadXMLFile.addAccount(testAccount3);
-			ReadXMLFile.addAccount(testAccount4);
+			DatabaseHandler.addAccount(testAccount1);
+			DatabaseHandler.addAccount(testAccount1Bis);
+			DatabaseHandler.addAccount(testAccount2);
+			DatabaseHandler.addAccount(testAccount3);
+			DatabaseHandler.addAccount(testAccount4);
 			System.out.println("--------------");
-			ReadXMLFile.printDatabase();
+			DatabaseHandler.printDatabase();
 
 			fis.close();
 		} catch (Exception e) {

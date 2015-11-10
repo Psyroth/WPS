@@ -19,7 +19,6 @@ public class ListOfAccounts extends TabActivity{
 
 		setContentView(R.layout.search_or_category_layout);
 		
-		
 		Resources ressources = getResources(); 
 		TabHost tabHost = getTabHost(); 
 		
