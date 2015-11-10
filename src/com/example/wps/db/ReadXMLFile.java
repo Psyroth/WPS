@@ -186,6 +186,8 @@ public class ReadXMLFile {
 				addNode("lastAccess", account.getLastAccess(), rootElement);
 				addNode("note", account.getNote(), rootElement);
 				addNode("category", account.getCategory(), rootElement);
+				addNode("favorite", Boolean.toString(account.getIsFavorite()),
+						rootElement);
 
 				NodeList nodeList = document.getElementsByTagName("accounts");
 				nodeList.item(0).appendChild(rootElement);
@@ -206,33 +208,12 @@ public class ReadXMLFile {
 			String retrievedName = elementList.get(i)
 					.getElementsByTagName("name").item(0).getTextContent();
 			if (account.getName().equals(retrievedName)) {
-				System.out.println("\nA " + account.getName()
-						+ " account already exists.");
 				return true;
 			}
 		}
 		System.out.println("\nA " + account.getName()
 				+ " account does not exist yet.");
 		return false;
-	}
-
-	/* Returns all the accounts in a given category. */
-	public static List<Account> accountsInCategory(String category) {
-
-		List<Account> retrievedAccounts = new ArrayList<Account>();
-
-		for (int i = 0; i < elementList.size(); i++) {
-
-			Element currentElement = elementList.get(i);
-			String retrievedCategory = currentElement
-					.getElementsByTagName("category").item(0).getTextContent();
-
-			if (category.equals(retrievedCategory)) {
-				Account retrievedAccount = elementToObject(currentElement);
-				retrievedAccounts.add(retrievedAccount);
-			}
-		}
-		return retrievedAccounts;
 	}
 
 	/* Removes the account from the database. */
@@ -275,29 +256,7 @@ public class ReadXMLFile {
 		}
 	}
 
-	/* Returns an account made from the element. */
-	public static Account elementToObject(Element element) {
-
-		String name = element.getElementsByTagName("name").item(0)
-				.getTextContent();
-		String id = element.getElementsByTagName("id").item(0).getTextContent();
-		String password = element.getElementsByTagName("password").item(0)
-				.getTextContent();
-		String url = element.getElementsByTagName("url").item(0)
-				.getTextContent();
-		String lastAccess = element.getElementsByTagName("lastAccess").item(0)
-				.getTextContent();
-		String note = element.getElementsByTagName("note").item(0)
-				.getTextContent();
-		String category = element.getElementsByTagName("category").item(0)
-				.getTextContent();
-		Boolean favorite = Boolean.parseBoolean(element.getElementsByTagName("favorite").item(0)
-				.getTextContent());
-
-		return new Account(name, id, password, url, lastAccess, note, category, favorite);
-	}
-
-	/* Returns the list of all the accounts in database. */
+	/* Returns all the accounts in database. */
 	public static List<Account> getAllAccounts() {
 
 		List<Account> allAccounts = new ArrayList<Account>();
@@ -305,19 +264,66 @@ public class ReadXMLFile {
 		for (int i = 0; i < elementList.size(); i++) {
 
 			Element currentElement = elementList.get(i);
-			Account anAccount = elementToObject(currentElement);
-			allAccounts.add(anAccount);
+			Account retrievedAccount = elementToObject(currentElement);
+			allAccounts.add(retrievedAccount);
 		}
 
 		return allAccounts;
 	}
 
-	public static void sortAccountListByLastAccess(ArrayList<Account> accountsList) {
-		Collections.sort(accountsList, Account.COMPARE_BY_LASTACCESS);
+	/* Returns all the accounts in a given category. */
+	public static List<Account> getAllAccountsInCategory(String category) {
+
+		List<Account> categoryAccounts = new ArrayList<Account>();
+
+		for (int i = 0; i < elementList.size(); i++) {
+
+			Element currentElement = elementList.get(i);
+			String retrievedCategory = currentElement
+					.getElementsByTagName("category").item(0).getTextContent();
+
+			if (category.equals(retrievedCategory)) {
+				Account categoryAccount = elementToObject(currentElement);
+				categoryAccounts.add(categoryAccount);
+			}
+		}
+		return categoryAccounts;
 	}
-	
-	public static void sortAccountListByAlphabeticOrder(ArrayList<Account> accountsList) {
+
+	/* Returns all favorite accounts. */
+	public static List<Account> getAllFavoriteAccounts() {
+		List<Account> favoriteAccounts = new ArrayList<Account>();
+
+		for (int i = 0; i < elementList.size(); i++) {
+
+			Element currentElement = elementList.get(i);
+			Boolean isFavorite = Boolean.parseBoolean(currentElement
+					.getElementsByTagName("favorite").item(0).getTextContent());
+
+			if (isFavorite) {
+				Account favoriteAccount = elementToObject(currentElement);
+				favoriteAccounts.add(favoriteAccount);
+			}
+		}
+		return favoriteAccounts;
+	}
+
+	/*
+	 * Sorts the Accounts in the accountsList by their name attribute
+	 * (Alphabetic order)
+	 */
+	public static void sortAccountListByAlphabeticOrder(
+			ArrayList<Account> accountsList) {
 		Collections.sort(accountsList, Account.COMPARE_BY_NAME);
+	}
+
+	/*
+	 * Sorts the Accounts in the accountsList by their lastAccess attribute
+	 * (most recent at the beginning)
+	 */
+	public static void sortAccountListByLastAccess(
+			ArrayList<Account> accountsList) {
+		Collections.sort(accountsList, Account.COMPARE_BY_LASTACCESS);
 	}
 
 	/*
@@ -336,8 +342,6 @@ public class ReadXMLFile {
 			transformer.transform(source, result);
 			document.normalize();
 			readXml();
-
-			System.out.println("Changes successfuly made");
 
 		} catch (Exception e) {
 			System.out.println("Failed to save the changes");
@@ -360,6 +364,29 @@ public class ReadXMLFile {
 			accessedLongAgo = true;
 		}
 		return accessedLongAgo;
+	}
+
+	/* Returns an account made from the element. */
+	public static Account elementToObject(Element element) {
+
+		String name = element.getElementsByTagName("name").item(0)
+				.getTextContent();
+		String id = element.getElementsByTagName("id").item(0).getTextContent();
+		String password = element.getElementsByTagName("password").item(0)
+				.getTextContent();
+		String url = element.getElementsByTagName("url").item(0)
+				.getTextContent();
+		String lastAccess = element.getElementsByTagName("lastAccess").item(0)
+				.getTextContent();
+		String note = element.getElementsByTagName("note").item(0)
+				.getTextContent();
+		String category = element.getElementsByTagName("category").item(0)
+				.getTextContent();
+		Boolean favorite = Boolean.parseBoolean(element
+				.getElementsByTagName("favorite").item(0).getTextContent());
+
+		return new Account(name, id, password, url, lastAccess, note, category,
+				favorite);
 	}
 
 	/* Print the database using the elementList. */
@@ -397,20 +424,20 @@ public class ReadXMLFile {
 				"facebookUser@hotmail.com", "facebook",
 				"https://www.facebook.com", "2015-09-12 22:00:00",
 				"Less useful than Linkedin", "Social Network", true);
-		
+
 		Account testAccount1Bis = new Account("FacebookBis",
 				"facebookUser@gmail.com", "facebook",
 				"https://www.facebook.com", "2009-06-01 18:45:00",
 				"Less useful than Linkedin", "Social Network", false);
-		
+
 		Account testAccount2 = new Account("Gmail", "gmailUser@hotmail.com",
 				"gmail", "https://www.gmail.com", "2012-02-24 13:42:00",
 				"Avoid Spam please", "E-Mail", false);
-		
+
 		Account testAccount3 = new Account("Youtube", "youtubeUser", "youtube",
 				"https://www.youtube.com", "2010-12-13 12:30:00",
 				"Best Channel Ever", "Entertainment", true);
-		
+
 		Account testAccount4 = new Account("Webmail", "webmailUser@ulb.ac.be",
 				"webmail", "https://webmail.ulb.ac.be/", "2005-08-20 09:30:00",
 				"E-mail delivery system", "E-Mail", false);
@@ -432,16 +459,16 @@ public class ReadXMLFile {
 		testAccountExists(testAccount4);
 
 		testGetAllAccounts();
-		testSearchAccountByCategory("E-Mail");
+		testGetAllAccountsInCategory("E-Mail");
 		testLastAccess(testAccount1);
 		testLastAccess(testAccount2);
+		testGetAllFavoriteAccounts();
 	}
 
 	public static void testAccountExists(Account account) {
 
 		System.out.println("\nTesting the presence of " + account.getName()
 				+ " account in database.");
-
 		accountExists(account);
 	}
 
@@ -449,7 +476,6 @@ public class ReadXMLFile {
 
 		System.out.println("\nTrying to add " + account.getName()
 				+ " account in database.");
-
 		addAccount(account);
 	}
 
@@ -457,7 +483,6 @@ public class ReadXMLFile {
 
 		System.out.println("\nTrying to modify " + oldAccount.getName()
 				+ " account in database.");
-
 		modifyAccount(oldAccount, newAccount);
 	}
 
@@ -465,19 +490,9 @@ public class ReadXMLFile {
 
 		System.out.println("\nTrying to remove " + account.getName()
 				+ " account in database.");
-
 		removeAccount(account);
 	}
-
-	public static void testSearchAccountByCategory(String category) {
-
-		System.out.println("\nRetrieving accounts in database from the "
-				+ category + " category.\n");
-
-		List<Account> retrievedAccounts = accountsInCategory(category);
-		System.out.println(Arrays.toString(retrievedAccounts.toArray()));
-	}
-
+	
 	public static void testGetAllAccounts() {
 
 		System.out.println("\nRetrieving all accounts from database.\n");
@@ -485,6 +500,21 @@ public class ReadXMLFile {
 		System.out.println(Arrays.toString(allAccounts.toArray()));
 	}
 
+	public static void testGetAllAccountsInCategory(String category) {
+
+		System.out.println("\nRetrieving accounts in database from the "
+				+ category + " category.\n");
+		List<Account> retrievedAccounts = getAllAccountsInCategory(category);
+		System.out.println(Arrays.toString(retrievedAccounts.toArray()));
+	}
+
+	public static void testGetAllFavoriteAccounts() {
+
+		System.out.println("\nRetrieving favorite accounts in database.\n");
+		List<Account> retrievedAccounts = getAllFavoriteAccounts();
+		System.out.println(Arrays.toString(retrievedAccounts.toArray()));
+	}
+	
 	public static void testLastAccess(Account account) {
 
 		if (accessedLongAgo(account)) {
