@@ -55,7 +55,6 @@ public class FrequencyViewActivity extends Activity {
 			tv.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null,
 					null, null);
 
-			System.out.println(tv.getText());
 			linearLayout.addView(tv);
 		}
 	}

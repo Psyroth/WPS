@@ -67,7 +67,7 @@ public class DatabaseHandler {
 
 				NodeList nodeList = document.getElementsByTagName("accounts");
 				nodeList.item(0).appendChild(rootElement);
-				XMLHandler.xmlToElementList();
+				elementList = XMLHandler.xmlToElementList();
 			}
 
 		} catch (Exception e) {
@@ -91,7 +91,7 @@ public class DatabaseHandler {
 				Element parentElement = (Element) element.getParentNode();
 				element.getParentNode().getParentNode()
 						.removeChild(parentElement);
-				XMLHandler.xmlToElementList();
+				elementList = XMLHandler.xmlToElementList();
 			}
 		}
 
