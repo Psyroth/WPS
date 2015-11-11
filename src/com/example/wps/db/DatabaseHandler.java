@@ -26,13 +26,13 @@ public class DatabaseHandler {
 		elementList = null;
 		document = null;
 	}
-	
+
 	public static void initDatabaseHandler(String xmlSD) {
 		xmlStringDatabase = xmlSD;
 		document = XMLHandler.buildDocument(xmlStringDatabase);
 		elementList = XMLHandler.xmlToElementList();
 	}
-	
+
 	/*
 	 * Returns an empty .xml file as a String as the database.
 	 */
@@ -57,13 +57,16 @@ public class DatabaseHandler {
 
 				XMLHandler.addNode("name", account.getName(), rootElement);
 				XMLHandler.addNode("id", account.getId(), rootElement);
-				XMLHandler.addNode("password", account.getPassword(), rootElement);
-				XMLHandler.addNode("url", account.getUrl(), rootElement);
-				XMLHandler.addNode("lastAccess", account.getLastAccess(), rootElement);
-				XMLHandler.addNode("note", account.getNote(), rootElement);
-				XMLHandler.addNode("category", account.getCategory(), rootElement);
-				XMLHandler.addNode("favorite", Boolean.toString(account.getIsFavorite()),
+				XMLHandler.addNode("password", account.getPassword(),
 						rootElement);
+				XMLHandler.addNode("url", account.getUrl(), rootElement);
+				XMLHandler.addNode("lastAccess", account.getLastAccess(),
+						rootElement);
+				XMLHandler.addNode("note", account.getNote(), rootElement);
+				XMLHandler.addNode("category", account.getCategory(),
+						rootElement);
+				XMLHandler.addNode("favorite",
+						Boolean.toString(account.getIsFavorite()), rootElement);
 
 				NodeList nodeList = document.getElementsByTagName("accounts");
 				nodeList.item(0).appendChild(rootElement);
@@ -86,8 +89,8 @@ public class DatabaseHandler {
 		try {
 
 			if (accountExists(account)) {
-				Element element = (Element) XMLHandler.getNodeByValue(account.getName(),
-						nodeList);
+				Element element = (Element) XMLHandler.getNodeByValue(
+						account.getName(), nodeList);
 				Element parentElement = (Element) element.getParentNode();
 				element.getParentNode().getParentNode()
 						.removeChild(parentElement);
@@ -116,7 +119,7 @@ public class DatabaseHandler {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/* Returns if the account exists or not. */
 	public static boolean accountExists(Account account) {
 
@@ -131,8 +134,22 @@ public class DatabaseHandler {
 				+ " account does not exist yet.");
 		return false;
 	}
-	
-	/* Returns true if the account was accessed more than 4 months ago. */
+
+	/* Returns the account that has "name" as account name */
+	public static Account getAccountFromName(String name) {
+		Account retrievedAccount = null;
+
+		NodeList nodeList = document.getElementsByTagName("accounts").item(0)
+				.getChildNodes();
+
+		Element element = (Element) XMLHandler.getNodeByValue(name, nodeList);
+		Element parentElement = (Element) element.getParentNode();
+		retrievedAccount = XMLHandler.elementToObject(parentElement);
+
+		return retrievedAccount;
+	}
+
+	/* Returns true if the account was accessed more than 3 months ago. */
 	public static boolean accessedLongAgo(Account account) {
 
 		Boolean accessedLongAgo = false;
@@ -143,7 +160,7 @@ public class DatabaseHandler {
 		DateTime lastAccess = formatter.parseDateTime(account.getLastAccess());
 		Interval i = new Interval(lastAccess, today);
 
-		if ((i.toPeriod().getYears() > 0) || (i.toPeriod().getMonths() > 4)) {
+		if ((i.toPeriod().getYears() > 0) || (i.toPeriod().getMonths() > 3)) {
 			accessedLongAgo = true;
 		}
 		return accessedLongAgo;
@@ -157,7 +174,8 @@ public class DatabaseHandler {
 		for (int i = 0; i < elementList.size(); i++) {
 
 			Element currentElement = elementList.get(i);
-			Account retrievedAccount = XMLHandler.elementToObject(currentElement);
+			Account retrievedAccount = XMLHandler
+					.elementToObject(currentElement);
 			allAccounts.add(retrievedAccount);
 		}
 
@@ -176,7 +194,8 @@ public class DatabaseHandler {
 					.getElementsByTagName("category").item(0).getTextContent();
 
 			if (category.equals(retrievedCategory)) {
-				Account categoryAccount = XMLHandler.elementToObject(currentElement);
+				Account categoryAccount = XMLHandler
+						.elementToObject(currentElement);
 				categoryAccounts.add(categoryAccount);
 			}
 		}
@@ -194,7 +213,8 @@ public class DatabaseHandler {
 					.getElementsByTagName("favorite").item(0).getTextContent());
 
 			if (isFavorite) {
-				Account favoriteAccount = XMLHandler.elementToObject(currentElement);
+				Account favoriteAccount = XMLHandler
+						.elementToObject(currentElement);
 				favoriteAccounts.add(favoriteAccount);
 			}
 		}
@@ -205,7 +225,8 @@ public class DatabaseHandler {
 	 * Sorts the Accounts in the accountsList by their name attribute
 	 * (Alphabetic order)
 	 */
-	public static void sortAccountListByAlphabeticOrder(ArrayList<Account> accountsList) {
+	public static void sortAccountListByAlphabeticOrder(
+			ArrayList<Account> accountsList) {
 		Collections.sort(accountsList, Account.COMPARE_BY_NAME);
 	}
 
@@ -213,7 +234,8 @@ public class DatabaseHandler {
 	 * Sorts the Accounts in the accountsList by their lastAccess attribute
 	 * (most recent at the beginning)
 	 */
-	public static void sortAccountListByLastAccess(ArrayList<Account> accountsList) {
+	public static void sortAccountListByLastAccess(
+			ArrayList<Account> accountsList) {
 		Collections.sort(accountsList, Account.COMPARE_BY_LASTACCESS);
 	}
 

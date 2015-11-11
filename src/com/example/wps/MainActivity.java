@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 
 import com.example.wps.db.Account;
 import com.example.wps.db.DatabaseHandler;
+import com.example.wps.db.DatabaseTests;
 import com.example.wps.gui.ListOfAccounts;
 import com.example.wps.gui.PasswordGenViewActivity;
 
@@ -33,28 +34,36 @@ public class MainActivity extends ActionBarActivity {
 
 	public void testDatabase() {
 
-		String FILENAME = "database";
 		DatabaseHandler.initDatabaseHandler();
 		String xmlStringDatabase = DatabaseHandler.createEmptyDatabase();
+
+		DatabaseTests dbt = new DatabaseTests();
+		dbt.runTests(xmlStringDatabase); // For local tests
+		// androidFileTest(xmlStringDatabase); // For persistence test
+	}
+
+	public void androidFileTest(String xmlStringDatabase) {
+
+		String FILENAME = "database";
 
 		Account testAccount1 = new Account("Facebook",
 				"facebookUser@hotmail.com", "facebook",
 				"https://www.facebook.com", "2015-09-12 22:00:00",
 				"Less useful than Linkedin", "Social Network", true);
-		
+
 		Account testAccount1Bis = new Account("FacebookBis",
 				"facebookUser@gmail.com", "facebook",
 				"https://www.facebook.com", "2009-06-01 18:45:00",
 				"Less useful than Linkedin", "Social Network", false);
-		
+
 		Account testAccount2 = new Account("Gmail", "gmailUser@hotmail.com",
 				"gmail", "https://www.gmail.com", "2012-02-24 13:42:00",
 				"Avoid Spam please", "E-Mail", false);
-		
+
 		Account testAccount3 = new Account("Youtube", "youtubeUser", "youtube",
 				"https://www.youtube.com", "2010-12-13 12:30:00",
 				"Best Channel Ever", "Entertainment", true);
-		
+
 		Account testAccount4 = new Account("Webmail", "webmailUser@ulb.ac.be",
 				"webmail", "https://webmail.ulb.ac.be/", "2005-08-20 09:30:00",
 				"E-mail delivery system", "E-Mail", false);
@@ -130,11 +139,11 @@ public class MainActivity extends ActionBarActivity {
 			// dialog.show();
 		}
 	}
-	
-	public void showPassGen(){
-		   Intent i = new Intent(MainActivity.this, PasswordGenViewActivity.class);
-		   startActivity(i);
-	   } 
+
+	public void showPassGen() {
+		Intent i = new Intent(MainActivity.this, PasswordGenViewActivity.class);
+		startActivity(i);
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

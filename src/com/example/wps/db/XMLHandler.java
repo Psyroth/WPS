@@ -47,6 +47,24 @@ public class XMLHandler {
 		return document;
 	}
 
+	/* Updates the elementList according to the .xml file. */
+	public static List<Element> xmlToElementList() {
+
+		elementList = new ArrayList<Element>();
+
+		try {
+
+			NodeList nodeList = document.getElementsByTagName("accounts");
+			addNodesValueToElementList(nodeList);
+
+		} catch (Exception e) {
+			System.out.println("Failed to read the .xml file");
+			e.printStackTrace();
+		}
+
+		return elementList;
+	}
+
 	/* Returns the node named "tagName" in the nodeList, null otherwise. */
 	public static Node getNodeByName(String tagName, NodeList nodeList) {
 
@@ -120,24 +138,6 @@ public class XMLHandler {
 		elementList.add(element);
 	}
 
-	/* Updates the elementList according to the .xml file. */
-	public static List<Element> xmlToElementList() {
-
-		elementList = new ArrayList<Element>();
-
-		try {
-
-			NodeList nodeList = document.getElementsByTagName("accounts");
-			addNodesValueToElementList(nodeList);
-
-		} catch (Exception e) {
-			System.out.println("Failed to read the .xml file");
-			e.printStackTrace();
-		}
-		
-		return elementList;
-	}
-
 	/* Returns an account made from the element. */
 	public static Account elementToObject(Element element) {
 
@@ -160,7 +160,7 @@ public class XMLHandler {
 		return new Account(name, id, password, url, lastAccess, note, category,
 				favorite);
 	}
-	
+
 	/*
 	 * Saves the created DOM tree to .xml file. Only when using local .xml file
 	 */

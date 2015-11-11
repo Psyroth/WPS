@@ -7,7 +7,7 @@ import com.example.wps.db.Account;
 import com.example.wps.db.DatabaseHandler;
 
 public class DatabaseTests {
-			
+
 	/* Launch the basic tests. */
 	public void runTests(String xmlSD) {
 
@@ -34,7 +34,7 @@ public class DatabaseTests {
 				"E-mail delivery system", "E-Mail", false);
 
 		DatabaseHandler.initDatabaseHandler(xmlSD);
-		
+
 		testAddAccount(testAccount1);
 		testModifyAccount(testAccount1, testAccount1Bis);
 
@@ -56,6 +56,7 @@ public class DatabaseTests {
 		testLastAccess(testAccount1);
 		testLastAccess(testAccount2);
 		testGetAllFavoriteAccounts();
+		testGetAccountFromName("Youtube");
 	}
 
 	public void testAccountExists(Account account) {
@@ -86,6 +87,14 @@ public class DatabaseTests {
 		DatabaseHandler.removeAccount(account);
 	}
 
+	public void testGetAccountFromName(String name) {
+
+		System.out.println("\nTrying to retrieve " + name
+				+ " account in database.");
+		Account account = DatabaseHandler.getAccountFromName(name);
+		System.out.println(account.toString());
+	}
+
 	public void testGetAllAccounts() {
 
 		System.out.println("\nRetrieving all accounts from database.\n");
@@ -97,14 +106,16 @@ public class DatabaseTests {
 
 		System.out.println("\nRetrieving accounts in database from the "
 				+ category + " category.\n");
-		List<Account> retrievedAccounts = DatabaseHandler.getAllAccountsInCategory(category);
+		List<Account> retrievedAccounts = DatabaseHandler
+				.getAllAccountsInCategory(category);
 		System.out.println(Arrays.toString(retrievedAccounts.toArray()));
 	}
 
 	public void testGetAllFavoriteAccounts() {
 
 		System.out.println("\nRetrieving favorite accounts in database.\n");
-		List<Account> retrievedAccounts = DatabaseHandler.getAllFavoriteAccounts();
+		List<Account> retrievedAccounts = DatabaseHandler
+				.getAllFavoriteAccounts();
 		System.out.println(Arrays.toString(retrievedAccounts.toArray()));
 	}
 
@@ -112,9 +123,9 @@ public class DatabaseTests {
 
 		if (DatabaseHandler.accessedLongAgo(account)) {
 			System.out
-					.println("\nIt is a long time you have accessed this account, you might want to change your password.");
+					.println("\nIt is a long time you have accessed this account, do you still use it ?");
 		} else {
-			System.out.println("\nThe last access is quite recent.");
+			System.out.println("\nThe last access is quite recent, you might want to change your password more often.");
 		}
 	}
 }
