@@ -1,8 +1,28 @@
 package com.example.wps.db;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
@@ -10,41 +30,122 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import android.content.Context;
 
 import com.example.wps.db.Account;
-import com.example.wps.db.XMLHandler;
+import com.example.wps.encryption.Encryption;
 
-public class DatabaseHandler {
+public class AccountDatabase {
 
-	private static String xmlStringDatabase;
-	private static List<Element> elementList;
+	private static String filename = "database.xml";
 	private static Document document;
+	private static byte[] key;
 
-	public static void initDatabaseHandler() {
-		xmlStringDatabase = null;
-		elementList = null;
-		document = null;
+	public static void initDatabase(Context context, String serialNumber, String nfcTag) throws TransformerFactoryConfigurationError, NoSuchAlgorithmException, Exception {
+		File file = new File(context.getFilesDir(), filename);
+		key = Encryption.xor(Encryption.sha1(serialNumber), Encryption.sha1(nfcTag));
+		if (file.exists()) {
+			document = openDatabase(file);
+			System.out.println("File exists");
+		}
+		else {
+			document = createEmptyDatabase();
+			saveDatabase(context);
+			System.out.println("File does not exist");
+		}
+	}
+	
+	/*
+	 * Load an existing database.
+	 */
+	private static Document openDatabase(File xmlFile) throws SAXException, IOException, ParserConfigurationException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, NoSuchPaddingException {
+		byte[] encodedDatabase = new byte[(int) xmlFile.length()];
+		FileInputStream inputStream = new FileInputStream(xmlFile);
+		inputStream.read(encodedDatabase);
+		inputStream.close();
+		String database = Encryption.decrypt(encodedDatabase, key);
+		Document result = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(database)));
+		return result;
 	}
 
-	public static void initDatabaseHandler(String xmlSD) {
-		xmlStringDatabase = xmlSD;
-		document = XMLHandler.buildDocument(xmlStringDatabase);
-		elementList = XMLHandler.xmlToElementList();
-	}
 
 	/*
-	 * Returns an empty .xml file as a String as the database.
+	 * Create an empty database.
 	 */
-	public static String createEmptyDatabase() {
+	private static Document createEmptyDatabase() throws SAXException, IOException, ParserConfigurationException {
 
-		String database = "<?xml version=\"1.0\""
+		String databaseContent = "<?xml version=\"1.0\""
 				+ "encoding=\"UTF-8\" standalone=\"no\"?>" + "<WPS-database>"
-				+ "<accounts>" + "</accounts>" + "</WPS-database>";
+				+ "<accounts>" 
+				+ "<account><name>Facebook</name><id>facebookUser@hotmail.com</id><password>facebook</password><url>https://www.facebook.com</url><lastAccess>2015-10-26 22:00:00</lastAccess><note>Less useful than Linkedin</note><category>Social Network</category><favorite>true</favorite></account></accounts>" + "</WPS-database>";
 
-		return database;
+		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(databaseContent)));
+		return document;
 	}
+	
+	/* Adds a node named "tagName" with "value" as value and "parent" as parent. */
+	private static void addNode(String tagName, String value, Node parent) {
 
+		// Create a new Node with the given tag name
+		Node node = document.createElement(tagName);
+
+		// Add the node value as a child text node
+		Text nodeVal = document.createTextNode(value);
+		node.appendChild(nodeVal);
+
+		// Add the new node structure to the parent node
+		parent.appendChild(node);
+	}
+	
+	/* Returns the node with the "value" in the nodeList, null otherwise. */
+	private static Node getNodeByValue(String value, NodeList nodeList) {
+
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Node node = nodeList.item(i);
+			NodeList childNodes = node.getChildNodes();
+
+			for (int j = 0; j < childNodes.getLength(); j++) {
+				Node data = childNodes.item(j);
+
+				if (data.getNodeType() == Node.ELEMENT_NODE) {
+					Element element = (Element) data;
+
+					if (element.getTextContent().equalsIgnoreCase(value)) {
+						return data;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	/* Returns an account made from the element. */
+	private static Account elementToAccount(Element element) {
+		String name = element.getElementsByTagName("name").item(0)
+				.getTextContent();
+		String id = element.getElementsByTagName("id").item(0).getTextContent();
+		String password = element.getElementsByTagName("password").item(0)
+				.getTextContent();
+		String url = element.getElementsByTagName("url").item(0)
+				.getTextContent();
+		String lastAccess = element.getElementsByTagName("lastAccess").item(0)
+				.getTextContent();
+		String note = element.getElementsByTagName("note").item(0)
+				.getTextContent();
+		String category = element.getElementsByTagName("category").item(0)
+				.getTextContent();
+		Boolean favorite = Boolean.parseBoolean(element
+				.getElementsByTagName("favorite").item(0).getTextContent());
+
+		return new Account(name, id, password, url, lastAccess, note, category,
+				favorite);
+	}
+	
 	/* Adds the "account" to the database. */
 	public static void addAccount(Account account) {
 
@@ -52,25 +153,23 @@ public class DatabaseHandler {
 
 			if (!accountExists(account)) {
 
-				Element rootElement = document.createElement(account.getName()
-						+ "Account");
+				Element rootElement = document.createElement("account");
 
-				XMLHandler.addNode("name", account.getName(), rootElement);
-				XMLHandler.addNode("id", account.getId(), rootElement);
-				XMLHandler.addNode("password", account.getPassword(),
+				addNode("name", account.getName(), rootElement);
+				addNode("id", account.getId(), rootElement);
+				addNode("password", account.getPassword(),
 						rootElement);
-				XMLHandler.addNode("url", account.getUrl(), rootElement);
-				XMLHandler.addNode("lastAccess", account.getLastAccess(),
+				addNode("url", account.getUrl(), rootElement);
+				addNode("lastAccess", account.getLastAccess(),
 						rootElement);
-				XMLHandler.addNode("note", account.getNote(), rootElement);
-				XMLHandler.addNode("category", account.getCategory(),
+				addNode("note", account.getNote(), rootElement);
+				addNode("category", account.getCategory(),
 						rootElement);
-				XMLHandler.addNode("favorite",
+				addNode("favorite",
 						Boolean.toString(account.getIsFavorite()), rootElement);
 
 				NodeList nodeList = document.getElementsByTagName("accounts");
 				nodeList.item(0).appendChild(rootElement);
-				elementList = XMLHandler.xmlToElementList();
 			}
 
 		} catch (Exception e) {
@@ -89,12 +188,11 @@ public class DatabaseHandler {
 		try {
 
 			if (accountExists(account)) {
-				Element element = (Element) XMLHandler.getNodeByValue(
+				Element element = (Element) getNodeByValue(
 						account.getName(), nodeList);
 				Element parentElement = (Element) element.getParentNode();
 				element.getParentNode().getParentNode()
 						.removeChild(parentElement);
-				elementList = XMLHandler.xmlToElementList();
 			}
 		}
 
@@ -123,10 +221,8 @@ public class DatabaseHandler {
 	/* Returns if the account exists or not. */
 	public static boolean accountExists(Account account) {
 
-		for (int i = 0; i < elementList.size(); i++) {
-			String retrievedName = elementList.get(i)
-					.getElementsByTagName("name").item(0).getTextContent();
-			if (account.getName().equals(retrievedName)) {
+		for (Account currentAccount : getAllAccounts()) {
+			if (account.getName().equals(currentAccount.getName())) {
 				return true;
 			}
 		}
@@ -142,9 +238,9 @@ public class DatabaseHandler {
 		NodeList nodeList = document.getElementsByTagName("accounts").item(0)
 				.getChildNodes();
 
-		Element element = (Element) XMLHandler.getNodeByValue(name, nodeList);
+		Element element = (Element) getNodeByValue(name, nodeList);
 		Element parentElement = (Element) element.getParentNode();
-		retrievedAccount = XMLHandler.elementToObject(parentElement);
+		retrievedAccount = elementToAccount(parentElement);
 
 		return retrievedAccount;
 	}
@@ -171,12 +267,12 @@ public class DatabaseHandler {
 
 		List<Account> allAccounts = new ArrayList<Account>();
 
-		for (int i = 0; i < elementList.size(); i++) {
-
-			Element currentElement = elementList.get(i);
-			Account retrievedAccount = XMLHandler
-					.elementToObject(currentElement);
-			allAccounts.add(retrievedAccount);
+		NodeList accountNodes = document.getElementsByTagName("accounts");
+		for (int i = 0; i < accountNodes.getLength(); i++) {
+			Node currentNode = accountNodes.item(i);
+			Element currentElement = (Element) currentNode;
+			Account currentAccount = elementToAccount(currentElement);
+			allAccounts.add(currentAccount);
 		}
 
 		return allAccounts;
@@ -187,16 +283,9 @@ public class DatabaseHandler {
 
 		List<Account> categoryAccounts = new ArrayList<Account>();
 
-		for (int i = 0; i < elementList.size(); i++) {
-
-			Element currentElement = elementList.get(i);
-			String retrievedCategory = currentElement
-					.getElementsByTagName("category").item(0).getTextContent();
-
-			if (category.equals(retrievedCategory)) {
-				Account categoryAccount = XMLHandler
-						.elementToObject(currentElement);
-				categoryAccounts.add(categoryAccount);
+		for (Account currentAccount : getAllAccounts()) {
+			if (category.equals(currentAccount.getCategory())) {
+				categoryAccounts.add(currentAccount);
 			}
 		}
 		return categoryAccounts;
@@ -206,16 +295,9 @@ public class DatabaseHandler {
 	public static List<Account> getAllFavoriteAccounts() {
 		List<Account> favoriteAccounts = new ArrayList<Account>();
 
-		for (int i = 0; i < elementList.size(); i++) {
-
-			Element currentElement = elementList.get(i);
-			Boolean isFavorite = Boolean.parseBoolean(currentElement
-					.getElementsByTagName("favorite").item(0).getTextContent());
-
-			if (isFavorite) {
-				Account favoriteAccount = XMLHandler
-						.elementToObject(currentElement);
-				favoriteAccounts.add(favoriteAccount);
+		for (Account currentAccount : getAllAccounts()) {
+			if (currentAccount.getIsFavorite()) {
+				favoriteAccounts.add(currentAccount);
 			}
 		}
 		return favoriteAccounts;
@@ -239,31 +321,34 @@ public class DatabaseHandler {
 		Collections.sort(accountsList, Account.COMPARE_BY_LASTACCESS);
 	}
 
-	/* Print the database using the elementList. */
+	/* Print the whole database. */
 	public static void printDatabase() {
 
-		for (int i = 0; i < elementList.size(); i++) {
-			System.out.println("\nAccount Name : "
-					+ elementList.get(i).getElementsByTagName("name").item(0)
-							.getTextContent());
-			System.out.println("Identifier : "
-					+ elementList.get(i).getElementsByTagName("id").item(0)
-							.getTextContent());
-			System.out.println("Password : "
-					+ elementList.get(i).getElementsByTagName("password")
-							.item(0).getTextContent());
-			System.out.println("Url : "
-					+ elementList.get(i).getElementsByTagName("url").item(0)
-							.getTextContent());
-			System.out.println("Last Accessed : "
-					+ elementList.get(i).getElementsByTagName("lastAccess")
-							.item(0).getTextContent());
-			System.out.println("Note : "
-					+ elementList.get(i).getElementsByTagName("note").item(0)
-							.getTextContent());
-			System.out.println("Category : "
-					+ elementList.get(i).getElementsByTagName("category")
-							.item(0).getTextContent());
+		for (Account account : getAllAccounts()) {
+			System.out.println(account.toString());
+		}
+	}
+	
+	public static void saveDatabase(Context context) throws TransformerConfigurationException, TransformerException, TransformerFactoryConfigurationError, IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+		deleteDatabase(context);
+		DOMSource domSource = new DOMSource(document);
+		StringWriter writer = new StringWriter();
+		StreamResult result = new StreamResult(writer);
+		TransformerFactory.newInstance().newTransformer().transform(domSource, result);
+		FileOutputStream outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+		byte[] encryptedDatabase = Encryption.encrypt(writer.toString(), key);
+		outputStream.write(encryptedDatabase);
+		outputStream.close();
+	}
+	
+	public static void flushDatabase() {
+		document = null;
+	}
+	
+	public static void deleteDatabase(Context context) {
+		File file = new File(context.getFilesDir(), filename);
+		if (file.exists()) {
+			file.delete();
 		}
 	}
 }

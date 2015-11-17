@@ -2,10 +2,24 @@ package com.example.wps;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+
+import org.xml.sax.SAXException;
 
 import com.example.wps.db.Account;
-import com.example.wps.db.DatabaseHandler;
+import com.example.wps.db.AccountDatabase;
 import com.example.wps.db.DatabaseTests;
+import com.example.wps.encryption.Encryption;
 import com.example.wps.gui.ListOfAccounts;
 import com.example.wps.gui.PasswordGenViewActivity;
 
@@ -29,80 +43,15 @@ public class MainActivity extends ActionBarActivity {
 
 		// check if NFC is active
 		checkNFCActive();
-		testDatabase();
-	}
-
-	public void testDatabase() {
-
-		DatabaseHandler.initDatabaseHandler();
-		String xmlStringDatabase = DatabaseHandler.createEmptyDatabase();
-
-		DatabaseTests dbt = new DatabaseTests();
-		dbt.runTests(xmlStringDatabase); // For local tests
-		// androidFileTest(xmlStringDatabase); // For persistence test
-	}
-
-	public void androidFileTest(String xmlStringDatabase) {
-
-		String FILENAME = "database";
-
-		Account testAccount1 = new Account("Facebook",
-				"facebookUser@hotmail.com", "facebook",
-				"https://www.facebook.com", "2015-09-12 22:00:00",
-				"Less useful than Linkedin", "Social Network", true);
-
-		Account testAccount1Bis = new Account("FacebookBis",
-				"facebookUser@gmail.com", "facebook",
-				"https://www.facebook.com", "2009-06-01 18:45:00",
-				"Less useful than Linkedin", "Social Network", false);
-
-		Account testAccount2 = new Account("Gmail", "gmailUser@hotmail.com",
-				"gmail", "https://www.gmail.com", "2012-02-24 13:42:00",
-				"Avoid Spam please", "E-Mail", false);
-
-		Account testAccount3 = new Account("Youtube", "youtubeUser", "youtube",
-				"https://www.youtube.com", "2010-12-13 12:30:00",
-				"Best Channel Ever", "Entertainment", true);
-
-		Account testAccount4 = new Account("Webmail", "webmailUser@ulb.ac.be",
-				"webmail", "https://webmail.ulb.ac.be/", "2005-08-20 09:30:00",
-				"E-mail delivery system", "E-Mail", false);
-
-		FileOutputStream fos = null;
-
 		try {
-			fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-			fos.write(xmlStringDatabase.getBytes());
-			fos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		FileInputStream fis = null;
-
-		try {
-			fis = openFileInput(FILENAME);
-			StringBuilder builder = new StringBuilder();
-			int ch;
-			while ((ch = fis.read()) != -1) {
-				builder.append((char) ch);
-			}
-
-			DatabaseHandler.initDatabaseHandler(builder.toString());
-
-			DatabaseHandler.addAccount(testAccount1);
-			DatabaseHandler.addAccount(testAccount1Bis);
-			DatabaseHandler.addAccount(testAccount2);
-			DatabaseHandler.addAccount(testAccount3);
-			DatabaseHandler.addAccount(testAccount4);
-			System.out.println("--------------");
-			DatabaseHandler.printDatabase();
-
-			fis.close();
-		} catch (Exception e) {
+			AccountDatabase.initDatabase(this, "lol", "abcd");
+			AccountDatabase.saveDatabase(this);
+		} catch (TransformerFactoryConfigurationError | Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
 
 	public void checkNFCActive() {
 		Context context = this.getApplicationContext();

@@ -108,7 +108,7 @@ public class Account {
 				+ "\nPassword : " + this.getPassword() + "\nUrl : "
 				+ this.getUrl() + "\nLast Access : " + this.getLastAccess()
 				+ "\nNote : " + this.getNote() + "\nCategory : " + this
-					.getCategory());
+					.getCategory() + "\nIs Favorite : " + this.getIsFavorite().toString());
 	}
 
 	public static Comparator<Account> COMPARE_BY_NAME = new Comparator<Account>() {

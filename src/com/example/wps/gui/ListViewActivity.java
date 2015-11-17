@@ -13,13 +13,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.wps.db.Account;
-import com.example.wps.db.DatabaseHandler;
+import com.example.wps.db.AccountDatabase;
 
 public class ListViewActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		ArrayList<Account> listOfAcc = (ArrayList<Account>) DatabaseHandler
+		ArrayList<Account> listOfAcc = (ArrayList<Account>) AccountDatabase
 				.getAllAccounts();
 
 		setContentView(R.layout.account_list_scrollview_layout);
@@ -28,7 +28,7 @@ public class ListViewActivity extends Activity {
 
 	public void addAccountsToLinearLayout(ArrayList<Account> listOfAccounts) {
 		
-		DatabaseHandler.sortAccountListByAlphabeticOrder(listOfAccounts);
+		AccountDatabase.sortAccountListByAlphabeticOrder(listOfAccounts);
 
 		for (int acc = 0; acc < listOfAccounts.size(); acc++) {
 			String userTitle = listOfAccounts.get(acc).getName();
