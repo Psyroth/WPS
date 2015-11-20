@@ -21,10 +21,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
-    
+
 	public static final String MIME_TEXT_PLAIN = "text/plain";
-    public static final String TAG = "NfcDemo";
-    
+	public static final String TAG = "NfcDemo";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,11 +37,9 @@ public class MainActivity extends ActionBarActivity {
 			AccountDatabase.initDatabase(this, "lol", "abcd");
 			AccountDatabase.saveDatabase(this);
 		} catch (TransformerFactoryConfigurationError | Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
 
 	public void checkNFCActive() {
 		Context context = this.getApplicationContext();
@@ -113,33 +111,33 @@ public class MainActivity extends ActionBarActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	private void handleIntent(Intent intent) {
-	    String action = intent.getAction();
-	    if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
-	         
-	        String type = intent.getType();
-	        if (MIME_TEXT_PLAIN.equals(type)) {
-	 
-	            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-	            new NdefReaderTask().execute(tag);
-	             
-	        } else {
-	            Log.d(TAG, "Wrong mime type: " + type);
-	        }
-	    } else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
-	         
-	        // In case we would still use the Tech Discovered Intent
-	        Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-	        String[] techList = tag.getTechList();
-	        String searchedTech = Ndef.class.getName();
-	         
-	        for (String tech : techList) {
-	            if (searchedTech.equals(tech)) {
-	                new NdefReaderTask().execute(tag);
-	                break;
-	            }
-	        }
-	    }
+		String action = intent.getAction();
+		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+
+			String type = intent.getType();
+			if (MIME_TEXT_PLAIN.equals(type)) {
+
+				Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+				new NdefReaderTask().execute(tag);
+
+			} else {
+				Log.d(TAG, "Wrong mime type: " + type);
+			}
+		} else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
+
+			// In case we would still use the Tech Discovered Intent
+			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+			String[] techList = tag.getTechList();
+			String searchedTech = Ndef.class.getName();
+
+			for (String tech : techList) {
+				if (searchedTech.equals(tech)) {
+					new NdefReaderTask().execute(tag);
+					break;
+				}
+			}
+		}
 	}
 }

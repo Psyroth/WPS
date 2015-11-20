@@ -5,7 +5,7 @@ import java.util.Scanner;
 import org.apache.commons.lang3.RandomStringUtils;
 
 public class PasswordGenerator {
-	
+
 	// Constants
 
 	private static String NUMBERS = "0123456789";
@@ -13,7 +13,7 @@ public class PasswordGenerator {
 	private static String SPECIALCHAR = "@#&(§!)-_<>,?;.:/=+%^$*€£";
 
 	// Attributes
-	
+
 	private Integer length = null;
 	private Boolean withNumbers = null;
 	private Boolean withAlpha = null;
@@ -21,7 +21,10 @@ public class PasswordGenerator {
 	private String result = "";
 
 	// Constructor
-	
+
+	public PasswordGenerator() {
+	}
+
 	public PasswordGenerator(Integer length, Boolean withNumbers,
 			Boolean withAlpha, Boolean withSpecial) {
 		this.length = length;
@@ -30,57 +33,32 @@ public class PasswordGenerator {
 		this.withSpecial = withSpecial;
 	}
 
-	public void userInteraction() {
+	public String generatePassword() {
 
-		// For user Input
-
-		this.askUserInput();
-		this.setResult(generatePassword(this.getLength(), this.getWithNumbers(), this.getWithAlpha(), this.getWithSpecial()));
-		System.out.println("Here is your password : " + this.getResult());
-
-		// Or just to test :
-		// this.passwordTest();
-	}
-
-	public void askUserInput() {
-		Scanner reader = new Scanner(System.in);
-		System.out.println("Enter a number for the length of your password : ");
-		this.setLength(reader.nextInt());
-
-		System.out
-				.println("Do you want NUMBERS in your password ? (true/false) : ");
-		this.setWithNumbers(reader.nextBoolean());
-
-		System.out
-				.println("Do you want alphabetic characters in your password ? (true/false) : ");
-		this.setWithAlpha(reader.nextBoolean());
-
-		System.out
-				.println("Do you want special characters in your password ? (true/false) : ");
-		this.setWithSpecial(reader.nextBoolean());
-		reader.close();
-	}
-
-	public String generatePassword(Integer length, Boolean withNumbers,
-			Boolean withAlpha, Boolean withSpecial) {
-
-		if (!(withNumbers || withAlpha || withSpecial)) {
-			System.out.println("You need something to build your password ! ");
-		} else if (!withNumbers && withSpecial && !withAlpha) {
+		if (!(this.getWithNumbers() || this.getWithAlpha() || this
+				.getWithSpecial())) {
+			System.out.println("You need something to build your password !");
+		} else if (!this.getWithNumbers() && !this.getWithAlpha()
+				&& this.getWithSpecial()) {
 			result = RandomStringUtils
 					.random(length, SPECIALCHAR.toCharArray());
-		} else if (withNumbers && !withAlpha && !withSpecial) {
+		} else if (this.getWithNumbers() && !this.getWithAlpha()
+				&& !this.getWithSpecial()) {
 			result = RandomStringUtils.random(length, (NUMBERS).toCharArray());
-		} else if (!withNumbers && withAlpha && !withSpecial) {
+		} else if (!this.getWithNumbers() && this.getWithAlpha()
+				&& !this.getWithSpecial()) {
 			result = RandomStringUtils.random(length,
 					(ALPHABETICCHAR).toCharArray());
-		} else if (withNumbers && withAlpha && !withSpecial) {
+		} else if (this.getWithNumbers() && this.getWithAlpha()
+				&& !this.getWithSpecial()) {
 			result = RandomStringUtils.random(length,
 					(NUMBERS + ALPHABETICCHAR).toCharArray());
-		} else if (!withNumbers && withAlpha && withSpecial) {
+		} else if (!this.getWithNumbers() && this.getWithAlpha()
+				&& this.getWithSpecial()) {
 			result = RandomStringUtils.random(length,
 					(ALPHABETICCHAR + SPECIALCHAR).toCharArray());
-		} else if (withNumbers && !withAlpha && withSpecial) {
+		} else if (this.getWithNumbers() && !this.getWithAlpha()
+				&& this.getWithSpecial()) {
 			result = RandomStringUtils.random(length,
 					(NUMBERS + SPECIALCHAR).toCharArray());
 		} else {
@@ -90,38 +68,20 @@ public class PasswordGenerator {
 		return result;
 	}
 
-	public void passwordTest() {
-		// Empty Password
-		this.setResult(this.generatePassword(10, false, false, false));
-		System.out.println("Here is your password : " + result);
+	public String generatePassword(Integer length, Boolean withNumbers,
+			Boolean withAlpha, Boolean withSpecial) {
 
-		// Numeric Password
-		this.setResult(this.generatePassword(10, true, false, false));
-		System.out.println("Here is your password : " + result);
+		this.setAll(length, withNumbers, withAlpha, withSpecial);
+		return this.generatePassword();
 
-		// AlphaNumeric Password
-		this.setResult(this.generatePassword(10, true, true, false));
-		System.out.println("Here is your password : " + result);
+	}
 
-		// SpecialAlphaNumeric Password
-		this.setResult(this.generatePassword(10, true, true, true));
-		System.out.println("Here is your password : " + result);
-
-		// Alpha Password
-		this.setResult(this.generatePassword(10, false, true, false));
-		System.out.println("Here is your password : " + result);
-
-		// SpecialAlpha Password
-		this.setResult(this.generatePassword(10, false, true, true));
-		System.out.println("Here is your password : " + result);
-
-		// SpecialNumeric Password
-		this.setResult(this.generatePassword(10, true, false, true));
-		System.out.println("Here is your password : " + result);
-
-		// Special Password
-		this.setResult(this.generatePassword(10, false, false, true));
-		System.out.println("Here is your password : " + result);
+	public void setAll(Integer length, Boolean withNumbers, Boolean withAlpha,
+			Boolean withSpecial) {
+		this.length = length;
+		this.withNumbers = withNumbers;
+		this.withAlpha = withAlpha;
+		this.withSpecial = withSpecial;
 	}
 
 	public Integer getLength() {
@@ -162,5 +122,52 @@ public class PasswordGenerator {
 
 	public void setResult(String result) {
 		this.result = result;
+	}
+
+	public void passwordTest() {
+		// Empty Password
+		this.setLength(10);
+		this.setWithNumbers(false);
+		this.setWithAlpha(false);
+		this.setWithSpecial(false);
+		this.setResult(this.generatePassword());
+		System.out.println("Here is your password : " + result);
+
+		// Numeric Password
+		this.setWithNumbers(true);
+		this.setResult(this.generatePassword());
+		System.out.println("Here is your password : " + result);
+
+		// AlphaNumeric Password
+		this.setWithAlpha(true);
+		this.setResult(this.generatePassword());
+		System.out.println("Here is your password : " + result);
+
+		// SpecialAlphaNumeric Password
+		this.setWithSpecial(true);
+		this.setResult(this.generatePassword());
+		System.out.println("Here is your password : " + result);
+
+		// SpecialAlpha Password
+		this.setWithNumbers(false);
+		this.setResult(this.generatePassword());
+		System.out.println("Here is your password : " + result);
+
+		// Alpha Password
+		this.setWithSpecial(false);
+		this.setResult(this.generatePassword());
+		System.out.println("Here is your password : " + result);
+
+		// SpecialNumeric Password
+		this.setWithNumbers(true);
+		this.setWithAlpha(false);
+		this.setWithSpecial(true);
+		this.setResult(this.generatePassword());
+		System.out.println("Here is your password : " + result);
+
+		// Special Password
+		this.setWithNumbers(false);
+		this.setResult(this.generatePassword());
+		System.out.println("Here is your password : " + result);
 	}
 }
