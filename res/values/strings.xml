@@ -12,5 +12,8 @@
     <string name="title_wpsaccount_detail">WPSAccount Detail</string>
     <string name="action_passgen"></string>
     <string name="action_passgen2">Password Generator</string>
+    <string name="namelabel">"Name : "</string>
+    <string name="idlabel">"Id : "</string>
+    <string name="passwordlabel">"Password : "</string>
 
 </resources>

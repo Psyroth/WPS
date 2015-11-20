@@ -22,8 +22,9 @@
         <activity android:name=".gui.CategoryViewActivity" />
         <activity android:name=".gui.FrequencyViewActivity" />
         <activity android:name=".gui.PasswordGenViewActivity" />
-        <activity android:name=".gui.SearchActivity" />
+        <activity android:name=".gui.SearchActivity" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".gui.FavoriteViewActivity" />
+        <activity android:name=".gui.SingleItemView" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
