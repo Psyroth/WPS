@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/GridLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="2"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_gravity="left"
+        android:text="Name : "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/mEtName"
+        android:layout_column="0"
+        android:layout_gravity="fill_horizontal"
+        android:ems="10"
+        android:hint="AccountName" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_column="0"
+        android:layout_gravity="left"
+        android:text="Id : "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/mEtId"
+        android:layout_column="0"
+        android:layout_gravity="fill_horizontal"
+        android:ems="10"
+        android:hint="Identifier" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_column="0"
+        android:layout_gravity="left"
+        android:text="Password : "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/mEtPassword"
+        android:layout_column="0"
+        android:layout_gravity="fill_horizontal"
+        android:ems="10"
+        android:hint="azerty" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_column="0"
+        android:layout_gravity="left"
+        android:text="Url : "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/mEtUrl"
+        android:layout_column="0"
+        android:layout_gravity="fill_horizontal"
+        android:ems="10"
+        android:hint="https://www.website.com"
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_column="0"
+        android:layout_gravity="left"
+        android:text="Category : "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/mEtCategory"
+        android:layout_column="0"
+        android:layout_gravity="fill_horizontal"
+        android:ems="10"
+        android:hint="Other" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_column="0"
+        android:layout_gravity="left"
+        android:text="Note : "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/mEtNote"
+        android:layout_height="61dp"
+        android:layout_column="0"
+        android:layout_gravity="fill_horizontal"
+        android:ems="10"
+        android:hint="Click to add notes..."
+        android:inputType="textMultiLine" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_column="0"
+        android:layout_gravity="end"
+        android:onClick="processInputData"
+        android:text="Save" />
+
+    <Space
+        android:layout_column="1"
+        android:layout_gravity="fill_vertical"
+        android:layout_row="14" />
+
+    <CheckBox
+        android:id="@+id/mCbIsFavorite"
+        android:layout_column="0"
+        android:layout_gravity="left|center_vertical"
+        android:layout_row="12"
+        android:text="Add to favorites" />
+
+</GridLayout>

@@ -57,14 +57,22 @@ public class ListOfAccounts extends TabActivity{
 			.setIndicator("", ressources.getDrawable(R.drawable.ic_search))
 			.setContent(intentSearch);
 		
+		// Add Account tab
+		Intent intentAddAccount = new Intent().setClass(this, AddAccountActivity.class);
+		TabSpec tabSpecAddAccount = tabHost
+			.newTabSpec("Add Account")
+			.setIndicator("", ressources.getDrawable(R.drawable.ic_add))
+			.setContent(intentAddAccount);
+		
 		// add all tabs 
 		tabHost.addTab(tabSpecFavoriteView);
 		tabHost.addTab(tabSpecListView);
 		tabHost.addTab(tabSpecCategoryView);
 		tabHost.addTab(tabSpecFrequencyView);
 		tabHost.addTab(tabSpecSearch);
+		tabHost.addTab(tabSpecAddAccount);
 		
-		//set Favortie tab as default (zero based)
+		// set Favortie tab as default (zero based)
 		tabHost.setCurrentTab(0);
 	}
 
