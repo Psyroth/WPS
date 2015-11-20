@@ -1,40 +1,30 @@
 package com.example.wps;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
-import org.xml.sax.SAXException;
-
-import com.example.wps.db.Account;
 import com.example.wps.db.AccountDatabase;
-import com.example.wps.db.DatabaseTests;
-import com.example.wps.encryption.Encryption;
 import com.example.wps.gui.ListOfAccounts;
 import com.example.wps.gui.PasswordGenViewActivity;
+import com.example.wps.tagManipulation.NdefReaderTask;
 
 import android.support.v7.app.ActionBarActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
+import android.nfc.Tag;
+import android.nfc.tech.Ndef;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
-
+    
+	public static final String MIME_TEXT_PLAIN = "text/plain";
+    public static final String TAG = "NfcDemo";
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,8 +54,8 @@ public class MainActivity extends ActionBarActivity {
 		if (adapter != null && adapter.isEnabled()) {
 			// adapter exists and is enabled.
 
-			// start scanning for RFID tag
-
+			// start scanning for NFC tag
+			handleIntent(getIntent());
 			// if successful then we ask the user what he wants to look for
 			Intent i = new Intent(MainActivity.this, ListOfAccounts.class);
 			startActivity(i);
@@ -122,5 +112,34 @@ public class MainActivity extends ActionBarActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+	
+	private void handleIntent(Intent intent) {
+	    String action = intent.getAction();
+	    if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+	         
+	        String type = intent.getType();
+	        if (MIME_TEXT_PLAIN.equals(type)) {
+	 
+	            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+	            new NdefReaderTask().execute(tag);
+	             
+	        } else {
+	            Log.d(TAG, "Wrong mime type: " + type);
+	        }
+	    } else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
+	         
+	        // In case we would still use the Tech Discovered Intent
+	        Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+	        String[] techList = tag.getTechList();
+	        String searchedTech = Ndef.class.getName();
+	         
+	        for (String tech : techList) {
+	            if (searchedTech.equals(tech)) {
+	                new NdefReaderTask().execute(tag);
+	                break;
+	            }
+	        }
+	    }
 	}
 }
