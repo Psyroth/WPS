@@ -3,10 +3,12 @@ package com.example.wps.gui;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -38,6 +40,26 @@ public class FavoriteViewActivity extends Activity {
 				tv.setText(userTitle + "\n" + userID + "\n" + userPass);
 				tv.setClickable(true);
 				tv.setLines(3);
+				tv.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						System.out.println("Clicked on element : " + v.getId());
+						// Launch viewAccountActivity
+						Intent viewAccountIntent = new Intent(FavoriteViewActivity.this, ViewAccountActivity.class);
+						
+						// TODO : Need to get the correct data
+						
+						viewAccountIntent.putExtra("AccountName", "DummyFacebook");
+						viewAccountIntent.putExtra("AccountId", "DummyId");
+						viewAccountIntent.putExtra("AccountPassword", "DummyPassword");
+						viewAccountIntent.putExtra("AccountUrl", "DummyUrl");
+						viewAccountIntent.putExtra("AccountCategory", "DummyCategory");
+						viewAccountIntent.putExtra("AccountNote", "DummyNote");
+						viewAccountIntent.putExtra("AccountIsFavorite", true);
+						startActivity(viewAccountIntent);
+					}
+				});
 
 				Resources res = getResources();
 				Drawable drawable = null;

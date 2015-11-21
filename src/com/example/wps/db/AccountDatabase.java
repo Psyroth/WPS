@@ -47,48 +47,67 @@ public class AccountDatabase {
 	private static Document document;
 	private static byte[] key;
 
-	public static void initDatabase(Context context, String serialNumber, String nfcTag) throws TransformerFactoryConfigurationError, NoSuchAlgorithmException, Exception {
+	public static void initDatabase(Context context, String serialNumber,
+			String nfcTag) throws TransformerFactoryConfigurationError,
+			NoSuchAlgorithmException, Exception {
 		File file = new File(context.getFilesDir(), filename);
-		key = Encryption.xor(Encryption.sha1(serialNumber), Encryption.sha1(nfcTag));
+		key = Encryption.xor(Encryption.sha1(serialNumber),
+				Encryption.sha1(nfcTag));
 		if (file.exists()) {
-			document = openDatabase(file);
 			System.out.println("File exists");
-		}
-		else {
+			document = openDatabase(file);
+			
+		} else {
+			System.out.println("File does not exist");
 			document = createEmptyDatabase();
 			saveDatabase(context);
-			System.out.println("File does not exist");
+			
+//			Account testAccount3 = new Account("Youtube", "youtubeUser", "youtube",
+//					"https://www.youtube.com", "2010-12-13 12:30:00",
+//					"Best Channel Ever", "Entertainment", true);
+//
+//			AccountDatabase.addAccount(testAccount3);
 		}
 	}
-	
+
 	/*
 	 * Load an existing database.
 	 */
-	private static Document openDatabase(File xmlFile) throws SAXException, IOException, ParserConfigurationException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, NoSuchPaddingException {
+	private static Document openDatabase(File xmlFile) throws SAXException,
+			IOException, ParserConfigurationException, InvalidKeyException,
+			BadPaddingException, IllegalBlockSizeException,
+			NoSuchAlgorithmException, NoSuchPaddingException {
 		byte[] encodedDatabase = new byte[(int) xmlFile.length()];
 		FileInputStream inputStream = new FileInputStream(xmlFile);
 		inputStream.read(encodedDatabase);
 		inputStream.close();
 		String database = Encryption.decrypt(encodedDatabase, key);
-		Document result = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(database)));
+		Document result = DocumentBuilderFactory.newInstance()
+				.newDocumentBuilder()
+				.parse(new InputSource(new StringReader(database)));
 		return result;
 	}
-
 
 	/*
 	 * Create an empty database.
 	 */
-	private static Document createEmptyDatabase() throws SAXException, IOException, ParserConfigurationException {
+	private static Document createEmptyDatabase() throws SAXException,
+			IOException, ParserConfigurationException {
 
 		String databaseContent = "<?xml version=\"1.0\""
-				+ "encoding=\"UTF-8\" standalone=\"no\"?>" + "<WPS-database>"
-				+ "<accounts>" 
-				+ "<account><name>Facebook</name><id>facebookUser@hotmail.com</id><password>facebook</password><url>https://www.facebook.com</url><lastAccess>2015-10-26 22:00:00</lastAccess><note>Less useful than Linkedin</note><category>Social Network</category><favorite>true</favorite></account></accounts>" + "</WPS-database>";
-
-		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(databaseContent)));
+				+ "encoding=\"UTF-8\" standalone=\"no\"?>"
+				+ "<WPS-database>"
+				+ "<accounts>"
+				+ "<account><name>Facebook</name><id>facebookUser@hotmail.com</id><password>facebook</password><url>https://www.facebook.com</url><lastAccess>2015-10-26 22:00:00</lastAccess><note>Less useful than Linkedin</note><category>Social Network</category><favorite>true</favorite></account></accounts>"
+				+ "</WPS-database>";
+		
+		document = DocumentBuilderFactory.newInstance()
+				.newDocumentBuilder()
+				.parse(new InputSource(new StringReader(databaseContent)));
+		
 		return document;
 	}
-	
+
 	/* Adds a node named "tagName" with "value" as value and "parent" as parent. */
 	private static void addNode(String tagName, String value, Node parent) {
 
@@ -102,7 +121,7 @@ public class AccountDatabase {
 		// Add the new node structure to the parent node
 		parent.appendChild(node);
 	}
-	
+
 	/* Returns the node with the "value" in the nodeList, null otherwise. */
 	private static Node getNodeByValue(String value, NodeList nodeList) {
 
@@ -124,6 +143,7 @@ public class AccountDatabase {
 		}
 		return null;
 	}
+
 	/* Returns an account made from the element. */
 	private static Account elementToAccount(Element element) {
 		String name = element.getElementsByTagName("name").item(0)
@@ -145,7 +165,7 @@ public class AccountDatabase {
 		return new Account(name, id, password, url, lastAccess, note, category,
 				favorite);
 	}
-	
+
 	/* Adds the "account" to the database. */
 	public static void addAccount(Account account) {
 
@@ -157,16 +177,13 @@ public class AccountDatabase {
 
 				addNode("name", account.getName(), rootElement);
 				addNode("id", account.getId(), rootElement);
-				addNode("password", account.getPassword(),
-						rootElement);
+				addNode("password", account.getPassword(), rootElement);
 				addNode("url", account.getUrl(), rootElement);
-				addNode("lastAccess", account.getLastAccess(),
-						rootElement);
+				addNode("lastAccess", account.getLastAccess(), rootElement);
 				addNode("note", account.getNote(), rootElement);
-				addNode("category", account.getCategory(),
+				addNode("category", account.getCategory(), rootElement);
+				addNode("favorite", Boolean.toString(account.getIsFavorite()),
 						rootElement);
-				addNode("favorite",
-						Boolean.toString(account.getIsFavorite()), rootElement);
 
 				NodeList nodeList = document.getElementsByTagName("accounts");
 				nodeList.item(0).appendChild(rootElement);
@@ -188,8 +205,8 @@ public class AccountDatabase {
 		try {
 
 			if (accountExists(account)) {
-				Element element = (Element) getNodeByValue(
-						account.getName(), nodeList);
+				Element element = (Element) getNodeByValue(account.getName(),
+						nodeList);
 				Element parentElement = (Element) element.getParentNode();
 				element.getParentNode().getParentNode()
 						.removeChild(parentElement);
@@ -328,23 +345,30 @@ public class AccountDatabase {
 			System.out.println(account.toString());
 		}
 	}
-	
-	public static void saveDatabase(Context context) throws TransformerConfigurationException, TransformerException, TransformerFactoryConfigurationError, IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+
+	public static void saveDatabase(Context context)
+			throws TransformerConfigurationException, TransformerException,
+			TransformerFactoryConfigurationError, IOException,
+			InvalidKeyException, NoSuchAlgorithmException,
+			NoSuchPaddingException, IllegalBlockSizeException,
+			BadPaddingException {
 		deleteDatabase(context);
 		DOMSource domSource = new DOMSource(document);
 		StringWriter writer = new StringWriter();
 		StreamResult result = new StreamResult(writer);
-		TransformerFactory.newInstance().newTransformer().transform(domSource, result);
-		FileOutputStream outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+		TransformerFactory.newInstance().newTransformer()
+				.transform(domSource, result);
+		FileOutputStream outputStream = context.openFileOutput(filename,
+				Context.MODE_PRIVATE);
 		byte[] encryptedDatabase = Encryption.encrypt(writer.toString(), key);
 		outputStream.write(encryptedDatabase);
 		outputStream.close();
 	}
-	
+
 	public static void flushDatabase() {
 		document = null;
 	}
-	
+
 	public static void deleteDatabase(Context context) {
 		File file = new File(context.getFilesDir(), filename);
 		if (file.exists()) {

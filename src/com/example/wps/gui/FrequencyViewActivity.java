@@ -1,13 +1,16 @@
 package com.example.wps.gui;
 
 import java.util.ArrayList;
+
 import com.example.wps.R;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,13 +37,34 @@ public class FrequencyViewActivity extends Activity {
 			String userID = listOfAccounts.get(acc).getId();
 			String userPass = listOfAccounts.get(acc).getPassword();
 
+			LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutAccountsList);
+			
 			TextView tv = new TextView(this);
 			tv.setId(acc);
 			tv.setText(userTitle + "\n" + userID + "\n" + userPass);
 			tv.setClickable(true);
 			tv.setLines(3);
+			tv.setOnClickListener(new View.OnClickListener() {
 
-			LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutAccountsList);
+				@Override
+				public void onClick(View v) {
+					System.out.println("Clicked on element : " + v.getId());
+					// Launch viewAccountActivity
+					Intent viewAccountIntent = new Intent(FrequencyViewActivity.this, ViewAccountActivity.class);
+					
+					// TODO : Need to get the correct data
+					
+					viewAccountIntent.putExtra("AccountName", "DummyFacebook");
+					viewAccountIntent.putExtra("AccountId", "DummyId");
+					viewAccountIntent.putExtra("AccountPassword", "DummyPassword");
+					viewAccountIntent.putExtra("AccountUrl", "DummyUrl");
+					viewAccountIntent.putExtra("AccountCategory", "DummyCategory");
+					viewAccountIntent.putExtra("AccountNote", "DummyNote");
+					viewAccountIntent.putExtra("AccountIsFavorite", true);
+					startActivity(viewAccountIntent);
+				}
+			});
+
 			Resources res = getResources();
 			Drawable drawable = null;
 

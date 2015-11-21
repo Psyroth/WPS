@@ -31,7 +31,6 @@ public class CategoryViewActivity extends Activity {
 		drawable = res.getDrawable(R.drawable.ic_games);
 		gamingTv.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable,
 				null, null, null);
-		linearLayout.addView(gamingTv);
 
 		// Internet Category
 		TextView internetTv = new TextView(this);
@@ -43,7 +42,6 @@ public class CategoryViewActivity extends Activity {
 		drawable = res.getDrawable(R.drawable.ic_internet);
 		internetTv.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable,
 				null, null, null);
-		linearLayout.addView(internetTv);
 
 		// Social Category
 		TextView socialTv = new TextView(this);
@@ -55,7 +53,6 @@ public class CategoryViewActivity extends Activity {
 		drawable = res.getDrawable(R.drawable.ic_fb);
 		socialTv.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable,
 				null, null, null);
-		linearLayout.addView(socialTv);
 
 		// Work Category
 		TextView workTv = new TextView(this);
@@ -67,7 +64,6 @@ public class CategoryViewActivity extends Activity {
 		drawable = res.getDrawable(R.drawable.ic_work);
 		workTv.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null,
 				null, null);
-		linearLayout.addView(workTv);
 
 		// Other Category
 		TextView otherTv = new TextView(this);
@@ -79,6 +75,11 @@ public class CategoryViewActivity extends Activity {
 		drawable = res.getDrawable(R.drawable.ic_other);
 		otherTv.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null,
 				null, null);
+		
+		linearLayout.addView(gamingTv);
+		linearLayout.addView(internetTv);
+		linearLayout.addView(socialTv);
+		linearLayout.addView(workTv);
 		linearLayout.addView(otherTv);
 	}
 }
