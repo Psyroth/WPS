@@ -24,6 +24,7 @@
         <activity android:name=".gui.PasswordGenViewActivity" />
         <activity android:name=".gui.SearchActivity" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".gui.AddAccountActivity" />
+        <activity android:name=".gui.ViewAccountActivity" />
         <activity android:name=".gui.FavoriteViewActivity" />
         <activity android:name=".gui.SingleItemView" />
         <activity
