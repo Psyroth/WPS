@@ -10,7 +10,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class ViewAccountActivity extends Activity {
-	
+
 	EditText vEtName;
 	EditText vEtId;
 	EditText vEtPassword;
@@ -19,7 +19,7 @@ public class ViewAccountActivity extends Activity {
 	EditText vEtNote;
 	CheckBox vCbIsFavorite;
 	final Context context = this;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,11 +32,11 @@ public class ViewAccountActivity extends Activity {
 		vEtCategory = (EditText) findViewById(R.id.vEtCategory);
 		vEtNote = (EditText) findViewById(R.id.vEtNote);
 		vCbIsFavorite = (CheckBox) findViewById(R.id.vCbIsFavorite);
-		
-		// Way to share Data between Activities 
-		
+
+		// Way to share Data between Activities
+
 		Bundle bundle = getIntent().getExtras();
-		
+
 		String accountName = bundle.getString("AccountName");
 		String accountId = bundle.getString("AccountId");
 		String accountPassword = bundle.getString("AccountPassword");
@@ -44,9 +44,9 @@ public class ViewAccountActivity extends Activity {
 		String accountCategory = bundle.getString("AccountCategory");
 		String accountNote = bundle.getString("AccountNote");
 		Boolean accountIsFavorite = bundle.getBoolean("AccountIsFavorite");
-		
+
 		// Fill the Account
-		
+
 		vEtName.setText(accountName);
 		vEtId.setText(accountId);
 		vEtPassword.setText(accountPassword);
@@ -54,7 +54,7 @@ public class ViewAccountActivity extends Activity {
 		vEtCategory.setText(accountCategory);
 		vEtNote.setText(accountNote);
 		vCbIsFavorite.setChecked(accountIsFavorite);
-		
+
 		// Disable interaction until user pushes "Modify" button.
 		vEtName.setKeyListener(null);
 		vEtId.setKeyListener(null);
@@ -64,7 +64,7 @@ public class ViewAccountActivity extends Activity {
 		vEtNote.setKeyListener(null);
 		vCbIsFavorite.setKeyListener(null);
 	}
-	
+
 	public void modifyAccount(View view) {
 		// TODO
 	}

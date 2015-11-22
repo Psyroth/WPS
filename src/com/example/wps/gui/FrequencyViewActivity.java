@@ -18,27 +18,28 @@ import com.example.wps.db.Account;
 import com.example.wps.db.AccountDatabase;
 
 public class FrequencyViewActivity extends Activity {
+	ArrayList<Account> listOfAcc;
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		ArrayList<Account> listOfAcc = (ArrayList<Account>) AccountDatabase
-				.getAllAccounts();
+		listOfAcc = (ArrayList<Account>) AccountDatabase.getAllAccounts();
 
 		setContentView(R.layout.account_list_scrollview_layout);
-		addAccountsToLinearLayout(listOfAcc);
+		addAccountsToLinearLayout();
 	}
 
-	public void addAccountsToLinearLayout(ArrayList<Account> listOfAccounts) {
+	public void addAccountsToLinearLayout() {
 
-		AccountDatabase.sortAccountListByLastAccess(listOfAccounts);
+		AccountDatabase.sortAccountListByLastAccess(listOfAcc);
 
-		for (int acc = 0; acc < listOfAccounts.size(); acc++) {
-			String userTitle = listOfAccounts.get(acc).getName();
-			String userID = listOfAccounts.get(acc).getId();
-			String userPass = listOfAccounts.get(acc).getPassword();
+		for (int acc = 0; acc < listOfAcc.size(); acc++) {
+			String userTitle = listOfAcc.get(acc).getName();
+			String userID = listOfAcc.get(acc).getId();
+			String userPass = listOfAcc.get(acc).getPassword();
 
 			LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutAccountsList);
-			
+
 			TextView tv = new TextView(this);
 			tv.setId(acc);
 			tv.setText(userTitle + "\n" + userID + "\n" + userPass);
@@ -50,17 +51,26 @@ public class FrequencyViewActivity extends Activity {
 				public void onClick(View v) {
 					System.out.println("Clicked on element : " + v.getId());
 					// Launch viewAccountActivity
-					Intent viewAccountIntent = new Intent(FrequencyViewActivity.this, ViewAccountActivity.class);
-					
-					// TODO : Need to get the correct data
-					
-					viewAccountIntent.putExtra("AccountName", "DummyFacebook");
-					viewAccountIntent.putExtra("AccountId", "DummyId");
-					viewAccountIntent.putExtra("AccountPassword", "DummyPassword");
-					viewAccountIntent.putExtra("AccountUrl", "DummyUrl");
-					viewAccountIntent.putExtra("AccountCategory", "DummyCategory");
-					viewAccountIntent.putExtra("AccountNote", "DummyNote");
-					viewAccountIntent.putExtra("AccountIsFavorite", true);
+					Intent viewAccountIntent = new Intent(
+							FrequencyViewActivity.this,
+							ViewAccountActivity.class);
+
+					// Need to change lastAccess then
+
+					viewAccountIntent.putExtra("AccountName",
+							listOfAcc.get(v.getId()).getName());
+					viewAccountIntent.putExtra("AccountId",
+							listOfAcc.get(v.getId()).getId());
+					viewAccountIntent.putExtra("AccountPassword", listOfAcc
+							.get(v.getId()).getPassword());
+					viewAccountIntent.putExtra("AccountUrl",
+							listOfAcc.get(v.getId()).getUrl());
+					viewAccountIntent.putExtra("AccountCategory", listOfAcc
+							.get(v.getId()).getCategory());
+					viewAccountIntent.putExtra("AccountNote",
+							listOfAcc.get(v.getId()).getNote());
+					viewAccountIntent.putExtra("AccountIsFavorite", listOfAcc
+							.get(v.getId()).getIsFavorite());
 					startActivity(viewAccountIntent);
 				}
 			});
