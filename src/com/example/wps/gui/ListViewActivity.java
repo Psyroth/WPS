@@ -11,8 +11,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,10 +23,29 @@ public class ListViewActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		listOfAcc = (ArrayList<Account>) AccountDatabase.getAllAccounts();
+		Bundle bundle = getIntent().getExtras();
+		String category = bundle.getString("WithCategory");
+
+		// Need “No account in category" message
+		accountsFromCategory(category);
 
 		setContentView(R.layout.account_list_scrollview_layout);
 		addAccountsToLinearLayout();
+	}
+
+	public void accountsFromCategory(String category) {
+		if (category.equalsIgnoreCase("All")) {
+			listOfAcc = (ArrayList<Account>) AccountDatabase.getAllAccounts();
+		} else if (category.equalsIgnoreCase("Gaming")
+				|| category.equalsIgnoreCase("Internet Sites")
+				|| category.equalsIgnoreCase("Social Network")
+				|| category.equalsIgnoreCase("Work")
+				|| category.equalsIgnoreCase("Other")) {
+			listOfAcc = (ArrayList<Account>) AccountDatabase
+					.getAllAccountsInCategory(category);
+		} else {
+			throw new IllegalArgumentException("Invalid category : " + category);
+		}
 	}
 
 	public void addAccountsToLinearLayout() {

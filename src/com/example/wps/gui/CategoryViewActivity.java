@@ -45,9 +45,11 @@ public class CategoryViewActivity extends Activity {
 			public void onClick(View v) {
 				System.out.println("Clicked on element : " + v.getId());
 				gamingTv.setBackgroundColor(Color.LTGRAY);
-				// Intent viewAccountIntent = new
-				// Intent(CategoryViewActivity.this, ListViewActivity.class);
-				// Switch to ListViewActivity with only specified category ??
+				Intent listViewIntent = new Intent(CategoryViewActivity.this,
+						ListViewActivity.class);
+				// Added data to display the accounts of the Gaming category
+				listViewIntent.putExtra("WithCategory", "Gaming");
+				startActivity(listViewIntent);
 			}
 		});
 
@@ -67,16 +69,19 @@ public class CategoryViewActivity extends Activity {
 			public void onClick(View v) {
 				System.out.println("Clicked on element : " + v.getId());
 				internetTv.setBackgroundColor(Color.LTGRAY);
-				// Intent viewAccountIntent = new
-				// Intent(CategoryViewActivity.this, ListViewActivity.class);
-				// Switch to ListViewActivity with only specified category ??
+				Intent listViewIntent = new Intent(CategoryViewActivity.this,
+						ListViewActivity.class);
+				// Added data to display the accounts of the Internet Sites
+				// category
+				listViewIntent.putExtra("WithCategory", "Internet Sites");
+				startActivity(listViewIntent);
 			}
 		});
 
 		// Social Category
 		socialTv = new TextView(this);
 		socialTv.setId(2);
-		socialTv.setText("\n" + " Social" + "\n");
+		socialTv.setText("\n" + " Social Network" + "\n");
 		socialTv.setClickable(true);
 		socialTv.setLines(3);
 		socialTv.setBackgroundColor(Color.WHITE);
@@ -89,9 +94,12 @@ public class CategoryViewActivity extends Activity {
 			public void onClick(View v) {
 				System.out.println("Clicked on element : " + v.getId());
 				socialTv.setBackgroundColor(Color.LTGRAY);
-				// Intent viewAccountIntent = new
-				// Intent(CategoryViewActivity.this, ListViewActivity.class);
-				// Switch to ListViewActivity with only specified category ??
+				Intent listViewIntent = new Intent(CategoryViewActivity.this,
+						ListViewActivity.class);
+				// Added data to display the accounts of the Social Network
+				// category
+				listViewIntent.putExtra("WithCategory", "Social Network");
+				startActivity(listViewIntent);
 			}
 		});
 
@@ -111,9 +119,11 @@ public class CategoryViewActivity extends Activity {
 			public void onClick(View v) {
 				System.out.println("Clicked on element : " + v.getId());
 				workTv.setBackgroundColor(Color.LTGRAY);
-				// Intent viewAccountIntent = new
-				// Intent(CategoryViewActivity.this, ListViewActivity.class);
-				// Switch to ListViewActivity with only specified category ??
+				Intent listViewIntent = new Intent(CategoryViewActivity.this,
+						ListViewActivity.class);
+				// Added data to display the accounts of the Work category
+				listViewIntent.putExtra("WithCategory", "Work");
+				startActivity(listViewIntent);
 			}
 		});
 
@@ -133,9 +143,11 @@ public class CategoryViewActivity extends Activity {
 			public void onClick(View v) {
 				System.out.println("Clicked on element : " + v.getId());
 				otherTv.setBackgroundColor(Color.LTGRAY);
-				// Intent viewAccountIntent = new
-				// Intent(CategoryViewActivity.this, ListViewActivity.class);
-				// Switch to ListViewActivity with only specified category ??
+				Intent listViewIntent = new Intent(CategoryViewActivity.this,
+						ListViewActivity.class);
+				// Added data to display the accounts of the Other category
+				listViewIntent.putExtra("WithCategory", "Other");
+				startActivity(listViewIntent);
 			}
 		});
 
@@ -144,5 +156,16 @@ public class CategoryViewActivity extends Activity {
 		linearLayout.addView(socialTv);
 		linearLayout.addView(workTv);
 		linearLayout.addView(otherTv);
+	}
+
+	@Override
+	public void onResume() {
+		// When returning to the Category View, uncheck textviews
+		super.onResume(); // Always call the superclass method first
+		gamingTv.setBackgroundColor(Color.WHITE);
+		internetTv.setBackgroundColor(Color.WHITE);
+		socialTv.setBackgroundColor(Color.WHITE);
+		workTv.setBackgroundColor(Color.WHITE);
+		otherTv.setBackgroundColor(Color.WHITE);
 	}
 }

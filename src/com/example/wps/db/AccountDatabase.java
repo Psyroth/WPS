@@ -61,12 +61,6 @@ public class AccountDatabase {
 			System.out.println("File does not exist");
 			document = createEmptyDatabase();
 			saveDatabase(context);
-			
-//			Account testAccount3 = new Account("Youtube", "youtubeUser", "youtube",
-//					"https://www.youtube.com", "2010-12-13 12:30:00",
-//					"Best Channel Ever", "Entertainment", true);
-//
-//			AccountDatabase.addAccount(testAccount3);
 		}
 	}
 
