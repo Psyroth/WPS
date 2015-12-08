@@ -1,5 +1,15 @@
 package com.example.wps.gui;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -45,9 +55,9 @@ public class AddAccountActivity extends Activity {
 
 	public void processInputData(View view) {
 		String accountName = mEtName.getText().toString();
-
+		System.out.println(accountName);
 		// Still an issue here
-		if (AccountDatabase.getAccountFromName(accountName) == null) {
+		if (AccountDatabase.getInstance().getAccountFromName(accountName) == null) {
 
 			String accountId = mEtId.getText().toString();
 			String accountPassword = mEtPassword.getText().toString();
@@ -63,7 +73,7 @@ public class AddAccountActivity extends Activity {
 					accountPassword, accountUrl, today.toString(formatter),
 					accountNote, accountCategory, isFavorite);
 			
-			AccountDatabase.addAccount(newAccount);
+			AccountDatabase.getInstance().addAccount(newAccount);
 			// Notify account saved ? Go back to previous view / activity ?
 		} else {
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(

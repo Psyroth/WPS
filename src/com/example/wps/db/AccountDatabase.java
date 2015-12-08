@@ -6,17 +6,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -41,33 +44,44 @@ import android.content.Context;
 import com.example.wps.db.Account;
 import com.example.wps.encryption.Encryption;
 
-public class AccountDatabase {
+public class AccountDatabase extends Observable {
 
-	private static String filename = "database.xml";
-	private static Document document;
-	private static byte[] key;
+	private String filename;
+	private byte[] key;
+	private Context context;
+	private Document document;
+	
+	private static AccountDatabase instance = null;
 
-	public static void initDatabase(Context context, String serialNumber,
-			String nfcTag) throws TransformerFactoryConfigurationError,
-			NoSuchAlgorithmException, Exception {
-		File file = new File(context.getFilesDir(), filename);
-		key = Encryption.xor(Encryption.sha1(serialNumber),
+	private AccountDatabase(String filename, String serialNumber, String nfcTag, Context context) throws NoSuchAlgorithmException, UnsupportedEncodingException, Exception {
+		this.filename = filename;
+		this.key = Encryption.xor(Encryption.sha1(serialNumber),
 				Encryption.sha1(nfcTag));
+		this.context = context;
+		File file = new File(context.getFilesDir(), filename);
+
 		if (file.exists()) {
 			System.out.println("File exists");
 			document = openDatabase(file);
-			
 		} else {
 			System.out.println("File does not exist");
 			document = createEmptyDatabase();
-			saveDatabase(context);
+			saveDatabase();
 		}
+	}
+	
+	public static void initialize(String filename, String serialNumber, String nfcTag, Context context) throws NoSuchAlgorithmException, UnsupportedEncodingException, Exception {
+		instance = new AccountDatabase(filename, serialNumber, nfcTag, context);
+	}
+	
+	public static AccountDatabase getInstance() {
+		return instance;
 	}
 
 	/*
 	 * Load an existing database.
 	 */
-	private static Document openDatabase(File xmlFile) throws SAXException,
+	private Document openDatabase(File xmlFile) throws SAXException,
 			IOException, ParserConfigurationException, InvalidKeyException,
 			BadPaddingException, IllegalBlockSizeException,
 			NoSuchAlgorithmException, NoSuchPaddingException {
@@ -85,7 +99,7 @@ public class AccountDatabase {
 	/*
 	 * Create an empty database.
 	 */
-	private static Document createEmptyDatabase() throws SAXException,
+	private Document createEmptyDatabase() throws SAXException,
 			IOException, ParserConfigurationException {
 
 		String databaseContent = "<?xml version=\"1.0\""
@@ -103,7 +117,7 @@ public class AccountDatabase {
 	}
 
 	/* Adds a node named "tagName" with "value" as value and "parent" as parent. */
-	private static void addNode(String tagName, String value, Node parent) {
+	private void addNode(String tagName, String value, Node parent) {
 
 		// Create a new Node with the given tag name
 		Node node = document.createElement(tagName);
@@ -161,7 +175,7 @@ public class AccountDatabase {
 	}
 
 	/* Adds the "account" to the database. */
-	public static void addAccount(Account account) {
+	public void addAccount(Account account) {
 
 		try {
 
@@ -181,6 +195,15 @@ public class AccountDatabase {
 
 				NodeList nodeList = document.getElementsByTagName("accounts");
 				nodeList.item(0).appendChild(rootElement);
+				try {
+					saveDatabase();
+					setChanged();
+					notifyObservers();
+				} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException
+						| BadPaddingException | TransformerException | TransformerFactoryConfigurationError | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 		} catch (Exception e) {
@@ -188,10 +211,11 @@ public class AccountDatabase {
 					+ " account.");
 			e.printStackTrace();
 		}
+		
 	}
 
 	/* Removes the account from the database. */
-	public static void removeAccount(Account account) {
+	public void removeAccount(Account account) {
 
 		NodeList nodeList = document.getElementsByTagName("accounts").item(0)
 				.getChildNodes();
@@ -212,10 +236,19 @@ public class AccountDatabase {
 					+ " account.");
 			e.printStackTrace();
 		}
+		try {
+			saveDatabase();
+		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException
+				| BadPaddingException | TransformerException | TransformerFactoryConfigurationError | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		setChanged();
+		notifyObservers();
 	}
 
 	/* Modify the oldAccount to the newAccount. */
-	public static void modifyAccount(Account oldAccount, Account newAccount) {
+	public void modifyAccount(Account oldAccount, Account newAccount) {
 
 		try {
 			if (accountExists(oldAccount)) {
@@ -230,7 +263,7 @@ public class AccountDatabase {
 	}
 
 	/* Returns if the account exists or not. */
-	public static boolean accountExists(Account account) {
+	public boolean accountExists(Account account) {
 
 		for (Account currentAccount : getAllAccounts()) {
 			if (account.getName().equals(currentAccount.getName())) {
@@ -243,16 +276,19 @@ public class AccountDatabase {
 	}
 
 	/* Returns the account that has "name" as account name */
-	public static Account getAccountFromName(String name) {
+	public Account getAccountFromName(String name) {
+
 		Account retrievedAccount = null;
 
-		NodeList nodeList = document.getElementsByTagName("accounts").item(0)
-				.getChildNodes();
+		List<Account> accounts = getAllAccounts();
 
-		Element element = (Element) getNodeByValue(name, nodeList);
-		Element parentElement = (Element) element.getParentNode();
-		retrievedAccount = elementToAccount(parentElement);
-
+		for (Account account : accounts) {
+			if (name.equals(account.getName())) {
+				retrievedAccount = account;
+				break;
+			}
+		}
+		
 		return retrievedAccount;
 	}
 
@@ -274,11 +310,13 @@ public class AccountDatabase {
 	}
 
 	/* Returns all the accounts in database. */
-	public static List<Account> getAllAccounts() {
+	public List<Account> getAllAccounts() {
 
 		List<Account> allAccounts = new ArrayList<Account>();
 
-		NodeList accountNodes = document.getElementsByTagName("accounts");
+		NodeList accountNodes = document.getElementsByTagName("accounts").item(0)
+				.getChildNodes();
+
 		for (int i = 0; i < accountNodes.getLength(); i++) {
 			Node currentNode = accountNodes.item(i);
 			Element currentElement = (Element) currentNode;
@@ -290,7 +328,7 @@ public class AccountDatabase {
 	}
 
 	/* Returns all the accounts in a given category. */
-	public static List<Account> getAllAccountsInCategory(String category) {
+	public List<Account> getAllAccountsInCategory(String category) {
 
 		List<Account> categoryAccounts = new ArrayList<Account>();
 
@@ -303,7 +341,7 @@ public class AccountDatabase {
 	}
 
 	/* Returns all favorite accounts. */
-	public static List<Account> getAllFavoriteAccounts() {
+	public List<Account> getAllFavoriteAccounts() {
 		List<Account> favoriteAccounts = new ArrayList<Account>();
 
 		for (Account currentAccount : getAllAccounts()) {
@@ -333,20 +371,20 @@ public class AccountDatabase {
 	}
 
 	/* Print the whole database. */
-	public static void printDatabase() {
+	public void printDatabase() {
 
 		for (Account account : getAllAccounts()) {
 			System.out.println(account.toString());
 		}
 	}
 
-	public static void saveDatabase(Context context)
+	private void saveDatabase()
 			throws TransformerConfigurationException, TransformerException,
 			TransformerFactoryConfigurationError, IOException,
 			InvalidKeyException, NoSuchAlgorithmException,
 			NoSuchPaddingException, IllegalBlockSizeException,
 			BadPaddingException {
-		deleteDatabase(context);
+		deleteDatabase();
 		DOMSource domSource = new DOMSource(document);
 		StringWriter writer = new StringWriter();
 		StreamResult result = new StreamResult(writer);
@@ -359,11 +397,11 @@ public class AccountDatabase {
 		outputStream.close();
 	}
 
-	public static void flushDatabase() {
+	private void flushDatabase() {
 		document = null;
 	}
 
-	public static void deleteDatabase(Context context) {
+	private void deleteDatabase() {
 		File file = new File(context.getFilesDir(), filename);
 		if (file.exists()) {
 			file.delete();

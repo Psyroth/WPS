@@ -33,9 +33,11 @@ public class MainActivity extends ActionBarActivity {
 
 		// check if NFC is active
 		checkNFCActive();
+		String filename = "database.xml";
+		String serialNumber = "lol";
+		String nfcTag = "abcd";
 		try {
-			AccountDatabase.initDatabase(this, "lol", "abcd");
-			AccountDatabase.saveDatabase(this);
+			AccountDatabase.initialize(filename, serialNumber, nfcTag, this);
 		} catch (TransformerFactoryConfigurationError | Exception e) {
 			e.printStackTrace();
 		}

@@ -6,6 +6,8 @@ import com.example.wps.db.AccountDatabase;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Observable;
+import java.util.Observer;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -14,7 +16,7 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.ListView;
 
-public class SearchActivity extends Activity {
+public class SearchActivity extends Activity implements Observer {
 	// Declare Variables
 	ListView list;
 	ListViewAdapter adapter;
@@ -29,7 +31,12 @@ public class SearchActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.listview_main);
 
-		listOfAcc = (ArrayList<Account>) AccountDatabase.getAllAccounts();
+		addAccountsOnLayout();
+		AccountDatabase.getInstance().addObserver(this);
+	}
+	
+	private void addAccountsOnLayout() {
+		listOfAcc = (ArrayList<Account>) AccountDatabase.getInstance().getAllAccounts();
 
 		// Locate the ListView in listview_main.xml
 		list = (ListView) findViewById(R.id.listview);
@@ -63,5 +70,16 @@ public class SearchActivity extends Activity {
 					int arg3) {
 			}
 		});
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		AccountDatabase.getInstance().deleteObserver(this);
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		addAccountsOnLayout();
 	}
 }

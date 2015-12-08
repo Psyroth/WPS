@@ -1,6 +1,8 @@
 package com.example.wps.gui;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import com.example.wps.R;
 
@@ -17,28 +19,29 @@ import android.widget.TextView;
 import com.example.wps.db.Account;
 import com.example.wps.db.AccountDatabase;
 
-public class FrequencyViewActivity extends Activity {
+public class FrequencyViewActivity extends Activity implements Observer {
 	ArrayList<Account> listOfAcc;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		listOfAcc = (ArrayList<Account>) AccountDatabase.getAllAccounts();
-
 		setContentView(R.layout.account_list_scrollview_layout);
 		addAccountsToLinearLayout();
+		AccountDatabase.getInstance().addObserver(this);
 	}
 
 	public void addAccountsToLinearLayout() {
 
+		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutAccountsList);
+		linearLayout.removeAllViews();
+		
+		listOfAcc = (ArrayList<Account>) AccountDatabase.getInstance().getAllAccounts();
 		AccountDatabase.sortAccountListByLastAccess(listOfAcc);
 
 		for (int acc = 0; acc < listOfAcc.size(); acc++) {
 			String userTitle = listOfAcc.get(acc).getName();
 			String userID = listOfAcc.get(acc).getId();
 			String userPass = listOfAcc.get(acc).getPassword();
-
-			LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutAccountsList);
 
 			TextView tv = new TextView(this);
 			tv.setId(acc);
@@ -91,5 +94,16 @@ public class FrequencyViewActivity extends Activity {
 
 			linearLayout.addView(tv);
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		AccountDatabase.getInstance().deleteObserver(this);
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		addAccountsToLinearLayout();
 	}
 }

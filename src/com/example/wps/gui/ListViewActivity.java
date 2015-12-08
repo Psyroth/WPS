@@ -1,6 +1,8 @@
 package com.example.wps.gui;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import com.example.wps.R;
 
@@ -17,31 +19,28 @@ import android.widget.TextView;
 import com.example.wps.db.Account;
 import com.example.wps.db.AccountDatabase;
 
-public class ListViewActivity extends Activity {
+public class ListViewActivity extends Activity implements Observer {
 	ArrayList<Account> listOfAcc;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Bundle bundle = getIntent().getExtras();
-		String category = bundle.getString("WithCategory");
-
-		// Need “No account in category" message
-		accountsFromCategory(category);
-
 		setContentView(R.layout.account_list_scrollview_layout);
+		
 		addAccountsToLinearLayout();
+		
+		AccountDatabase.getInstance().addObserver(this);
 	}
 
 	public void accountsFromCategory(String category) {
 		if (category.equalsIgnoreCase("All")) {
-			listOfAcc = (ArrayList<Account>) AccountDatabase.getAllAccounts();
+			listOfAcc = (ArrayList<Account>) AccountDatabase.getInstance().getAllAccounts();
 		} else if (category.equalsIgnoreCase("Gaming")
 				|| category.equalsIgnoreCase("Internet Sites")
 				|| category.equalsIgnoreCase("Social Network")
 				|| category.equalsIgnoreCase("Work")
 				|| category.equalsIgnoreCase("Other")) {
-			listOfAcc = (ArrayList<Account>) AccountDatabase
+			listOfAcc = (ArrayList<Account>) AccountDatabase.getInstance()
 					.getAllAccountsInCategory(category);
 		} else {
 			throw new IllegalArgumentException("Invalid category : " + category);
@@ -49,16 +48,22 @@ public class ListViewActivity extends Activity {
 	}
 
 	public void addAccountsToLinearLayout() {
+		Bundle bundle = getIntent().getExtras();
+		String category = bundle.getString("WithCategory");
+
+		// Need “No account in category" message
+		accountsFromCategory(category);
 
 		AccountDatabase.sortAccountListByAlphabeticOrder(listOfAcc);
 
+		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutAccountsList);
+		linearLayout.removeAllViews();
+		
 		for (int acc = 0; acc < listOfAcc.size(); acc++) {
 			String userTitle = listOfAcc.get(acc).getName();
 			String userID = listOfAcc.get(acc).getId();
 			String userPass = listOfAcc.get(acc).getPassword();
-
-			LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutAccountsList);
-
+			
 			TextView tv = new TextView(this);
 			tv.setId(acc);
 			tv.setText(userTitle + "\n" + userID + "\n" + userPass);
@@ -109,5 +114,16 @@ public class ListViewActivity extends Activity {
 
 			linearLayout.addView(tv);
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		AccountDatabase.getInstance().deleteObserver(this);
+	}
+	
+	@Override
+	public void update(Observable observable, Object data) {
+		addAccountsToLinearLayout();
 	}
 }
