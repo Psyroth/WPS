@@ -213,17 +213,21 @@ public class AccountDatabase extends Observable {
 		}
 		
 	}
+	
+	public void removeAccount(Account account) {
+		removeAccount(account.getName());
+	}
 
 	/* Removes the account from the database. */
-	public void removeAccount(Account account) {
+	public void removeAccount(String accountName) {
 
 		NodeList nodeList = document.getElementsByTagName("accounts").item(0)
 				.getChildNodes();
 
 		try {
 
-			if (accountExists(account)) {
-				Element element = (Element) getNodeByValue(account.getName(),
+			if (accountExists(accountName)) {
+				Element element = (Element) getNodeByValue(accountName,
 						nodeList);
 				Element parentElement = (Element) element.getParentNode();
 				element.getParentNode().getParentNode()
@@ -232,7 +236,7 @@ public class AccountDatabase extends Observable {
 		}
 
 		catch (Exception e) {
-			System.out.println("Failed to remove " + account.getName()
+			System.out.println("Failed to remove " + accountName
 					+ " account.");
 			e.printStackTrace();
 		}
@@ -248,29 +252,33 @@ public class AccountDatabase extends Observable {
 	}
 
 	/* Modify the oldAccount to the newAccount. */
-	public void modifyAccount(Account oldAccount, Account newAccount) {
+	public void modifyAccount(Account newAccount) {
 
 		try {
-			if (accountExists(oldAccount)) {
-				removeAccount(oldAccount);
+			if (accountExists(newAccount.getName())) {
+				removeAccount(newAccount.getName());
 				addAccount(newAccount);
 			}
 		} catch (Exception e) {
-			System.out.println("Failed to modify " + oldAccount.getName()
+			System.out.println("Failed to modify " + newAccount.getName()
 					+ " account.");
 			e.printStackTrace();
 		}
 	}
 
-	/* Returns if the account exists or not. */
 	public boolean accountExists(Account account) {
+		return accountExists(account.getName());
+	}
+	
+	/* Returns if the account exists or not. */
+	public boolean accountExists(String accountName) {
 
 		for (Account currentAccount : getAllAccounts()) {
-			if (account.getName().equals(currentAccount.getName())) {
+			if (accountName.equals(currentAccount.getName())) {
 				return true;
 			}
 		}
-		System.out.println("\nA " + account.getName()
+		System.out.println("\nA " + accountName
 				+ " account does not exist yet.");
 		return false;
 	}
