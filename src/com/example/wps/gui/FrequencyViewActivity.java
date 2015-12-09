@@ -58,8 +58,6 @@ public class FrequencyViewActivity extends Activity implements Observer {
 							FrequencyViewActivity.this,
 							ViewAccountActivity.class);
 
-					// Need to change lastAccess then
-
 					viewAccountIntent.putExtra("AccountName",
 							listOfAcc.get(v.getId()).getName());
 					viewAccountIntent.putExtra("AccountId",

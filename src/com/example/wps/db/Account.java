@@ -130,7 +130,14 @@ public class Account {
 			// 0 this has the same date that another
 			// 1 this is after another
 
-			return (lastAccess1.compareTo(lastAccess2));
+			int res = lastAccess1.compareTo(lastAccess2);
+			if (res==-1) {
+				res = 1;
+			}
+			else if (res==1) {
+				res = -1;
+			}
+			return res;
 		}
 	};
 }

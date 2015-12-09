@@ -57,8 +57,6 @@ public class FavoriteViewActivity extends Activity implements Observer {
 							FavoriteViewActivity.this,
 							ViewAccountActivity.class);
 
-					// Need to change lastAccess then
-
 					viewAccountIntent.putExtra("AccountName",
 							favAccounts.get(v.getId()).getName());
 					viewAccountIntent.putExtra("AccountId",

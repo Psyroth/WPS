@@ -78,8 +78,6 @@ public class ListViewActivity extends Activity implements Observer {
 					Intent viewAccountIntent = new Intent(
 							ListViewActivity.this, ViewAccountActivity.class);
 
-					// Need to change lastAccess then
-
 					viewAccountIntent.putExtra("AccountName",
 							listOfAcc.get(v.getId()).getName());
 					viewAccountIntent.putExtra("AccountId",

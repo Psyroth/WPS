@@ -10,6 +10,7 @@ import com.example.wps.db.AccountDatabase;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.method.KeyListener;
 import android.view.View;
@@ -54,6 +55,14 @@ public class ViewAccountActivity extends Activity {
 		String accountCategory = bundle.getString("AccountCategory");
 		String accountNote = bundle.getString("AccountNote");
 		Boolean accountIsFavorite = bundle.getBoolean("AccountIsFavorite");
+		
+		// Update lastAccess
+		DateTime today = new DateTime();
+		DateTimeFormatter formatter = DateTimeFormat
+				.forPattern("yyyy-MM-dd HH:mm:ss");
+		String lastAccess = today.toString(formatter);
+		Account account = new Account(accountName, accountId, accountPassword, accountUrl, lastAccess, accountNote, accountCategory, accountIsFavorite);
+		AccountDatabase.getInstance().modifyAccount(account);
 
 		// Fill the Account
 
@@ -64,21 +73,27 @@ public class ViewAccountActivity extends Activity {
 		vEtCategory.setText(accountCategory);
 		vEtNote.setText(accountNote);
 		vCbIsFavorite.setChecked(accountIsFavorite);
-		
+
+		// Disable interaction until user pushes "Modify" button.
 		idKeyListener = vEtId.getKeyListener();
 		passwordKeyListener = vEtPassword.getKeyListener();
 		urlKeyListener = vEtUrl.getKeyListener();
 		categoryKeyListener = vEtCategory.getKeyListener();
 		noteKeyListener = vEtNote.getKeyListener();
 		favoriteKeyListener = vCbIsFavorite.getKeyListener();
-
-		// Disable interaction until user pushes "Modify" button.
+		
 		vEtName.setKeyListener(null);
+		vEtName.setBackgroundColor(Color.GRAY);
 		vEtId.setKeyListener(null);
+		vEtId.setBackgroundColor(Color.GRAY);
 		vEtPassword.setKeyListener(null);
+		vEtPassword.setBackgroundColor(Color.GRAY);
 		vEtUrl.setKeyListener(null);
+		vEtUrl.setBackgroundColor(Color.GRAY);
 		vEtCategory.setKeyListener(null);
+		vEtCategory.setBackgroundColor(Color.GRAY);
 		vEtNote.setKeyListener(null);
+		vEtNote.setBackgroundColor(Color.GRAY);
 		vCbIsFavorite.setEnabled(false);;
 	}
 
@@ -87,10 +102,15 @@ public class ViewAccountActivity extends Activity {
 		if ("Modify".equals(button.getText())) {
 			button.setText("Save");
 			vEtId.setKeyListener(idKeyListener);
+			vEtId.setBackgroundColor(Color.WHITE);
 			vEtPassword.setKeyListener(passwordKeyListener);
+			vEtPassword.setBackgroundColor(Color.WHITE);
 			vEtUrl.setKeyListener(urlKeyListener);
+			vEtUrl.setBackgroundColor(Color.WHITE);
 			vEtCategory.setKeyListener(categoryKeyListener);
+			vEtCategory.setBackgroundColor(Color.WHITE);
 			vEtNote.setKeyListener(noteKeyListener);
+			vEtNote.setBackgroundColor(Color.WHITE);
 			vCbIsFavorite.setEnabled(true);;
 		}
 		else {
