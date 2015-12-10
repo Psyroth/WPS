@@ -12,8 +12,10 @@ import com.example.wps.nfc.NfcReader;
 import com.example.wps.nfc.NfcWriter;
 
 import android.support.v7.app.ActionBarActivity;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
@@ -85,13 +87,30 @@ public class MainActivity extends ActionBarActivity {
 				
 				try {
 					AccountDatabase.initialize(filename, serialNumber, nfcTag, this);
+					// if successful then we ask the user what he wants to look for
+					Intent i = new Intent(MainActivity.this, ListOfAccounts.class);
+					startActivity(i);
 				} catch (TransformerFactoryConfigurationError | Exception e) {
-					e.printStackTrace();
+					nfcTag = null;
+					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+							this);
+
+					alertDialogBuilder.setTitle("Error");
+					alertDialogBuilder
+							.setMessage("The NFC tag is invalid ! Database was not decrypted. Try another tag.")
+							.setCancelable(false)
+							.setPositiveButton("Ok",
+									new DialogInterface.OnClickListener() {
+										public void onClick(DialogInterface dialog,
+												int id) {
+											dialog.cancel();
+										}
+									});
+
+					AlertDialog alertDialog = alertDialogBuilder.create();
+					alertDialog.show();
 				}
 				
-				// if successful then we ask the user what he wants to look for
-				Intent i = new Intent(MainActivity.this, ListOfAccounts.class);
-				startActivity(i);
 			}
 			else if (nfcTag != null) {
 				Intent i = new Intent(MainActivity.this, ListOfAccounts.class);
