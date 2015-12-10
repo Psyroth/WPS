@@ -7,11 +7,13 @@
     <uses-sdk
         android:minSdkVersion="19"
         android:targetSdkVersion="21" />
-	
-	<uses-permission android:name="android.permission.NFC" />
-    
-	<uses-feature android:name="android.hardware.nfc" android:required="true" />
-	
+
+    <uses-permission android:name="android.permission.NFC" />
+
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -22,7 +24,9 @@
         <activity android:name=".gui.CategoryViewActivity" />
         <activity android:name=".gui.FrequencyViewActivity" />
         <activity android:name=".gui.PasswordGenViewActivity" />
-        <activity android:name=".gui.SearchActivity" android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".gui.SearchActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".gui.AddAccountActivity" />
         <activity android:name=".gui.ViewAccountActivity" />
         <activity android:name=".gui.FavoriteViewActivity" />
@@ -35,8 +39,28 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            
+            <intent-filter>
+            <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+
+            <data android:mimeType="text/plain" />
+        </intent-filter>
+
+        <intent-filter>
+            <action android:name="android.nfc.action.TAG_DISCOVERED" />
+        </intent-filter>
+            
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/nfc_tech_filter" />
         </activity>
-        
+
     </application>
 
 </manifest>

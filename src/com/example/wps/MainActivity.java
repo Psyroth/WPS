@@ -1,19 +1,28 @@
 package com.example.wps;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
 import com.example.wps.db.AccountDatabase;
 import com.example.wps.gui.ListOfAccounts;
 import com.example.wps.gui.PasswordGenViewActivity;
-import com.example.wps.tagManipulation.NdefReaderTask;
+import com.example.wps.nfc.NfcReader;
+import com.example.wps.nfc.NfcWriter;
 
 import android.support.v7.app.ActionBarActivity;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
 import android.nfc.Tag;
+import android.nfc.tech.MifareUltralight;
 import android.nfc.tech.Ndef;
+import android.nfc.tech.NfcA;
+import android.nfc.tech.NfcV;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -22,52 +31,79 @@ import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
-	public static final String MIME_TEXT_PLAIN = "text/plain";
-	public static final String TAG = "NfcDemo";
+	private static String filename = "database.xml";
+	private static String serialNumber = null;
+	//private static String nfcTag = "afghjiymphgefuoi";
+	private static String nfcTag = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		serialNumber = Build.SERIAL;
+		
+		/*Tag tag = getIntent().getParcelableExtra(NfcAdapter.EXTRA_TAG);
+		try { 
+			new NfcWriter(tag, nfcTag.getBytes(Charset.forName("US-ASCII"))).start();
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+
 		// shows initial app window
 		setContentView(R.layout.activity_main);
-
-		// check if NFC is active
-		checkNFCActive();
-		String filename = "database.xml";
-		String serialNumber = "lol";
-		String nfcTag = "abcd";
-		try {
-			AccountDatabase.initialize(filename, serialNumber, nfcTag, this);
-		} catch (TransformerFactoryConfigurationError | Exception e) {
-			e.printStackTrace();
-		}
+		
+		// Retrieve data from NFC tag
+		getNfcTag();
 	}
 
-	public void checkNFCActive() {
+	public void getNfcTag() {
 		Context context = this.getApplicationContext();
 
 		// check if NFC is active
-		NfcManager manager = (NfcManager) context
-				.getSystemService(Context.NFC_SERVICE);
+		NfcManager manager = (NfcManager) context.getSystemService(Context.NFC_SERVICE);
 		NfcAdapter adapter = manager.getDefaultAdapter();
 		// if active, launch NFC scan
 		if (adapter != null && adapter.isEnabled()) {
 			// adapter exists and is enabled.
 
 			// start scanning for NFC tag
-			handleIntent(getIntent());
-			// if successful then we ask the user what he wants to look for
-			Intent i = new Intent(MainActivity.this, ListOfAccounts.class);
-			startActivity(i);
+			if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
+				Tag tag = getIntent().getParcelableExtra(NfcAdapter.EXTRA_TAG);
+				
+				NfcReader nfcReader = new NfcReader(tag);
+				nfcReader.start();
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				nfcTag = new String(nfcReader.data, Charset.forName("US-ASCII"));
+				// stop scanning for NFC tag
+				
+				try {
+					AccountDatabase.initialize(filename, serialNumber, nfcTag, this);
+				} catch (TransformerFactoryConfigurationError | Exception e) {
+					e.printStackTrace();
+				}
+				
+				// if successful then we ask the user what he wants to look for
+				Intent i = new Intent(MainActivity.this, ListOfAccounts.class);
+				startActivity(i);
+			}
+			else if (nfcTag != null) {
+				Intent i = new Intent(MainActivity.this, ListOfAccounts.class);
+				startActivity(i);
+			}
+
 		}
 		// if not active, take the user to wireless settings to enable NFC
 		else {
-			Toast.makeText(
-					getApplicationContext(),
-					"Please activate NFC and press Back to return to the application!",
+			Toast.makeText(getApplicationContext(), "Please activate NFC and press Back to return to the application!",
 					Toast.LENGTH_LONG).show();
-			startActivity(new Intent(
-					android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+			startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
 
 			// TODO dialog box to make sure he wants to go to settings maybe?
 			// final Dialog dialog = new Dialog(this);
@@ -101,7 +137,7 @@ public class MainActivity extends ActionBarActivity {
 		switch (id) {
 		case R.id.action_settings:
 			// settings();
-			checkNFCActive();
+			getNfcTag();
 			return true;
 		case R.id.action_passgen:
 			showPassGen();
@@ -114,32 +150,4 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 
-	private void handleIntent(Intent intent) {
-		String action = intent.getAction();
-		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
-
-			String type = intent.getType();
-			if (MIME_TEXT_PLAIN.equals(type)) {
-
-				Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-				new NdefReaderTask().execute(tag);
-
-			} else {
-				Log.d(TAG, "Wrong mime type: " + type);
-			}
-		} else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
-
-			// In case we would still use the Tech Discovered Intent
-			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-			String[] techList = tag.getTechList();
-			String searchedTech = Ndef.class.getName();
-
-			for (String tech : techList) {
-				if (searchedTech.equals(tech)) {
-					new NdefReaderTask().execute(tag);
-					break;
-				}
-			}
-		}
-	}
 }
