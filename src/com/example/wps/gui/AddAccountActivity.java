@@ -11,6 +11,7 @@ import com.example.wps.gui.MessageDialogBox;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -76,5 +77,13 @@ public class AddAccountActivity extends Activity {
 					context, "Error", "The account is already existing !", "Ok");
 			alreadyExistDialogBox.displayDialogBox();
 		}
+	}
+	public void showPassGen() {
+		Intent i = new Intent(this, PasswordGenViewActivity.class);
+		startActivity(i);
+	}
+	public void openPassGen(View view)
+	{
+		showPassGen();
 	}
 }

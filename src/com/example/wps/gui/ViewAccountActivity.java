@@ -83,17 +83,17 @@ public class ViewAccountActivity extends Activity {
 		favoriteKeyListener = vCbIsFavorite.getKeyListener();
 		
 		vEtName.setKeyListener(null);
-		vEtName.setBackgroundColor(Color.GRAY);
+		vEtName.setBackgroundColor(Color.LTGRAY);
 		vEtId.setKeyListener(null);
-		vEtId.setBackgroundColor(Color.GRAY);
+		vEtId.setBackgroundColor(Color.LTGRAY);
 		vEtPassword.setKeyListener(null);
-		vEtPassword.setBackgroundColor(Color.GRAY);
+		vEtPassword.setBackgroundColor(Color.LTGRAY);
 		vEtUrl.setKeyListener(null);
-		vEtUrl.setBackgroundColor(Color.GRAY);
+		vEtUrl.setBackgroundColor(Color.LTGRAY);
 		vEtCategory.setKeyListener(null);
-		vEtCategory.setBackgroundColor(Color.GRAY);
+		vEtCategory.setBackgroundColor(Color.LTGRAY);
 		vEtNote.setKeyListener(null);
-		vEtNote.setBackgroundColor(Color.GRAY);
+		vEtNote.setBackgroundColor(Color.LTGRAY);
 		vCbIsFavorite.setEnabled(false);;
 	}
 

@@ -90,7 +90,7 @@
     </EditText>
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/copyToClipboardButton"
         android:layout_column="0"
         android:layout_gravity="end"
         android:onClick="modifyAccount"

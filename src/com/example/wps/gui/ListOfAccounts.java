@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
+import com.example.wps.MainActivity;
 import com.example.wps.R;
 
 public class ListOfAccounts extends TabActivity {
@@ -83,6 +84,11 @@ public class ListOfAccounts extends TabActivity {
 		tabHost.setCurrentTab(0);
 	}
 
+	public void showPassGen() {
+		Intent i = new Intent(this, PasswordGenViewActivity.class);
+		startActivity(i);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -100,6 +106,9 @@ public class ListOfAccounts extends TabActivity {
 		switch (id) {
 		case R.id.action_settings:
 			// settings();
+			return true;
+		case R.id.action_passgen:
+			showPassGen();
 			return true;
 		case R.id.action_exit:
 			System.exit(1);
