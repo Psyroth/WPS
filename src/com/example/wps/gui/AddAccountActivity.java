@@ -14,8 +14,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 public class AddAccountActivity extends Activity {
 
@@ -23,7 +25,7 @@ public class AddAccountActivity extends Activity {
 	EditText mEtId;
 	EditText mEtPassword;
 	EditText mEtUrl;
-	EditText mEtCategory;
+	Spinner categorySpinner;
 	EditText mEtNote;
 	CheckBox mCbIsFavorite;
 	final Context context = this;
@@ -37,7 +39,12 @@ public class AddAccountActivity extends Activity {
 		mEtId = (EditText) findViewById(R.id.mEtId);
 		mEtPassword = (EditText) findViewById(R.id.mEtPassword);
 		mEtUrl = (EditText) findViewById(R.id.mEtUrl);
-		mEtCategory = (EditText) findViewById(R.id.mEtCategory);
+		categorySpinner = (Spinner) findViewById(R.id.categorySpinner);
+		String[] items = new String[] { "Gaming", "Internet Site",
+				"Social Network", "Work", "Other" };
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_dropdown_item, items);
+		categorySpinner.setAdapter(adapter);
 		mEtNote = (EditText) findViewById(R.id.mEtNote);
 
 		mCbIsFavorite = (CheckBox) findViewById(R.id.mCbIsFavorite);
@@ -61,7 +68,8 @@ public class AddAccountActivity extends Activity {
 			DateTime today = new DateTime();
 			DateTimeFormatter formatter = DateTimeFormat
 					.forPattern("yyyy-MM-dd HH:mm:ss");
-			String accountCategory = mEtCategory.getText().toString();
+			String accountCategory = categorySpinner.getSelectedItem()
+					.toString();
 			String accountNote = mEtNote.getText().toString();
 			Boolean isFavorite = mCbIsFavorite.isChecked();
 
@@ -82,12 +90,13 @@ public class AddAccountActivity extends Activity {
 			alreadyExistDialogBox.displayDialogBox();
 		}
 	}
+
 	public void showPassGen() {
 		Intent i = new Intent(this, PasswordGenViewActivity.class);
 		startActivity(i);
 	}
-	public void openPassGen(View view)
-	{
+
+	public void openPassGen(View view) {
 		showPassGen();
 	}
 }
