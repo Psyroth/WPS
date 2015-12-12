@@ -29,11 +29,14 @@ public class FavoriteViewActivity extends Activity implements Observer {
 		AccountDatabase.getInstance().addObserver(this);
 	}
 
+	/*
+	 * Display the favorites accounts in AccountDatabase.
+	 */
 	public void addAccountsToLinearLayout() {
 
 		favAccounts = (ArrayList<Account>) AccountDatabase.getInstance()
 				.getAllFavoriteAccounts();
-		
+
 		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutAccountsList);
 		linearLayout.removeAllViews();
 
@@ -51,12 +54,13 @@ public class FavoriteViewActivity extends Activity implements Observer {
 
 				@Override
 				public void onClick(View v) {
-					System.out.println("Clicked on element : " + v.getId());
+
 					// Launch viewAccountActivity
 					Intent viewAccountIntent = new Intent(
 							FavoriteViewActivity.this,
 							ViewAccountActivity.class);
 
+					// Way to Share data across Activities
 					viewAccountIntent.putExtra("AccountName",
 							favAccounts.get(v.getId()).getName());
 					viewAccountIntent.putExtra("AccountId",
@@ -78,8 +82,10 @@ public class FavoriteViewActivity extends Activity implements Observer {
 			});
 
 			Resources res = getResources();
-			Drawable drawable = setCategoryIcon(favAccounts.get(acc).getCategory(), res);
-			
+			Drawable drawable = setCategoryIcon(favAccounts.get(acc)
+					.getCategory(), res);
+
+			// Alternate between White and Grey
 			if (acc % 2 == 0) {
 				tv.setBackgroundColor(Color.WHITE);
 			} else {
@@ -87,15 +93,14 @@ public class FavoriteViewActivity extends Activity implements Observer {
 			}
 			tv.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null,
 					null, null);
-
 			linearLayout.addView(tv);
 		}
 	}
 
-	public Drawable setCategoryIcon(String category, Resources res)
-	{
+	/* Adds the corresponding Icon to each category */
+	public Drawable setCategoryIcon(String category, Resources res) {
 		Drawable drawable = null;
-		switch(category){
+		switch (category) {
 		case "Gaming":
 			drawable = res.getDrawable(R.drawable.ic_games);
 			break;
@@ -108,13 +113,13 @@ public class FavoriteViewActivity extends Activity implements Observer {
 		case "Work":
 			drawable = res.getDrawable(R.drawable.ic_work);
 			break;
-		default: //other
+		default: // other
 			drawable = res.getDrawable(R.drawable.ic_other);
-			break;	
+			break;
 		}
 		return drawable;
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();

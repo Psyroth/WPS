@@ -17,6 +17,7 @@ public class Account {
 	private String category;
 	private Boolean isFavorite;
 
+	/* Account Constructor */
 	public Account(String name, String id, String password, String url,
 			String lastAccess, String note, String category, Boolean isFavorite) {
 		this.name = name;

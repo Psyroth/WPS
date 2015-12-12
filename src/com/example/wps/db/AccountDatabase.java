@@ -52,6 +52,7 @@ public class AccountDatabase extends Observable {
 
 	private static AccountDatabase instance = null;
 
+	/* AccountDatabase constructor */
 	private AccountDatabase(String filename, String serialNumber,
 			String nfcTag, Context context) throws NoSuchAlgorithmException,
 			UnsupportedEncodingException, Exception {
@@ -71,19 +72,19 @@ public class AccountDatabase extends Observable {
 		}
 	}
 
+	/* Creates a new instance of the AccountDatabase after NfcTag scanning */
 	public static void initialize(String filename, String serialNumber,
 			String nfcTag, Context context) throws NoSuchAlgorithmException,
 			UnsupportedEncodingException, Exception {
 		instance = new AccountDatabase(filename, serialNumber, nfcTag, context);
 	}
 
+	/* Returns the unique instance of the AccountDatabase */
 	public static AccountDatabase getInstance() {
 		return instance;
 	}
 
-	/*
-	 * Load an existing database.
-	 */
+	/* Load an existing database. */
 	private Document openDatabase(File xmlFile) throws SAXException,
 			IOException, ParserConfigurationException, InvalidKeyException,
 			BadPaddingException, IllegalBlockSizeException,
@@ -99,18 +100,13 @@ public class AccountDatabase extends Observable {
 		return result;
 	}
 
-	/*
-	 * Create an empty database.
-	 */
+	/* Create an empty database. */
 	private Document createEmptyDatabase() throws SAXException, IOException,
 			ParserConfigurationException {
 
 		String databaseContent = "<?xml version=\"1.0\""
-				+ "encoding=\"UTF-8\" standalone=\"no\"?>"
-				+ "<WPS-database>"
-				+ "<accounts>"
-				+ "</accounts>"
-				+ "</WPS-database>";
+				+ "encoding=\"UTF-8\" standalone=\"no\"?>" + "<WPS-database>"
+				+ "<accounts>" + "</accounts>" + "</WPS-database>";
 
 		document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 				.parse(new InputSource(new StringReader(databaseContent)));
@@ -118,6 +114,7 @@ public class AccountDatabase extends Observable {
 		return document;
 	}
 
+	/* Adds dummy accounts in the AccountDatabase. */
 	public static void addTestAccountsToDatabase() {
 
 		Account oldAccountTest = new Account("Facebook",
@@ -190,7 +187,6 @@ public class AccountDatabase extends Observable {
 	public void addAccount(Account account) {
 
 		try {
-
 			if (!accountExists(account)) {
 
 				Element rootElement = document.createElement("account");
@@ -218,20 +214,19 @@ public class AccountDatabase extends Observable {
 					e.printStackTrace();
 				}
 			}
-
 		} catch (Exception e) {
 			System.out.println("Failed to add " + account.getName()
 					+ " account.");
 			e.printStackTrace();
 		}
-
 	}
 
+	/* Removes the account from the database. */
 	public void removeAccount(Account account) {
 		removeAccount(account.getName());
 	}
 
-	/* Removes the account from the database. */
+	/* Removes the account having accountName from the database. */
 	public void removeAccount(String accountName) {
 
 		NodeList nodeList = document.getElementsByTagName("accounts").item(0)
@@ -363,17 +358,8 @@ public class AccountDatabase extends Observable {
 		List<Account> categoryAccounts = new ArrayList<Account>();
 
 		for (Account currentAccount : getAllAccounts()) {
-			if (!category.equalsIgnoreCase("Other")) {
-				if (category.equalsIgnoreCase(currentAccount.getCategory())) {
-					categoryAccounts.add(currentAccount);
-				}
-			} else if ((!currentAccount.getCategory()
-					.equalsIgnoreCase("Gaming"))
-					&& (!currentAccount.getCategory().equalsIgnoreCase(
-							"Internet Sites"))
-					&& (!currentAccount.getCategory().equalsIgnoreCase(
-							"Social Network"))
-					&& (!currentAccount.getCategory().equalsIgnoreCase("Work"))) {
+
+			if (category.equalsIgnoreCase(currentAccount.getCategory())) {
 				categoryAccounts.add(currentAccount);
 			}
 		}
@@ -418,6 +404,10 @@ public class AccountDatabase extends Observable {
 		}
 	}
 
+	/*
+	 * Rewrite and encrypt the .Xml Document to save the AccountDatabase after
+	 * changes
+	 */
 	private void saveDatabase() throws TransformerConfigurationException,
 			TransformerException, TransformerFactoryConfigurationError,
 			IOException, InvalidKeyException, NoSuchAlgorithmException,
@@ -436,10 +426,12 @@ public class AccountDatabase extends Observable {
 		outputStream.close();
 	}
 
+	/* Makes the AccountDatabase inaccessible by nullifying the Document */
 	private void flushDatabase() {
 		document = null;
 	}
 
+	/* Delete the file containing the AccountDatabase */
 	private void deleteDatabase() {
 		File file = new File(context.getFilesDir(), filename);
 		if (file.exists()) {

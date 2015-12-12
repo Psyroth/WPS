@@ -18,12 +18,12 @@ import android.view.View.OnClickListener;
 
 public class ListViewAdapter extends BaseAdapter {
 
-	// Declare Variables
 	Context mContext;
 	LayoutInflater inflater;
 	private List<Account> accountList = null;
 	private ArrayList<Account> arraylist;
 
+	/* ListViewAdapter Constructor */
 	public ListViewAdapter(Context context, List<Account> accountList) {
 		mContext = context;
 		this.accountList = accountList;
@@ -32,6 +32,7 @@ public class ListViewAdapter extends BaseAdapter {
 		this.arraylist.addAll(accountList);
 	}
 
+	/* Nested class to manage what elements should appear in the view */
 	public class ViewHolder {
 		TextView name;
 		TextView id;
@@ -53,6 +54,7 @@ public class ListViewAdapter extends BaseAdapter {
 		return position;
 	}
 
+	/* Displays the clickable singleItem in a listView */
 	public View getView(final int position, View view, ViewGroup parent) {
 		final ViewHolder holder;
 		if (view == null) {
@@ -78,19 +80,15 @@ public class ListViewAdapter extends BaseAdapter {
 			public void onClick(View arg0) {
 				// Send single item click data to SingleItemView Class
 				Intent intent = new Intent(mContext, SingleItemView.class);
-				// Pass all data name
+				// Pass all data
 				intent.putExtra("Name", (accountList.get(position).getName()));
-				// Pass all data id
 				intent.putExtra("Id", (accountList.get(position).getId()));
-				// Pass all data password
 				intent.putExtra("Password",
 						(accountList.get(position).getPassword()));
-				// Pass all data flag
 				// Start SingleItemView Class
 				mContext.startActivity(intent);
 			}
 		});
-
 		return view;
 	}
 

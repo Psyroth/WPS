@@ -12,11 +12,12 @@ public class MessageDialogBox {
 	String title;
 	String message;
 	String buttonText;
-	Boolean changeIntent = false;
+	Boolean changeActivity = false;
 	Activity oldActivity;
 	Context packageContext;
 	Class nextClass;
 
+	/* MessageDialogBox Constructor */
 	public MessageDialogBox(Context context, String title, String message,
 			String buttonText) {
 		this.context = context;
@@ -25,29 +26,32 @@ public class MessageDialogBox {
 		this.buttonText = buttonText;
 	}
 
+	/* If you want to switch Activity after displaying the MessageDialogBox */
 	public void prepareNewIntent(Activity oldActivity, Context packageContext,
 			Class nextClass) {
 		this.oldActivity = oldActivity;
-		this.changeIntent = true;
+		this.changeActivity = true;
 		this.packageContext = packageContext;
 		this.nextClass = nextClass;
 	}
 
+	/* To display the Dialog Box with current attributes */
 	public void displayDialogBox() {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 				this.getContext());
 
-		// set title
+		// Set title
 		alertDialogBuilder.setTitle(this.getTitle());
 
-		// set dialog message
+		// Set dialog message
 		alertDialogBuilder
 				.setMessage(this.getMessage())
 				.setCancelable(false)
 				.setPositiveButton(this.getButtonText(),
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-								if (changeIntent) {
+								if (changeActivity) { // If we want to switch
+														// Activity
 									dialog.cancel();
 									Intent i = new Intent(packageContext,
 											nextClass);
@@ -58,9 +62,9 @@ public class MessageDialogBox {
 							}
 						});
 
-		// create alert dialog
+		// Create alert dialog
 		AlertDialog alertDialog = alertDialogBuilder.create();
-		// show it
+		// Show it
 		alertDialog.show();
 	}
 
@@ -96,27 +100,11 @@ public class MessageDialogBox {
 		this.buttonText = buttonText;
 	}
 
-	public Boolean getChangeIntent() {
-		return changeIntent;
+	public Boolean getChangeActivity() {
+		return changeActivity;
 	}
 
-	public void setChangeIntent(Boolean changeIntent) {
-		this.changeIntent = changeIntent;
-	}
-
-	public Context getPackageContext() {
-		return packageContext;
-	}
-
-	public void setPackageContext(Context packageContext) {
-		this.packageContext = packageContext;
-	}
-
-	public Class getNextClass() {
-		return nextClass;
-	}
-
-	public void setNextClass(Class nextClass) {
-		this.nextClass = nextClass;
+	public void setChangeActivity(Boolean changeActivity) {
+		this.changeActivity = changeActivity;
 	}
 }

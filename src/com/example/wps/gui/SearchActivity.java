@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 public class SearchActivity extends Activity implements Observer {
-	// Declare Variables
+	
 	ListView list;
 	ListViewAdapter adapter;
 	EditText editsearch;

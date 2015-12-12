@@ -30,6 +30,10 @@ public class FrequencyViewActivity extends Activity implements Observer {
 		AccountDatabase.getInstance().addObserver(this);
 	}
 
+	/*
+	 * Display the accounts in AccountDatabase by LastAccess (last accessed
+	 * accounts being first).
+	 */
 	public void addAccountsToLinearLayout() {
 
 		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutAccountsList);
@@ -53,12 +57,13 @@ public class FrequencyViewActivity extends Activity implements Observer {
 
 				@Override
 				public void onClick(View v) {
-					System.out.println("Clicked on element : " + v.getId());
+					
 					// Launch viewAccountActivity
 					Intent viewAccountIntent = new Intent(
 							FrequencyViewActivity.this,
 							ViewAccountActivity.class);
 
+					// Way to Share data across Activities
 					viewAccountIntent.putExtra("AccountName",
 							listOfAcc.get(v.getId()).getName());
 					viewAccountIntent.putExtra("AccountId",
@@ -83,6 +88,7 @@ public class FrequencyViewActivity extends Activity implements Observer {
 			Drawable drawable = setCategoryIcon(listOfAcc.get(acc)
 					.getCategory(), res);
 
+			// Alternate between White and Grey
 			if (acc % 2 == 0) {
 				tv.setBackgroundColor(Color.WHITE);
 			} else {
@@ -90,11 +96,11 @@ public class FrequencyViewActivity extends Activity implements Observer {
 			}
 			tv.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null,
 					null, null);
-
 			linearLayout.addView(tv);
 		}
 	}
 
+	/* Adds the corresponding Icon to each category */
 	public Drawable setCategoryIcon(String category, Resources res) {
 		Drawable drawable = null;
 		switch (category) {

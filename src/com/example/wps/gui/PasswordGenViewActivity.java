@@ -34,9 +34,8 @@ public class PasswordGenViewActivity extends Activity {
 
 		setContentView(R.layout.password_generator_viewer);
 
-		// get the password EditText
+		// Locate the TextViews and CheckBoxes in password_generator_viewer.xml
 		mEtPwd = (EditText) findViewById(R.id.PasswordGenerated);
-		// get the show/hide password Checkbox
 		mCbShowPwd = (CheckBox) findViewById(R.id.ShowPwdCheckBox);
 		mCbWithNumbers = (CheckBox) findViewById(R.id.NumberCheckBox);
 		mCbWithSpecial = (CheckBox) findViewById(R.id.SpecialCharCheckBox);
@@ -47,18 +46,18 @@ public class PasswordGenViewActivity extends Activity {
 		np.setMaxValue(30);
 		np.setWrapSelectorWheel(false);
 
-		// when user clicks on this checkbox, this is the handler.
+		// When user clicks on this checkbox, this is the handler.
 		mCbShowPwd.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				// checkbox status is changed from uncheck to checked.
+				// Checkbox status is changed from uncheck to checked.
 				if (!isChecked) {
-					// show password
+					// Show password
 					mEtPwd.setTransformationMethod(PasswordTransformationMethod
 							.getInstance());
 				} else {
-					// hide password
+					// Hide password
 					mEtPwd.setTransformationMethod(HideReturnsTransformationMethod
 							.getInstance());
 				}
@@ -66,6 +65,10 @@ public class PasswordGenViewActivity extends Activity {
 		});
 	}
 
+	/*
+	 * When user pushes "Generate Password" button, it will generate a password
+	 * according to what parameters he used
+	 */
 	public void genPasswordAfterButtonClicked(View view) {
 
 		if (mCbWithNumbers.isChecked() || mCbWithAlphabet.isChecked()
@@ -82,6 +85,10 @@ public class PasswordGenViewActivity extends Activity {
 		}
 	}
 
+	/*
+	 * When user pushes "Copy to Clipboard" button, it will copy the generated
+	 * password in his Clipboard for future use
+	 */
 	public void copyToClipboardButtonClicked(View view) {
 		System.out.println(mEtPwd.getText());
 		ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);

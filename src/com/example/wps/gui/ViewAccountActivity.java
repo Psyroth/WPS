@@ -17,7 +17,6 @@ import android.text.method.KeyListener;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Button;
 
 public class ViewAccountActivity extends Activity {
 
@@ -30,6 +29,7 @@ public class ViewAccountActivity extends Activity {
 	CheckBox vCbIsFavorite;
 	final Context context = this;
 
+	// To disable fields to avoid mistyping
 	KeyListener idKeyListener, passwordKeyListener, urlKeyListener,
 			categoryKeyListener, noteKeyListener, favoriteKeyListener;
 
@@ -38,6 +38,7 @@ public class ViewAccountActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.view_account_layout);
 
+		// Locate the TextViews in view_account_layout.xml
 		vEtName = (EditText) findViewById(R.id.vEtName);
 		vEtId = (EditText) findViewById(R.id.vEtId);
 		vEtPassword = (EditText) findViewById(R.id.vEtPassword);
@@ -47,7 +48,6 @@ public class ViewAccountActivity extends Activity {
 		vCbIsFavorite = (CheckBox) findViewById(R.id.vCbIsFavorite);
 
 		// Way to share Data between Activities
-
 		Bundle bundle = getIntent().getExtras();
 
 		String accountName = bundle.getString("AccountName");
@@ -69,7 +69,6 @@ public class ViewAccountActivity extends Activity {
 		}
 
 		// Update lastAccess
-
 		DateTime today = new DateTime();
 		DateTimeFormatter formatter = DateTimeFormat
 				.forPattern("yyyy-MM-dd HH:mm:ss");
@@ -80,7 +79,6 @@ public class ViewAccountActivity extends Activity {
 		AccountDatabase.getInstance().modifyAccount(account);
 
 		// Fill the Account
-
 		vEtName.setText(accountName);
 		vEtId.setText(accountId);
 		vEtPassword.setText(accountPassword);
@@ -110,9 +108,12 @@ public class ViewAccountActivity extends Activity {
 		vEtNote.setKeyListener(null);
 		vEtNote.setBackgroundColor(Color.LTGRAY);
 		vCbIsFavorite.setEnabled(false);
-
 	}
 
+	/*
+	 * When user pushes "Modify" button, it will transfer him to the
+	 * addAccountActivity with already completed fields
+	 */
 	public void modifyAccount(View view) {
 
 		Intent addAccountIntent = new Intent(ViewAccountActivity.this,
@@ -130,40 +131,5 @@ public class ViewAccountActivity extends Activity {
 				vCbIsFavorite.isChecked());
 
 		startActivity(addAccountIntent);
-
-		// Button button = (Button) view;
-		// if ("Modify".equals(button.getText())) {
-		// button.setText("Save");
-		// vEtId.setKeyListener(idKeyListener);
-		// vEtId.setBackgroundColor(Color.WHITE);
-		// vEtPassword.setKeyListener(passwordKeyListener);
-		// vEtPassword.setBackgroundColor(Color.WHITE);
-		// vEtUrl.setKeyListener(urlKeyListener);
-		// vEtUrl.setBackgroundColor(Color.WHITE);
-		// vEtCategory.setKeyListener(categoryKeyListener);
-		// vEtCategory.setBackgroundColor(Color.WHITE);
-		// vEtNote.setKeyListener(noteKeyListener);
-		// vEtNote.setBackgroundColor(Color.WHITE);
-		// vCbIsFavorite.setEnabled(true);;
-		// }
-		// else {
-		// String accountName = vEtName.getText().toString();
-		// String accountId = vEtId.getText().toString();
-		// String accountPassword = vEtPassword.getText().toString();
-		// String accountUrl = vEtUrl.getText().toString();
-		// DateTime today = new DateTime();
-		// DateTimeFormatter formatter = DateTimeFormat
-		// .forPattern("yyyy-MM-dd HH:mm:ss");
-		// String accountCategory = vEtCategory.getText().toString();
-		// String accountNote = vEtNote.getText().toString();
-		// Boolean isFavorite = vCbIsFavorite.isChecked();
-		//
-		// Account newAccount = new Account(accountName, accountId,
-		// accountPassword, accountUrl, today.toString(formatter),
-		// accountNote, accountCategory, isFavorite);
-		//
-		// AccountDatabase.getInstance().modifyAccount(newAccount);
-		// finish();
-		// }
 	}
 }

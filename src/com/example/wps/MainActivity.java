@@ -36,7 +36,6 @@ public class MainActivity extends ActionBarActivity {
 
 	private static String filename = "database.xml";
 	private static String serialNumber = null;
-	// private static String nfcTag = "afghjiymphgefuoi";
 	private static String nfcTag = null;
 
 	@Override
@@ -45,13 +44,6 @@ public class MainActivity extends ActionBarActivity {
 
 		serialNumber = Build.SERIAL;
 
-		/*
-		 * Tag tag = getIntent().getParcelableExtra(NfcAdapter.EXTRA_TAG); try {
-		 * new NfcWriter(tag,
-		 * nfcTag.getBytes(Charset.forName("US-ASCII"))).start(); } catch
-		 * (Exception e) { e.printStackTrace(); }
-		 */
-
 		// shows initial app window
 		setContentView(R.layout.activity_main);
 
@@ -59,18 +51,39 @@ public class MainActivity extends ActionBarActivity {
 		getNfcTag();
 	}
 
+	/*
+	 * Method to write a unique code on the NfcTag, to be used if NfcTag is
+	 * empty.
+	 */
+	public void setNfcTag() {
+
+		nfcTag = "afghjiymphgefuoi";
+
+		Tag tag = getIntent().getParcelableExtra(NfcAdapter.EXTRA_TAG);
+		try {
+			new NfcWriter(tag, nfcTag.getBytes(Charset.forName("US-ASCII")))
+					.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * Method to read a unique code on the NfcTag, opens the corresponding
+	 * AccountDatabase if NfcTag and Android Device are matching.
+	 */
 	public void getNfcTag() {
 		Context context = this.getApplicationContext();
 
-		// check if NFC is active
+		// Check if NFC is active
 		NfcManager manager = (NfcManager) context
 				.getSystemService(Context.NFC_SERVICE);
 		NfcAdapter adapter = manager.getDefaultAdapter();
-		// if active, launch NFC scan
+		// If active, launch NFC scan
 		if (adapter != null && adapter.isEnabled()) {
-			// adapter exists and is enabled.
+			// Adapter exists and is enabled.
 
-			// start scanning for NFC tag
+			// Start scanning for NFC tag
 			if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent()
 					.getAction())) {
 				Tag tag = getIntent().getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -83,13 +96,13 @@ public class MainActivity extends ActionBarActivity {
 					e.printStackTrace();
 				}
 				nfcTag = new String(nfcReader.data, Charset.forName("US-ASCII"));
-				// stop scanning for NFC tag
+				// Stop scanning for NFC tag
 
 				try {
 					AccountDatabase.initialize(filename, serialNumber, nfcTag,
 							this);
 					AccountDatabase.addTestAccountsToDatabase();
-					// if successful, we ask the user what he wants to look for
+					// If successful, we ask the user what he wants to look for
 					Intent i = new Intent(MainActivity.this,
 							ListOfAccounts.class);
 					startActivity(i);
@@ -110,7 +123,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 
 		}
-		// if not active, take the user to wireless settings to enable NFC
+		// If not active, take the user to wireless settings to enable NFC
 		else {
 			Toast.makeText(
 					getApplicationContext(),
@@ -119,16 +132,11 @@ public class MainActivity extends ActionBarActivity {
 			startActivity(new Intent(
 					android.provider.Settings.ACTION_WIRELESS_SETTINGS));
 
-			// TODO dialog box to make sure he wants to go to settings maybe?
-			// final Dialog dialog = new Dialog(this);
-			//
-			// dialog.setContentView(R.layout.activity_dialog_nfc_inactive);
-			// dialog.setTitle("NFC disabled");
-			//
-			// dialog.show();
+			// TODO dialog box to make sure he wants to go to settings maybe ?
 		}
 	}
 
+	/* Launch the PasswordGeneratorActivity from the setting menu. */
 	public void showPassGen() {
 		Intent i = new Intent(MainActivity.this, PasswordGenViewActivity.class);
 		startActivity(i);

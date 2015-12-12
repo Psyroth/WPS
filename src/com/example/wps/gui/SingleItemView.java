@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 public class SingleItemView extends Activity {
-	// Declare Variables
+
 	TextView txtname;
 	TextView txtid;
 	TextView txtpassword;
@@ -21,11 +21,9 @@ public class SingleItemView extends Activity {
 		setContentView(R.layout.singleitemview);
 		// Retrieve data from MainActivity on item click event
 		Intent i = getIntent();
-		// Get the results of name
+		// Get the results
 		name = i.getStringExtra("Name");
-		// Get the results of id
 		id = i.getStringExtra("Id");
-		// Get the results of password
 		password = i.getStringExtra("Password");
 
 		// Locate the TextViews in singleitemview.xml

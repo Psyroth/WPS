@@ -26,15 +26,16 @@ public class ListViewActivity extends Activity implements Observer {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.account_list_scrollview_layout);
-		
+
 		addAccountsToLinearLayout();
-		
+
 		AccountDatabase.getInstance().addObserver(this);
 	}
 
 	public void accountsFromCategory(String category) {
 		if (category.equalsIgnoreCase("All")) {
-			listOfAcc = (ArrayList<Account>) AccountDatabase.getInstance().getAllAccounts();
+			listOfAcc = (ArrayList<Account>) AccountDatabase.getInstance()
+					.getAllAccounts();
 		} else if (category.equalsIgnoreCase("Gaming")
 				|| category.equalsIgnoreCase("Internet Sites")
 				|| category.equalsIgnoreCase("Social Network")
@@ -58,12 +59,12 @@ public class ListViewActivity extends Activity implements Observer {
 
 		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutAccountsList);
 		linearLayout.removeAllViews();
-		
+
 		for (int acc = 0; acc < listOfAcc.size(); acc++) {
 			String userTitle = listOfAcc.get(acc).getName();
 			String userID = listOfAcc.get(acc).getId();
 			String userPass = listOfAcc.get(acc).getPassword();
-			
+
 			TextView tv = new TextView(this);
 			tv.setId(acc);
 			tv.setText(userTitle + "\n" + userID + "\n" + userPass);
@@ -99,8 +100,9 @@ public class ListViewActivity extends Activity implements Observer {
 			});
 
 			Resources res = getResources();
-			Drawable drawable = setCategoryIcon(listOfAcc.get(acc).getCategory(), res);
-			
+			Drawable drawable = setCategoryIcon(listOfAcc.get(acc)
+					.getCategory(), res);
+
 			if (acc % 2 == 0) {
 				tv.setBackgroundColor(Color.WHITE);
 			} else {
@@ -113,10 +115,10 @@ public class ListViewActivity extends Activity implements Observer {
 		}
 	}
 
-	public Drawable setCategoryIcon(String category, Resources res)
-	{
+	/* Adds the corresponding Icon to each category */
+	public Drawable setCategoryIcon(String category, Resources res) {
 		Drawable drawable = null;
-		switch(category){
+		switch (category) {
 		case "Gaming":
 			drawable = res.getDrawable(R.drawable.ic_games);
 			break;
@@ -129,19 +131,19 @@ public class ListViewActivity extends Activity implements Observer {
 		case "Work":
 			drawable = res.getDrawable(R.drawable.ic_work);
 			break;
-		default: //other
+		default: // other
 			drawable = res.getDrawable(R.drawable.ic_other);
-			break;	
+			break;
 		}
 		return drawable;
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		AccountDatabase.getInstance().deleteObserver(this);
 	}
-	
+
 	@Override
 	public void update(Observable observable, Object data) {
 		addAccountsToLinearLayout();
