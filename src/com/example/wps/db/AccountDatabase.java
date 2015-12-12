@@ -109,13 +109,23 @@ public class AccountDatabase extends Observable {
 				+ "encoding=\"UTF-8\" standalone=\"no\"?>"
 				+ "<WPS-database>"
 				+ "<accounts>"
-				+ "<account><name>Facebook</name><id>facebookUser@hotmail.com</id><password>facebook</password><url>https://www.facebook.com</url><lastAccess>2015-10-26 22:00:00</lastAccess><note>Less useful than Linkedin</note><category>Social Network</category><favorite>true</favorite></account></accounts>"
+				+ "</accounts>"
 				+ "</WPS-database>";
 
 		document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 				.parse(new InputSource(new StringReader(databaseContent)));
 
 		return document;
+	}
+
+	public static void addTestAccountsToDatabase() {
+
+		Account oldAccountTest = new Account("Facebook",
+				"facebookUser@hotmail.com", "facebook",
+				"https://www.facebook.com", "2014-09-12 22:00:00",
+				"Less useful than Linkedin", "Social Network", true);
+
+		AccountDatabase.getInstance().addAccount(oldAccountTest);
 	}
 
 	/* Adds a node named "tagName" with "value" as value and "parent" as parent. */
@@ -305,12 +315,22 @@ public class AccountDatabase extends Observable {
 	/* Returns true if the account was accessed more than 3 months ago. */
 	public static boolean accessedLongAgo(Account account) {
 
+		String stringLastAccess = account.getLastAccess();
+		return accessedLongAgo(stringLastAccess);
+	}
+
+	/*
+	 * Returns true if a String representing a Joda date is greather than 3
+	 * months ago.
+	 */
+	public static boolean accessedLongAgo(String stringLastAccess) {
+
 		Boolean accessedLongAgo = false;
 		DateTime today = new DateTime();
 		DateTimeFormatter formatter = DateTimeFormat
 				.forPattern("yyyy-MM-dd HH:mm:ss");
 
-		DateTime lastAccess = formatter.parseDateTime(account.getLastAccess());
+		DateTime lastAccess = formatter.parseDateTime(stringLastAccess);
 		Interval i = new Interval(lastAccess, today);
 
 		if ((i.toPeriod().getYears() > 0) || (i.toPeriod().getMonths() > 3)) {

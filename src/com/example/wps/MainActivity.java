@@ -88,8 +88,8 @@ public class MainActivity extends ActionBarActivity {
 				try {
 					AccountDatabase.initialize(filename, serialNumber, nfcTag,
 							this);
-					// if successful then we ask the user what he wants to look
-					// for
+					AccountDatabase.addTestAccountsToDatabase();
+					// if successful, we ask the user what he wants to look for
 					Intent i = new Intent(MainActivity.this,
 							ListOfAccounts.class);
 					startActivity(i);
@@ -163,5 +163,4 @@ public class MainActivity extends ActionBarActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
 }

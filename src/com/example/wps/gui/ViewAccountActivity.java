@@ -54,11 +54,22 @@ public class ViewAccountActivity extends Activity {
 		String accountId = bundle.getString("AccountId");
 		String accountPassword = bundle.getString("AccountPassword");
 		String accountUrl = bundle.getString("AccountUrl");
+		String accountLastAccess = bundle.getString("AccountLastAccess");
 		String accountCategory = bundle.getString("AccountCategory");
 		String accountNote = bundle.getString("AccountNote");
 		Boolean accountIsFavorite = bundle.getBoolean("AccountIsFavorite");
 
+		if (AccountDatabase.accessedLongAgo(accountLastAccess)) {
+			MessageDialogBox changePasswordDialogBox = new MessageDialogBox(
+					context,
+					"Reminder",
+					"It has been more than 3 months you accessed this account, you might need to use another password !",
+					"Ok");
+			changePasswordDialogBox.displayDialogBox();
+		}
+
 		// Update lastAccess
+
 		DateTime today = new DateTime();
 		DateTimeFormatter formatter = DateTimeFormat
 				.forPattern("yyyy-MM-dd HH:mm:ss");
@@ -99,7 +110,7 @@ public class ViewAccountActivity extends Activity {
 		vEtNote.setKeyListener(null);
 		vEtNote.setBackgroundColor(Color.LTGRAY);
 		vCbIsFavorite.setEnabled(false);
-		;
+
 	}
 
 	public void modifyAccount(View view) {

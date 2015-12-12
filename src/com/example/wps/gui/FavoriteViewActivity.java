@@ -65,6 +65,8 @@ public class FavoriteViewActivity extends Activity implements Observer {
 							.get(v.getId()).getPassword());
 					viewAccountIntent.putExtra("AccountUrl",
 							favAccounts.get(v.getId()).getUrl());
+					viewAccountIntent.putExtra("AccountLastAccess", favAccounts
+							.get(v.getId()).getLastAccess());
 					viewAccountIntent.putExtra("AccountCategory", favAccounts
 							.get(v.getId()).getCategory());
 					viewAccountIntent.putExtra("AccountNote",

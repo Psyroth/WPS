@@ -34,8 +34,9 @@ public class FrequencyViewActivity extends Activity implements Observer {
 
 		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutAccountsList);
 		linearLayout.removeAllViews();
-		
-		listOfAcc = (ArrayList<Account>) AccountDatabase.getInstance().getAllAccounts();
+
+		listOfAcc = (ArrayList<Account>) AccountDatabase.getInstance()
+				.getAllAccounts();
 		AccountDatabase.sortAccountListByLastAccess(listOfAcc);
 
 		for (int acc = 0; acc < listOfAcc.size(); acc++) {
@@ -66,6 +67,8 @@ public class FrequencyViewActivity extends Activity implements Observer {
 							.get(v.getId()).getPassword());
 					viewAccountIntent.putExtra("AccountUrl",
 							listOfAcc.get(v.getId()).getUrl());
+					viewAccountIntent.putExtra("AccountLastAccess", listOfAcc
+							.get(v.getId()).getLastAccess());
 					viewAccountIntent.putExtra("AccountCategory", listOfAcc
 							.get(v.getId()).getCategory());
 					viewAccountIntent.putExtra("AccountNote",
@@ -77,8 +80,9 @@ public class FrequencyViewActivity extends Activity implements Observer {
 			});
 
 			Resources res = getResources();
-			Drawable drawable = setCategoryIcon(listOfAcc.get(acc).getCategory(), res);
-			
+			Drawable drawable = setCategoryIcon(listOfAcc.get(acc)
+					.getCategory(), res);
+
 			if (acc % 2 == 0) {
 				tv.setBackgroundColor(Color.WHITE);
 			} else {
@@ -91,10 +95,9 @@ public class FrequencyViewActivity extends Activity implements Observer {
 		}
 	}
 
-	public Drawable setCategoryIcon(String category, Resources res)
-	{
+	public Drawable setCategoryIcon(String category, Resources res) {
 		Drawable drawable = null;
-		switch(category){
+		switch (category) {
 		case "Gaming":
 			drawable = res.getDrawable(R.drawable.ic_games);
 			break;
@@ -107,13 +110,13 @@ public class FrequencyViewActivity extends Activity implements Observer {
 		case "Work":
 			drawable = res.getDrawable(R.drawable.ic_work);
 			break;
-		default: //other
+		default: // other
 			drawable = res.getDrawable(R.drawable.ic_other);
-			break;	
+			break;
 		}
 		return drawable;
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();

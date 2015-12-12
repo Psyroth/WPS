@@ -86,6 +86,8 @@ public class ListViewActivity extends Activity implements Observer {
 							.get(v.getId()).getPassword());
 					viewAccountIntent.putExtra("AccountUrl",
 							listOfAcc.get(v.getId()).getUrl());
+					viewAccountIntent.putExtra("AccountLastAccess", listOfAcc
+							.get(v.getId()).getLastAccess());
 					viewAccountIntent.putExtra("AccountCategory", listOfAcc
 							.get(v.getId()).getCategory());
 					viewAccountIntent.putExtra("AccountNote",
