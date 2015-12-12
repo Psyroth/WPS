@@ -82,7 +82,10 @@ public class AddAccountActivity extends Activity {
 			MessageDialogBox alreadyExistDialogBox = new MessageDialogBox(
 					context, "Success",
 					"Your account has successfuly been saved !", "Ok");
+			alreadyExistDialogBox.prepareNewIntent(this,
+					AddAccountActivity.this, ListOfAccounts.class);
 			alreadyExistDialogBox.displayDialogBox();
+
 		} else {
 
 			MessageDialogBox alreadyExistDialogBox = new MessageDialogBox(

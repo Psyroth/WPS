@@ -3,11 +3,9 @@ package com.example.wps.gui;
 import com.example.wps.R;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.text.method.HideReturnsTransformationMethod;
@@ -83,12 +81,12 @@ public class PasswordGenViewActivity extends Activity {
 			passwordDialogBox.displayDialogBox();
 		}
 	}
-	
-	public void copyToClipboardButtonClicked(View view){
+
+	public void copyToClipboardButtonClicked(View view) {
 		System.out.println(mEtPwd.getText());
-		 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE); 
-		 ClipData clip = ClipData.newPlainText("PwdGenCopy", mEtPwd.getText());
-		 clipboard.setPrimaryClip(clip);
+		ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+		ClipData clip = ClipData.newPlainText("PwdGenCopy", mEtPwd.getText());
+		clipboard.setPrimaryClip(clip);
 	}
-	
+
 }

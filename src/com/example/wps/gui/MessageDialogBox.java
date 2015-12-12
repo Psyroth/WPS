@@ -1,6 +1,8 @@
 package com.example.wps.gui;
 
 import android.content.Context;
+import android.content.Intent;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
@@ -10,6 +12,10 @@ public class MessageDialogBox {
 	String title;
 	String message;
 	String buttonText;
+	Boolean changeIntent = false;
+	Activity oldActivity;
+	Context packageContext;
+	Class nextClass;
 
 	public MessageDialogBox(Context context, String title, String message,
 			String buttonText) {
@@ -17,6 +23,14 @@ public class MessageDialogBox {
 		this.title = title;
 		this.message = message;
 		this.buttonText = buttonText;
+	}
+
+	public void prepareNewIntent(Activity oldActivity, Context packageContext,
+			Class nextClass) {
+		this.oldActivity = oldActivity;
+		this.changeIntent = true;
+		this.packageContext = packageContext;
+		this.nextClass = nextClass;
 	}
 
 	public void displayDialogBox() {
@@ -33,7 +47,14 @@ public class MessageDialogBox {
 				.setPositiveButton(this.getButtonText(),
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-								dialog.cancel();
+								if (changeIntent) {
+									dialog.cancel();
+									Intent i = new Intent(packageContext,
+											nextClass);
+									oldActivity.startActivity(i);
+								} else {
+									dialog.cancel();
+								}
 							}
 						});
 
@@ -73,5 +94,29 @@ public class MessageDialogBox {
 
 	public void setButtonText(String buttonText) {
 		this.buttonText = buttonText;
+	}
+
+	public Boolean getChangeIntent() {
+		return changeIntent;
+	}
+
+	public void setChangeIntent(Boolean changeIntent) {
+		this.changeIntent = changeIntent;
+	}
+
+	public Context getPackageContext() {
+		return packageContext;
+	}
+
+	public void setPackageContext(Context packageContext) {
+		this.packageContext = packageContext;
+	}
+
+	public Class getNextClass() {
+		return nextClass;
+	}
+
+	public void setNextClass(Class nextClass) {
+		this.nextClass = nextClass;
 	}
 }
