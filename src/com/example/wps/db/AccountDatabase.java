@@ -343,7 +343,17 @@ public class AccountDatabase extends Observable {
 		List<Account> categoryAccounts = new ArrayList<Account>();
 
 		for (Account currentAccount : getAllAccounts()) {
-			if (category.equals(currentAccount.getCategory())) {
+			if (!category.equalsIgnoreCase("Other")) {
+				if (category.equalsIgnoreCase(currentAccount.getCategory())) {
+					categoryAccounts.add(currentAccount);
+				}
+			} else if ((!currentAccount.getCategory()
+					.equalsIgnoreCase("Gaming"))
+					&& (!currentAccount.getCategory().equalsIgnoreCase(
+							"Internet Sites"))
+					&& (!currentAccount.getCategory().equalsIgnoreCase(
+							"Social Network"))
+					&& (!currentAccount.getCategory().equalsIgnoreCase("Work"))) {
 				categoryAccounts.add(currentAccount);
 			}
 		}
