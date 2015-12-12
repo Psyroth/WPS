@@ -7,6 +7,7 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 
 import com.example.wps.db.AccountDatabase;
 import com.example.wps.gui.ListOfAccounts;
+import com.example.wps.gui.MessageDialogBox;
 import com.example.wps.gui.PasswordGenViewActivity;
 import com.example.wps.nfc.NfcReader;
 import com.example.wps.nfc.NfcWriter;
@@ -94,24 +95,13 @@ public class MainActivity extends ActionBarActivity {
 					startActivity(i);
 				} catch (TransformerFactoryConfigurationError | Exception e) {
 					nfcTag = null;
-					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-							this);
 
-					alertDialogBuilder.setTitle("Error");
-					alertDialogBuilder
-							.setMessage(
-									"The NFC tag is invalid ! Database was not decrypted. Try another tag.")
-							.setCancelable(false)
-							.setPositiveButton("Ok",
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog, int id) {
-											dialog.cancel();
-										}
-									});
-
-					AlertDialog alertDialog = alertDialogBuilder.create();
-					alertDialog.show();
+					MessageDialogBox invalidNFCDialogBox = new MessageDialogBox(
+							this,
+							"Error",
+							"The NFC tag is invalid ! Database was not decrypted. Try another tag.",
+							"Ok");
+					invalidNFCDialogBox.displayDialogBox();
 				}
 
 			} else if (nfcTag != null) {
