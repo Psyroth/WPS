@@ -50,10 +50,12 @@ public class AccountDatabase extends Observable {
 	private byte[] key;
 	private Context context;
 	private Document document;
-	
+
 	private static AccountDatabase instance = null;
 
-	private AccountDatabase(String filename, String serialNumber, String nfcTag, Context context) throws NoSuchAlgorithmException, UnsupportedEncodingException, Exception {
+	private AccountDatabase(String filename, String serialNumber,
+			String nfcTag, Context context) throws NoSuchAlgorithmException,
+			UnsupportedEncodingException, Exception {
 		this.filename = filename;
 		this.key = Encryption.xor(Encryption.sha1(serialNumber),
 				Encryption.sha1(nfcTag));
@@ -69,11 +71,13 @@ public class AccountDatabase extends Observable {
 			saveDatabase();
 		}
 	}
-	
-	public static void initialize(String filename, String serialNumber, String nfcTag, Context context) throws NoSuchAlgorithmException, UnsupportedEncodingException, Exception {
+
+	public static void initialize(String filename, String serialNumber,
+			String nfcTag, Context context) throws NoSuchAlgorithmException,
+			UnsupportedEncodingException, Exception {
 		instance = new AccountDatabase(filename, serialNumber, nfcTag, context);
 	}
-	
+
 	public static AccountDatabase getInstance() {
 		return instance;
 	}
@@ -99,8 +103,8 @@ public class AccountDatabase extends Observable {
 	/*
 	 * Create an empty database.
 	 */
-	private Document createEmptyDatabase() throws SAXException,
-			IOException, ParserConfigurationException {
+	private Document createEmptyDatabase() throws SAXException, IOException,
+			ParserConfigurationException {
 
 		String databaseContent = "<?xml version=\"1.0\""
 				+ "encoding=\"UTF-8\" standalone=\"no\"?>"
@@ -108,11 +112,10 @@ public class AccountDatabase extends Observable {
 				+ "<accounts>"
 				+ "<account><name>Facebook</name><id>facebookUser@hotmail.com</id><password>facebook</password><url>https://www.facebook.com</url><lastAccess>2015-10-26 22:00:00</lastAccess><note>Less useful than Linkedin</note><category>Social Network</category><favorite>true</favorite></account></accounts>"
 				+ "</WPS-database>";
-		
-		document = DocumentBuilderFactory.newInstance()
-				.newDocumentBuilder()
+
+		document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 				.parse(new InputSource(new StringReader(databaseContent)));
-		
+
 		return document;
 	}
 
@@ -199,9 +202,10 @@ public class AccountDatabase extends Observable {
 					saveDatabase();
 					setChanged();
 					notifyObservers();
-				} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException
-						| BadPaddingException | TransformerException | TransformerFactoryConfigurationError | IOException e) {
-					// TODO Auto-generated catch block
+				} catch (InvalidKeyException | NoSuchAlgorithmException
+						| NoSuchPaddingException | IllegalBlockSizeException
+						| BadPaddingException | TransformerException
+						| TransformerFactoryConfigurationError | IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -211,9 +215,9 @@ public class AccountDatabase extends Observable {
 					+ " account.");
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public void removeAccount(Account account) {
 		removeAccount(account.getName());
 	}
@@ -236,15 +240,15 @@ public class AccountDatabase extends Observable {
 		}
 
 		catch (Exception e) {
-			System.out.println("Failed to remove " + accountName
-					+ " account.");
+			System.out.println("Failed to remove " + accountName + " account.");
 			e.printStackTrace();
 		}
 		try {
 			saveDatabase();
-		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException
-				| BadPaddingException | TransformerException | TransformerFactoryConfigurationError | IOException e) {
-			// TODO Auto-generated catch block
+		} catch (InvalidKeyException | NoSuchAlgorithmException
+				| NoSuchPaddingException | IllegalBlockSizeException
+				| BadPaddingException | TransformerException
+				| TransformerFactoryConfigurationError | IOException e) {
 			e.printStackTrace();
 		}
 		setChanged();
@@ -269,7 +273,7 @@ public class AccountDatabase extends Observable {
 	public boolean accountExists(Account account) {
 		return accountExists(account.getName());
 	}
-	
+
 	/* Returns if the account exists or not. */
 	public boolean accountExists(String accountName) {
 
@@ -296,7 +300,6 @@ public class AccountDatabase extends Observable {
 				break;
 			}
 		}
-		
 		return retrievedAccount;
 	}
 
@@ -322,8 +325,8 @@ public class AccountDatabase extends Observable {
 
 		List<Account> allAccounts = new ArrayList<Account>();
 
-		NodeList accountNodes = document.getElementsByTagName("accounts").item(0)
-				.getChildNodes();
+		NodeList accountNodes = document.getElementsByTagName("accounts")
+				.item(0).getChildNodes();
 
 		for (int i = 0; i < accountNodes.getLength(); i++) {
 			Node currentNode = accountNodes.item(i);
@@ -386,10 +389,9 @@ public class AccountDatabase extends Observable {
 		}
 	}
 
-	private void saveDatabase()
-			throws TransformerConfigurationException, TransformerException,
-			TransformerFactoryConfigurationError, IOException,
-			InvalidKeyException, NoSuchAlgorithmException,
+	private void saveDatabase() throws TransformerConfigurationException,
+			TransformerException, TransformerFactoryConfigurationError,
+			IOException, InvalidKeyException, NoSuchAlgorithmException,
 			NoSuchPaddingException, IllegalBlockSizeException,
 			BadPaddingException {
 		deleteDatabase();

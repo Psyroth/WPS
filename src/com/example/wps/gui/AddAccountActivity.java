@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -72,9 +73,34 @@ public class AddAccountActivity extends Activity {
 			Account newAccount = new Account(accountName, accountId,
 					accountPassword, accountUrl, today.toString(formatter),
 					accountNote, accountCategory, isFavorite);
-			
+
 			AccountDatabase.getInstance().addAccount(newAccount);
-			// Notify account saved ? Go back to previous view / activity ?
+
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+					context);
+
+			// set title
+			alertDialogBuilder.setTitle("Success");
+
+			// set dialog message
+			alertDialogBuilder
+					.setMessage(
+							"New Account successfully added to your database !")
+					.setCancelable(false)
+					.setPositiveButton("Ok",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
+
+			// create alert dialog
+			AlertDialog alertDialog = alertDialogBuilder.create();
+
+			// show it
+			alertDialog.show();
+
 		} else {
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 					context);
