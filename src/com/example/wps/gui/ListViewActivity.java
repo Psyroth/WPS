@@ -97,15 +97,12 @@ public class ListViewActivity extends Activity implements Observer {
 			});
 
 			Resources res = getResources();
-			Drawable drawable = null;
-
+			Drawable drawable = setCategoryIcon(listOfAcc.get(acc).getCategory(), res);
+			
 			if (acc % 2 == 0) {
 				tv.setBackgroundColor(Color.WHITE);
-				drawable = res.getDrawable(R.drawable.ic_face_black_24dp);
 			} else {
 				tv.setBackgroundColor(Color.LTGRAY);
-				drawable = res
-						.getDrawable(R.drawable.ic_phonelink_lock_black_24dp);
 			}
 			tv.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null,
 					null, null);
@@ -114,6 +111,29 @@ public class ListViewActivity extends Activity implements Observer {
 		}
 	}
 
+	public Drawable setCategoryIcon(String category, Resources res)
+	{
+		Drawable drawable = null;
+		switch(category){
+		case "Gaming":
+			drawable = res.getDrawable(R.drawable.ic_games);
+			break;
+		case "Internet Sites":
+			drawable = res.getDrawable(R.drawable.ic_internet);
+			break;
+		case "Social Network":
+			drawable = res.getDrawable(R.drawable.ic_fb);
+			break;
+		case "Work":
+			drawable = res.getDrawable(R.drawable.ic_work);
+			break;
+		default: //other
+			drawable = res.getDrawable(R.drawable.ic_other);
+			break;	
+		}
+		return drawable;
+	}
+	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
