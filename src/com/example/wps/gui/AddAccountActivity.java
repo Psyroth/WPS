@@ -71,10 +71,14 @@ public class AddAccountActivity extends Activity {
 
 			AccountDatabase.getInstance().addAccount(newAccount);
 
+			MessageDialogBox alreadyExistDialogBox = new MessageDialogBox(
+					context, "Success",
+					"Your account has successfuly been saved !", "Ok");
+			alreadyExistDialogBox.displayDialogBox();
 		} else {
 
 			MessageDialogBox alreadyExistDialogBox = new MessageDialogBox(
-					context, "Error", "The account is already existing !", "Ok");
+					context, "Error", "The account already exists !", "Ok");
 			alreadyExistDialogBox.displayDialogBox();
 		}
 	}
