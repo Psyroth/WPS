@@ -1,15 +1,5 @@
 package com.example.wps.gui;
 
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -17,11 +7,10 @@ import org.joda.time.format.DateTimeFormatter;
 import com.example.wps.R;
 import com.example.wps.db.Account;
 import com.example.wps.db.AccountDatabase;
+import com.example.wps.gui.MessageDialogBox;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -55,9 +44,15 @@ public class AddAccountActivity extends Activity {
 
 	public void processInputData(View view) {
 		String accountName = mEtName.getText().toString();
-		System.out.println(accountName);
-		// Still an issue here
-		if (AccountDatabase.getInstance().getAccountFromName(accountName) == null) {
+
+		if (accountName.equals("")) {
+			MessageDialogBox alreadyExistDialogBox = new MessageDialogBox(
+					context, "Error",
+					"An empty name for an account is not valid !", "Ok");
+			alreadyExistDialogBox.displayDialogBox();
+		}
+
+		else if (AccountDatabase.getInstance().getAccountFromName(accountName) == null) {
 
 			String accountId = mEtId.getText().toString();
 			String accountPassword = mEtPassword.getText().toString();
@@ -72,27 +67,14 @@ public class AddAccountActivity extends Activity {
 			Account newAccount = new Account(accountName, accountId,
 					accountPassword, accountUrl, today.toString(formatter),
 					accountNote, accountCategory, isFavorite);
-			
+
 			AccountDatabase.getInstance().addAccount(newAccount);
-			// Notify account saved ? Go back to previous view / activity ?
+
 		} else {
-			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-					context);
 
-			alertDialogBuilder.setTitle("Error");
-			alertDialogBuilder
-					.setMessage("The account is already existing !")
-					.setCancelable(false)
-					.setPositiveButton("Ok",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									dialog.cancel();
-								}
-							});
-
-			AlertDialog alertDialog = alertDialogBuilder.create();
-			alertDialog.show();
+			MessageDialogBox alreadyExistDialogBox = new MessageDialogBox(
+					context, "Error", "The account is already existing !", "Ok");
+			alreadyExistDialogBox.displayDialogBox();
 		}
 	}
 }

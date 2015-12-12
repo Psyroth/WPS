@@ -74,29 +74,11 @@ public class PasswordGenViewActivity extends Activity {
 					mCbWithNumbers.isChecked(), mCbWithAlphabet.isChecked(),
 					mCbWithSpecial.isChecked()));
 		} else {
-			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-					context);
 
-			// set title
-			alertDialogBuilder.setTitle("Error");
-
-			// set dialog message
-			alertDialogBuilder
-					.setMessage("You need something to build your password !")
-					.setCancelable(false)
-					.setPositiveButton("Ok",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									dialog.cancel();
-								}
-							});
-
-			// create alert dialog
-			AlertDialog alertDialog = alertDialogBuilder.create();
-
-			// show it
-			alertDialog.show();
+			MessageDialogBox passwordDialogBox = new MessageDialogBox(context,
+					"Error", "You need something to build your password !",
+					"Ok");
+			passwordDialogBox.displayDialogBox();
 		}
 	}
 }

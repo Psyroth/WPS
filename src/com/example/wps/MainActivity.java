@@ -7,6 +7,7 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 
 import com.example.wps.db.AccountDatabase;
 import com.example.wps.gui.ListOfAccounts;
+import com.example.wps.gui.MessageDialogBox;
 import com.example.wps.gui.PasswordGenViewActivity;
 import com.example.wps.nfc.NfcReader;
 import com.example.wps.nfc.NfcWriter;
@@ -35,7 +36,7 @@ public class MainActivity extends ActionBarActivity {
 
 	private static String filename = "database.xml";
 	private static String serialNumber = null;
-	//private static String nfcTag = "afghjiymphgefuoi";
+	// private static String nfcTag = "afghjiymphgefuoi";
 	private static String nfcTag = null;
 
 	@Override
@@ -43,19 +44,17 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 
 		serialNumber = Build.SERIAL;
-		
-		/*Tag tag = getIntent().getParcelableExtra(NfcAdapter.EXTRA_TAG);
-		try { 
-			new NfcWriter(tag, nfcTag.getBytes(Charset.forName("US-ASCII"))).start();
-		}
-		catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+
+		/*
+		 * Tag tag = getIntent().getParcelableExtra(NfcAdapter.EXTRA_TAG); try {
+		 * new NfcWriter(tag,
+		 * nfcTag.getBytes(Charset.forName("US-ASCII"))).start(); } catch
+		 * (Exception e) { e.printStackTrace(); }
+		 */
 
 		// shows initial app window
 		setContentView(R.layout.activity_main);
-		
+
 		// Retrieve data from NFC tag
 		getNfcTag();
 	}
@@ -64,55 +63,48 @@ public class MainActivity extends ActionBarActivity {
 		Context context = this.getApplicationContext();
 
 		// check if NFC is active
-		NfcManager manager = (NfcManager) context.getSystemService(Context.NFC_SERVICE);
+		NfcManager manager = (NfcManager) context
+				.getSystemService(Context.NFC_SERVICE);
 		NfcAdapter adapter = manager.getDefaultAdapter();
 		// if active, launch NFC scan
 		if (adapter != null && adapter.isEnabled()) {
 			// adapter exists and is enabled.
 
 			// start scanning for NFC tag
-			if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
+			if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent()
+					.getAction())) {
 				Tag tag = getIntent().getParcelableExtra(NfcAdapter.EXTRA_TAG);
-				
+
 				NfcReader nfcReader = new NfcReader(tag);
 				nfcReader.start();
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				nfcTag = new String(nfcReader.data, Charset.forName("US-ASCII"));
 				// stop scanning for NFC tag
-				
+
 				try {
-					AccountDatabase.initialize(filename, serialNumber, nfcTag, this);
-					// if successful then we ask the user what he wants to look for
-					Intent i = new Intent(MainActivity.this, ListOfAccounts.class);
+					AccountDatabase.initialize(filename, serialNumber, nfcTag,
+							this);
+					// if successful then we ask the user what he wants to look
+					// for
+					Intent i = new Intent(MainActivity.this,
+							ListOfAccounts.class);
 					startActivity(i);
 				} catch (TransformerFactoryConfigurationError | Exception e) {
 					nfcTag = null;
-					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-							this);
 
-					alertDialogBuilder.setTitle("Error");
-					alertDialogBuilder
-							.setMessage("The NFC tag is invalid ! Database was not decrypted. Try another tag.")
-							.setCancelable(false)
-							.setPositiveButton("Ok",
-									new DialogInterface.OnClickListener() {
-										public void onClick(DialogInterface dialog,
-												int id) {
-											dialog.cancel();
-										}
-									});
-
-					AlertDialog alertDialog = alertDialogBuilder.create();
-					alertDialog.show();
+					MessageDialogBox invalidNFCDialogBox = new MessageDialogBox(
+							this,
+							"Error",
+							"The NFC tag is invalid ! Database was not decrypted. Try another tag.",
+							"Ok");
+					invalidNFCDialogBox.displayDialogBox();
 				}
-				
-			}
-			else if (nfcTag != null) {
+
+			} else if (nfcTag != null) {
 				Intent i = new Intent(MainActivity.this, ListOfAccounts.class);
 				startActivity(i);
 			}
@@ -120,9 +112,12 @@ public class MainActivity extends ActionBarActivity {
 		}
 		// if not active, take the user to wireless settings to enable NFC
 		else {
-			Toast.makeText(getApplicationContext(), "Please activate NFC and press Back to return to the application!",
+			Toast.makeText(
+					getApplicationContext(),
+					"Please activate NFC and press Back to return to the application!",
 					Toast.LENGTH_LONG).show();
-			startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+			startActivity(new Intent(
+					android.provider.Settings.ACTION_WIRELESS_SETTINGS));
 
 			// TODO dialog box to make sure he wants to go to settings maybe?
 			// final Dialog dialog = new Dialog(this);

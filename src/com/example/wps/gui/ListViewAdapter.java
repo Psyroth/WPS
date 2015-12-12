@@ -33,9 +33,9 @@ public class ListViewAdapter extends BaseAdapter {
 	}
 
 	public class ViewHolder {
-		TextView rank;
-		TextView country;
-		TextView population;
+		TextView name;
+		TextView id;
+		TextView password;
 	}
 
 	@Override
@@ -59,17 +59,17 @@ public class ListViewAdapter extends BaseAdapter {
 			holder = new ViewHolder();
 			view = inflater.inflate(R.layout.listview_item, null);
 			// Locate the TextViews in listview_item.xml
-			holder.rank = (TextView) view.findViewById(R.id.name);
-			holder.country = (TextView) view.findViewById(R.id.id);
-			holder.population = (TextView) view.findViewById(R.id.password);
+			holder.name = (TextView) view.findViewById(R.id.name);
+			holder.id = (TextView) view.findViewById(R.id.id);
+			holder.password = (TextView) view.findViewById(R.id.password);
 			view.setTag(holder);
 		} else {
 			holder = (ViewHolder) view.getTag();
 		}
 		// Set the results into TextViews
-		holder.rank.setText(accountList.get(position).getName());
-		holder.country.setText(accountList.get(position).getId());
-		holder.population.setText(accountList.get(position).getPassword());
+		holder.name.setText(accountList.get(position).getName());
+		holder.id.setText(accountList.get(position).getId());
+		holder.password.setText(accountList.get(position).getPassword());
 
 		// Listen for ListView Item Click
 		view.setOnClickListener(new OnClickListener() {
@@ -78,11 +78,11 @@ public class ListViewAdapter extends BaseAdapter {
 			public void onClick(View arg0) {
 				// Send single item click data to SingleItemView Class
 				Intent intent = new Intent(mContext, SingleItemView.class);
-				// Pass all data rank
+				// Pass all data name
 				intent.putExtra("Name", (accountList.get(position).getName()));
-				// Pass all data country
+				// Pass all data id
 				intent.putExtra("Id", (accountList.get(position).getId()));
-				// Pass all data population
+				// Pass all data password
 				intent.putExtra("Password",
 						(accountList.get(position).getPassword()));
 				// Pass all data flag
@@ -94,7 +94,7 @@ public class ListViewAdapter extends BaseAdapter {
 		return view;
 	}
 
-	// Filter Class
+	// Filter Class for Search functionality
 	public void filter(String charText) {
 		charText = charText.toLowerCase(Locale.getDefault());
 		accountList.clear();
