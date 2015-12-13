@@ -163,9 +163,9 @@ public class CategoryViewActivity extends Activity {
 		// When returning to the Category View, uncheck textviews
 		super.onResume(); // Always call the superclass method first
 		gamingTv.setBackgroundColor(Color.WHITE);
-		internetTv.setBackgroundColor(Color.WHITE);
+		internetTv.setBackgroundColor(Color.LTGRAY);
 		socialTv.setBackgroundColor(Color.WHITE);
-		workTv.setBackgroundColor(Color.WHITE);
+		workTv.setBackgroundColor(Color.LTGRAY);
 		otherTv.setBackgroundColor(Color.WHITE);
 	}
 }

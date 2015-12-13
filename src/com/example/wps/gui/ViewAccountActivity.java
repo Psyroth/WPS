@@ -132,4 +132,15 @@ public class ViewAccountActivity extends Activity {
 
 		startActivity(addAccountIntent);
 	}
+	
+	public void removeAccount(View view){
+		AccountDatabase.getInstance().removeAccount(vEtName.getText().toString());
+		
+		MessageDialogBox successDialogBox = new MessageDialogBox(context,
+				"Success", "Your account has successfuly been deleted !",
+				"Ok");
+		successDialogBox.prepareNewIntent(this, ViewAccountActivity.this,
+				ListOfAccounts.class);
+		successDialogBox.displayDialogBox();
+	}
 }
