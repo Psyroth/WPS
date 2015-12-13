@@ -9,7 +9,9 @@ import com.example.wps.db.Account;
 import com.example.wps.db.AccountDatabase;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -132,15 +134,45 @@ public class ViewAccountActivity extends Activity {
 
 		startActivity(addAccountIntent);
 	}
-	
-	public void removeAccount(View view){
-		AccountDatabase.getInstance().removeAccount(vEtName.getText().toString());
-		
-		MessageDialogBox successDialogBox = new MessageDialogBox(context,
-				"Success", "Your account has successfuly been deleted !",
-				"Ok");
-		successDialogBox.prepareNewIntent(this, ViewAccountActivity.this,
-				ListOfAccounts.class);
-		successDialogBox.displayDialogBox();
+
+	/*
+	 * When user pushes "Delete" button, it will show a confirmation box and
+	 * notice him afterwards
+	 */
+	public void removeAccount(View view) {
+
+		// Cannot using custom build because of 2 buttons
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				context);
+
+		alertDialogBuilder.setTitle("Confirmation");
+		alertDialogBuilder
+				.setMessage("Are you sure you want to delete this account ?")
+				.setCancelable(false)
+				.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								AccountDatabase.getInstance().removeAccount(
+										vEtName.getText().toString());
+								dialog.cancel();
+								MessageDialogBox successDialogBox = new MessageDialogBox(
+										context,
+										"Success",
+										"Your account has successfuly been deleted !",
+										"Ok");
+								successDialogBox.prepareNewIntent(
+										ViewAccountActivity.this, context,
+										ListOfAccounts.class);
+								successDialogBox.displayDialogBox();
+							}
+						})
+				.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
 	}
 }

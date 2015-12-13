@@ -9,6 +9,7 @@ import com.example.wps.db.AccountDatabase;
 import com.example.wps.gui.ListOfAccounts;
 import com.example.wps.gui.MessageDialogBox;
 import com.example.wps.gui.PasswordGenViewActivity;
+import com.example.wps.gui.ViewAccountActivity;
 import com.example.wps.nfc.NfcReader;
 import com.example.wps.nfc.NfcWriter;
 
@@ -37,6 +38,7 @@ public class MainActivity extends ActionBarActivity {
 	private static String filename = "database.xml";
 	private static String serialNumber = null;
 	private static String nfcTag = null;
+	final Context mainContext = this;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -102,10 +104,14 @@ public class MainActivity extends ActionBarActivity {
 					AccountDatabase.initialize(filename, serialNumber, nfcTag,
 							this);
 					AccountDatabase.addTestAccountsToDatabase();
+
 					// If successful, we ask the user what he wants to look for
-					Intent i = new Intent(MainActivity.this,
-							ListOfAccounts.class);
-					startActivity(i);
+					MessageDialogBox successDialogBox = new MessageDialogBox(
+							mainContext, "Success",
+							"The NFC tag was valid, Welcome to WPS !", "Ok");
+					successDialogBox.prepareNewIntent(MainActivity.this,
+							mainContext, ListOfAccounts.class);
+					successDialogBox.displayDialogBox();
 				} catch (TransformerFactoryConfigurationError | Exception e) {
 					nfcTag = null;
 
@@ -116,12 +122,10 @@ public class MainActivity extends ActionBarActivity {
 							"Ok");
 					invalidNFCDialogBox.displayDialogBox();
 				}
-
 			} else if (nfcTag != null) {
 				Intent i = new Intent(MainActivity.this, ListOfAccounts.class);
 				startActivity(i);
 			}
-
 		}
 		// If not active, take the user to wireless settings to enable NFC
 		else {
@@ -131,7 +135,6 @@ public class MainActivity extends ActionBarActivity {
 					Toast.LENGTH_LONG).show();
 			startActivity(new Intent(
 					android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-
 			// TODO dialog box to make sure he wants to go to settings maybe ?
 		}
 	}
