@@ -7,6 +7,7 @@ import org.joda.time.format.DateTimeFormatter;
 import com.example.wps.R;
 import com.example.wps.db.Account;
 import com.example.wps.db.AccountDatabase;
+import com.example.wps.web.VubAutoLogin;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -110,6 +111,11 @@ public class ViewAccountActivity extends Activity {
 		vEtNote.setKeyListener(null);
 		vEtNote.setBackgroundColor(Color.LTGRAY);
 		vCbIsFavorite.setEnabled(false);
+	}
+	
+	public void autoLogin(View view) {
+		Intent i = new Intent(ViewAccountActivity.this, WebBrowser.class);
+		startActivity(i);
 	}
 
 	/*
