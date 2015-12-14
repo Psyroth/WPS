@@ -18,8 +18,9 @@ public class WebBrowser extends Activity {
 		
 		HtmlSource htmlSource = new HtmlSource();
 		
-		String username="", pwd="";
-		Thread vubAutoLogin = new VubAutoLogin("https://cas.vub.ac.be/cas/login", username, pwd, htmlSource);
+		String username=getIntent().getExtras().getString("login"),
+				pwd=getIntent().getExtras().getString("pwd");
+		Thread vubAutoLogin = new VubAutoLogin("https://cas.vub.ac.be/cas/login?service=https%3A%2F%2Fpointcarre.vub.ac.be%2F", username, pwd, htmlSource);
 		vubAutoLogin.start();
 		try {
 			Thread.sleep(1000);

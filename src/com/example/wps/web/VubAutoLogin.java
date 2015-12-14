@@ -73,7 +73,7 @@ public class VubAutoLogin extends Thread {
 		Elements pwd = doc.select("#password");
 		pwd.get(0).attr("value", pass);
 		Elements form = doc.select("#fm1");
-		form.get(0).attr("action", "https://cas.vub.ac.be/cas/login");
+		form.get(0).attr("action", "https://cas.vub.ac.be/cas/login?service=https%3A%2F%2Fpointcarre.vub.ac.be%2F");
 		
 		html = doc.html();
 		return html;

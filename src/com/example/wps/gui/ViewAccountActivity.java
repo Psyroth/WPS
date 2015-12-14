@@ -115,6 +115,8 @@ public class ViewAccountActivity extends Activity {
 	
 	public void autoLogin(View view) {
 		Intent i = new Intent(ViewAccountActivity.this, WebBrowser.class);
+		i.putExtra("login", vEtId.getText().toString());
+		i.putExtra("pwd", vEtPassword.getText().toString());
 		startActivity(i);
 	}
 
