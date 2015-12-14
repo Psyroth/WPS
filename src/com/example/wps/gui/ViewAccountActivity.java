@@ -117,6 +117,7 @@ public class ViewAccountActivity extends Activity {
 		Intent i = new Intent(ViewAccountActivity.this, WebBrowser.class);
 		i.putExtra("login", vEtId.getText().toString());
 		i.putExtra("pwd", vEtPassword.getText().toString());
+		i.putExtra("url", vEtUrl.getText().toString());
 		startActivity(i);
 	}
 
