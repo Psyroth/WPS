@@ -18,6 +18,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.method.KeyListener;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
@@ -84,7 +85,7 @@ public class ViewAccountActivity extends Activity {
 		// Fill the Account
 		vEtName.setText(accountName);
 		vEtId.setText(accountId);
-		vEtPassword.setText(accountPassword);
+		vEtPassword.setText("******");
 		vEtUrl.setText(accountUrl);
 		vEtCategory.setText(accountCategory);
 		vEtNote.setText(accountNote);
@@ -115,9 +116,13 @@ public class ViewAccountActivity extends Activity {
 	
 	public void autoLogin(View view) {
 		Intent i = new Intent(ViewAccountActivity.this, WebBrowserActivity.class);
-		i.putExtra("login", vEtId.getText().toString());
-		i.putExtra("pwd", vEtPassword.getText().toString());
-		i.putExtra("url", vEtUrl.getText().toString());
+		Bundle bundle = getIntent().getExtras();
+		String login = bundle.getString("AccountId");
+		String pwd = bundle.getString("AccountPassword");
+		String url = bundle.getString("AccountUrl");
+		i.putExtra("login", login);
+		i.putExtra("pwd", pwd);
+		i.putExtra("url", url);
 		startActivity(i);
 	}
 
@@ -129,17 +134,16 @@ public class ViewAccountActivity extends Activity {
 
 		Intent addAccountIntent = new Intent(ViewAccountActivity.this,
 				AddAccountActivity.class);
+		
+		Bundle bundle = getIntent().getExtras();
 
-		addAccountIntent.putExtra("AccountName", vEtName.getText().toString());
-		addAccountIntent.putExtra("AccountId", vEtId.getText().toString());
-		addAccountIntent.putExtra("AccountPassword", vEtPassword.getText()
-				.toString());
-		addAccountIntent.putExtra("AccountUrl", vEtUrl.getText().toString());
-		addAccountIntent.putExtra("AccountCategory", vEtCategory.getText()
-				.toString());
-		addAccountIntent.putExtra("AccountNote", vEtNote.getText().toString());
-		addAccountIntent.putExtra("AccountIsFavorite",
-				vCbIsFavorite.isChecked());
+		addAccountIntent.putExtra("AccountName", bundle.getString("AccountName"));
+		addAccountIntent.putExtra("AccountId", bundle.getString("AccountId"));
+		addAccountIntent.putExtra("AccountPassword", bundle.getString("AccountPassword"));
+		addAccountIntent.putExtra("AccountUrl", bundle.getString("AccountUrl"));
+		addAccountIntent.putExtra("AccountCategory", bundle.getString("AccountCategory"));
+		addAccountIntent.putExtra("AccountNote", bundle.getString("AccountNote"));
+		addAccountIntent.putExtra("AccountIsFavorite", bundle.getBoolean("AccountIsFavorite"));
 
 		startActivity(addAccountIntent);
 	}
@@ -183,5 +187,18 @@ public class ViewAccountActivity extends Activity {
 
 		AlertDialog alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
+	}
+	
+	public void togglePassword(View view) {
+		String pass = vEtPassword.getText().toString();
+		Button button = (Button) findViewById(R.id.showPasswordButton);
+		if ("******".equals(pass)) {
+			vEtPassword.setText(getIntent().getExtras().getString("AccountPassword"));
+			button.setText("Hide");
+		}
+		else {
+			vEtPassword.setText("******");
+			button.setText("Show");
+		}
 	}
 }

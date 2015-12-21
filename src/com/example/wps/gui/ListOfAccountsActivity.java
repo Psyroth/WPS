@@ -66,7 +66,7 @@ public abstract class ListOfAccountsActivity extends Activity implements Observe
 		for (int acc = 0; acc < listOfAcc.size(); acc++) {
 			String userTitle = listOfAcc.get(acc).getName();
 			String userID = listOfAcc.get(acc).getId();
-			String userPass = listOfAcc.get(acc).getPassword();
+			String userPass = "******";
 
 			TextView tv = new TextView(this);
 			tv.setId(acc);
