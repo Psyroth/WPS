@@ -10,7 +10,7 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import com.example.wps.R;
 
-public class ListOfAccounts extends TabActivity {
+public class AccountsTab extends TabActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,8 @@ public class ListOfAccounts extends TabActivity {
 
 		// Favorite List View tab
 		Intent intentFavoriteView = new Intent().setClass(this,
-				FavoriteViewActivity.class);
+				FavoriteActivity.class);
+		intentFavoriteView.putExtra("WithCategory", "All");
 		TabSpec tabSpecFavoriteView = tabHost
 				.newTabSpec("Favorite View")
 				.setIndicator("",
@@ -32,7 +33,7 @@ public class ListOfAccounts extends TabActivity {
 
 		// A_Z List View tab
 		Intent intentListView = new Intent().setClass(this,
-				ListViewActivity.class);
+				AlphabeticActivity.class);
 		// Added data to display the accounts of all categories
 		intentListView.putExtra("WithCategory", "All");
 		TabSpec tabSpecListView = tabHost
@@ -43,14 +44,15 @@ public class ListOfAccounts extends TabActivity {
 
 		// Category View tab
 		Intent intentCategoryView = new Intent().setClass(this,
-				CategoryViewActivity.class);
+				CategoryActivity.class);
 		TabSpec tabSpecCategoryView = tabHost.newTabSpec("Category View")
 				.setIndicator("", ressources.getDrawable(R.drawable.ic_action))
 				.setContent(intentCategoryView);
 
 		// Frequency View tab
 		Intent intentFrequencyView = new Intent().setClass(this,
-				FrequencyViewActivity.class);
+				FrequencyActivity.class);
+		intentFrequencyView.putExtra("WithCategory", "All");
 		TabSpec tabSpecFrequencyView = tabHost
 				.newTabSpec("Frequency View")
 				.setIndicator("",

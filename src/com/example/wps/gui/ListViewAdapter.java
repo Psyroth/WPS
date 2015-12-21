@@ -79,7 +79,7 @@ public class ListViewAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View arg0) {
 				// Send single item click data to SingleItemView Class
-				Intent intent = new Intent(mContext, SingleItemView.class);
+				Intent intent = new Intent(mContext, SingleItemActivity.class);
 				// Pass all data
 				intent.putExtra("Name", (accountList.get(position).getName()));
 				intent.putExtra("Id", (accountList.get(position).getId()));

@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class CategoryViewActivity extends Activity {
+public class CategoryActivity extends Activity {
 	TextView gamingTv;
 	TextView internetTv;
 	TextView socialTv;
@@ -45,8 +45,8 @@ public class CategoryViewActivity extends Activity {
 			public void onClick(View v) {
 				System.out.println("Clicked on element : " + v.getId());
 				gamingTv.setBackgroundColor(Color.LTGRAY);
-				Intent listViewIntent = new Intent(CategoryViewActivity.this,
-						ListViewActivity.class);
+				Intent listViewIntent = new Intent(CategoryActivity.this,
+						AlphabeticActivity.class);
 				// Added data to display the accounts of the Gaming category
 				listViewIntent.putExtra("WithCategory", "Gaming");
 				startActivity(listViewIntent);
@@ -69,8 +69,8 @@ public class CategoryViewActivity extends Activity {
 			public void onClick(View v) {
 				System.out.println("Clicked on element : " + v.getId());
 				internetTv.setBackgroundColor(Color.LTGRAY);
-				Intent listViewIntent = new Intent(CategoryViewActivity.this,
-						ListViewActivity.class);
+				Intent listViewIntent = new Intent(CategoryActivity.this,
+						AlphabeticActivity.class);
 				// Added data to display the accounts of the Internet Sites
 				// category
 				listViewIntent.putExtra("WithCategory", "Internet Sites");
@@ -94,8 +94,8 @@ public class CategoryViewActivity extends Activity {
 			public void onClick(View v) {
 				System.out.println("Clicked on element : " + v.getId());
 				socialTv.setBackgroundColor(Color.LTGRAY);
-				Intent listViewIntent = new Intent(CategoryViewActivity.this,
-						ListViewActivity.class);
+				Intent listViewIntent = new Intent(CategoryActivity.this,
+						AlphabeticActivity.class);
 				// Added data to display the accounts of the Social Network
 				// category
 				listViewIntent.putExtra("WithCategory", "Social Network");
@@ -119,8 +119,8 @@ public class CategoryViewActivity extends Activity {
 			public void onClick(View v) {
 				System.out.println("Clicked on element : " + v.getId());
 				workTv.setBackgroundColor(Color.LTGRAY);
-				Intent listViewIntent = new Intent(CategoryViewActivity.this,
-						ListViewActivity.class);
+				Intent listViewIntent = new Intent(CategoryActivity.this,
+						AlphabeticActivity.class);
 				// Added data to display the accounts of the Work category
 				listViewIntent.putExtra("WithCategory", "Work");
 				startActivity(listViewIntent);
@@ -143,8 +143,8 @@ public class CategoryViewActivity extends Activity {
 			public void onClick(View v) {
 				System.out.println("Clicked on element : " + v.getId());
 				otherTv.setBackgroundColor(Color.LTGRAY);
-				Intent listViewIntent = new Intent(CategoryViewActivity.this,
-						ListViewActivity.class);
+				Intent listViewIntent = new Intent(CategoryActivity.this,
+						AlphabeticActivity.class);
 				// Added data to display the accounts of the Other category
 				listViewIntent.putExtra("WithCategory", "Other");
 				startActivity(listViewIntent);

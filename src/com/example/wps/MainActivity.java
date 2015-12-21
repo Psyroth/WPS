@@ -6,7 +6,7 @@ import java.nio.charset.Charset;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
 import com.example.wps.db.AccountDatabase;
-import com.example.wps.gui.ListOfAccounts;
+import com.example.wps.gui.AccountsTab;
 import com.example.wps.gui.MessageDialogBox;
 import com.example.wps.gui.PasswordGenViewActivity;
 import com.example.wps.gui.ViewAccountActivity;
@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity {
 	 */
 	public void setNfcTag() {
 
-		nfcTag = "afghjiymphgefuoi";
+		nfcTag = "r56c87km92eg5mq9";
 
 		Tag tag = getIntent().getParcelableExtra(NfcAdapter.EXTRA_TAG);
 		try {
@@ -110,7 +110,7 @@ public class MainActivity extends ActionBarActivity {
 							mainContext, "Success",
 							"The NFC tag was valid, Welcome to WPS !", "Ok");
 					successDialogBox.prepareNewIntent(MainActivity.this,
-							mainContext, ListOfAccounts.class);
+							mainContext, AccountsTab.class);
 					successDialogBox.displayDialogBox();
 				} catch (TransformerFactoryConfigurationError | Exception e) {
 					nfcTag = null;
@@ -123,7 +123,7 @@ public class MainActivity extends ActionBarActivity {
 					invalidNFCDialogBox.displayDialogBox();
 				}
 			} else if (nfcTag != null) {
-				Intent i = new Intent(MainActivity.this, ListOfAccounts.class);
+				Intent i = new Intent(MainActivity.this, AccountsTab.class);
 				startActivity(i);
 			}
 		}

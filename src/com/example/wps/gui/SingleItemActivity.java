@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class SingleItemView extends Activity {
+public class SingleItemActivity extends Activity {
 
 	TextView txtname;
 	TextView txtid;

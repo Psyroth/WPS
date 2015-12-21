@@ -335,9 +335,9 @@ public class AccountDatabase extends Observable {
 	}
 
 	/* Returns all the accounts in database. */
-	public List<Account> getAllAccounts() {
+	public ArrayList<Account> getAllAccounts() {
 
-		List<Account> allAccounts = new ArrayList<Account>();
+		ArrayList<Account> allAccounts = new ArrayList<Account>();
 
 		NodeList accountNodes = document.getElementsByTagName("accounts")
 				.item(0).getChildNodes();
@@ -367,8 +367,8 @@ public class AccountDatabase extends Observable {
 	}
 
 	/* Returns all favorite accounts. */
-	public List<Account> getAllFavoriteAccounts() {
-		List<Account> favoriteAccounts = new ArrayList<Account>();
+	public ArrayList<Account> getAllFavoriteAccounts() {
+		ArrayList<Account> favoriteAccounts = new ArrayList<Account>();
 
 		for (Account currentAccount : getAllAccounts()) {
 			if (currentAccount.getIsFavorite()) {

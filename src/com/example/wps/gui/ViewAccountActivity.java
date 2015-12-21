@@ -114,7 +114,7 @@ public class ViewAccountActivity extends Activity {
 	}
 	
 	public void autoLogin(View view) {
-		Intent i = new Intent(ViewAccountActivity.this, WebBrowser.class);
+		Intent i = new Intent(ViewAccountActivity.this, WebBrowserActivity.class);
 		i.putExtra("login", vEtId.getText().toString());
 		i.putExtra("pwd", vEtPassword.getText().toString());
 		i.putExtra("url", vEtUrl.getText().toString());
@@ -171,7 +171,7 @@ public class ViewAccountActivity extends Activity {
 										"Ok");
 								successDialogBox.prepareNewIntent(
 										ViewAccountActivity.this, context,
-										ListOfAccounts.class);
+										AccountsTab.class);
 								successDialogBox.displayDialogBox();
 							}
 						})

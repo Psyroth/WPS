@@ -105,7 +105,7 @@ public class AddAccountActivity extends Activity {
 					"Success", "Your account has successfuly been modified !",
 					"Ok");
 			successDialogBox.prepareNewIntent(this, AddAccountActivity.this,
-					ListOfAccounts.class);
+					AccountsTab.class);
 			successDialogBox.displayDialogBox();
 		}
 
@@ -119,7 +119,7 @@ public class AddAccountActivity extends Activity {
 					"Success", "Your account has successfuly been saved !",
 					"Ok");
 			successDialogBox.prepareNewIntent(this, AddAccountActivity.this,
-					ListOfAccounts.class);
+					AccountsTab.class);
 			successDialogBox.displayDialogBox();
 
 		} else {

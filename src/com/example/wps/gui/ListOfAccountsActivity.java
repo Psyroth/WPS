@@ -1,10 +1,13 @@
 package com.example.wps.gui;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import com.example.wps.R;
+import com.example.wps.db.Account;
+import com.example.wps.db.AccountDatabase;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,32 +19,49 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.wps.db.Account;
-import com.example.wps.db.AccountDatabase;
-
-public class FrequencyViewActivity extends Activity implements Observer {
-	ArrayList<Account> listOfAcc;
-
+public abstract class ListOfAccountsActivity extends Activity implements Observer {
+	
+	protected ArrayList<Account> listOfAcc;
+	
+	protected abstract ArrayList<Account> getSortedAccounts();
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.account_list_scrollview_layout);
+
 		addAccountsToLinearLayout();
+
 		AccountDatabase.getInstance().addObserver(this);
 	}
+	
+	public void accountsFromCategory(String category) {
+		if (category.equalsIgnoreCase("All")) {
+			listOfAcc = (ArrayList<Account>) AccountDatabase.getInstance()
+					.getAllAccounts();
+		} else if (category.equalsIgnoreCase("Gaming")
+				|| category.equalsIgnoreCase("Internet Sites")
+				|| category.equalsIgnoreCase("Social Network")
+				|| category.equalsIgnoreCase("Work")
+				|| category.equalsIgnoreCase("Other")) {
+			listOfAcc = (ArrayList<Account>) AccountDatabase.getInstance()
+					.getAllAccountsInCategory(category);
+		} else {
+			throw new IllegalArgumentException("Invalid category : " + category);
+		}
+	}
 
-	/*
-	 * Display the accounts in AccountDatabase by LastAccess (last accessed
-	 * accounts being first).
-	 */
 	public void addAccountsToLinearLayout() {
+		Bundle bundle = getIntent().getExtras();
+		String category = bundle.getString("WithCategory");
+
+		// Need “No account in category" message
+		accountsFromCategory(category);
+
+		listOfAcc = getSortedAccounts();
 
 		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutAccountsList);
 		linearLayout.removeAllViews();
-
-		listOfAcc = (ArrayList<Account>) AccountDatabase.getInstance()
-				.getAllAccounts();
-		AccountDatabase.sortAccountListByLastAccess(listOfAcc);
 
 		for (int acc = 0; acc < listOfAcc.size(); acc++) {
 			String userTitle = listOfAcc.get(acc).getName();
@@ -57,13 +77,11 @@ public class FrequencyViewActivity extends Activity implements Observer {
 
 				@Override
 				public void onClick(View v) {
-					
+					System.out.println("Clicked on element : " + v.getId());
 					// Launch viewAccountActivity
 					Intent viewAccountIntent = new Intent(
-							FrequencyViewActivity.this,
-							ViewAccountActivity.class);
+							ListOfAccountsActivity.this, ViewAccountActivity.class);
 
-					// Way to Share data across Activities
 					viewAccountIntent.putExtra("AccountName",
 							listOfAcc.get(v.getId()).getName());
 					viewAccountIntent.putExtra("AccountId",
@@ -88,7 +106,6 @@ public class FrequencyViewActivity extends Activity implements Observer {
 			Drawable drawable = setCategoryIcon(listOfAcc.get(acc)
 					.getCategory(), res);
 
-			// Alternate between White and Grey
 			if (acc % 2 == 0) {
 				tv.setBackgroundColor(Color.WHITE);
 			} else {
@@ -96,6 +113,7 @@ public class FrequencyViewActivity extends Activity implements Observer {
 			}
 			tv.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null,
 					null, null);
+
 			linearLayout.addView(tv);
 		}
 	}
@@ -133,4 +151,5 @@ public class FrequencyViewActivity extends Activity implements Observer {
 	public void update(Observable observable, Object data) {
 		addAccountsToLinearLayout();
 	}
+
 }

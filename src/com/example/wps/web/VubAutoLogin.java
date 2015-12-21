@@ -39,6 +39,7 @@ public class VubAutoLogin extends Thread {
 			String html = getHtml();
 			html = autoCompleteLogin(html);
 			htmlSource.html = html;
+			System.out.println(html);
 			System.out.println("Loading html completed");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -72,8 +73,8 @@ public class VubAutoLogin extends Thread {
 		login.get(0).attr("value", username);
 		Elements pwd = doc.select("#password");
 		pwd.get(0).attr("value", pass);
-		Elements form = doc.select("#fm1");
-		form.get(0).attr("action", "https://cas.vub.ac.be/cas/login?service=https%3A%2F%2Fpointcarre.vub.ac.be%2F");
+		//Elements form = doc.select("#fm1");
+		//form.get(0).attr("action", "https://cas.vub.ac.be/cas/login?service=https%3A%2F%2Fpointcarre.vub.ac.be%2F");
 		
 		html = doc.html();
 		return html;

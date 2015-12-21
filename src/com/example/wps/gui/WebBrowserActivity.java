@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class WebBrowser extends Activity {
+public class WebBrowserActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class WebBrowser extends Activity {
 					htmlSource);
 			vubAutoLogin.start();
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(3000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
