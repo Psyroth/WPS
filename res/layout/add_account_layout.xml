@@ -46,7 +46,8 @@
         android:layout_column="0"
         android:layout_gravity="left"
         android:ems="10"
-        android:hint="azerty" />
+        android:hint="azerty"
+        android:inputType="textPassword" />
 
     <TextView
         android:id="@+id/textView4"
