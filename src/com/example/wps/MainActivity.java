@@ -160,13 +160,6 @@ public class MainActivity extends ActionBarActivity {
 		int id = item.getItemId();
 
 		switch (id) {
-		case R.id.action_settings:
-			// settings();
-			getNfcTag();
-			return true;
-		case R.id.action_passgen:
-			showPassGen();
-			return true;
 		case R.id.action_exit:
 			System.exit(1);
 			return true;

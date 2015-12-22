@@ -105,12 +105,6 @@ public class AccountsTab extends TabActivity {
 		int id = item.getItemId();
 
 		switch (id) {
-		case R.id.action_settings:
-			// settings();
-			return true;
-		case R.id.action_passgen:
-			showPassGen();
-			return true;
 		case R.id.action_exit:
 			System.exit(1);
 			return true;
