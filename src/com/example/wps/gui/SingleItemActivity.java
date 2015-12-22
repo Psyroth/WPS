@@ -8,12 +8,8 @@ import android.widget.TextView;
 
 public class SingleItemActivity extends Activity {
 
-	TextView txtname;
-	TextView txtid;
-	TextView txtpassword;
-	String name;
-	String id;
-	String password;
+	private TextView txtname, txtid, txtpassword;
+	private String name, id, password;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

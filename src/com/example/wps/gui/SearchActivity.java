@@ -18,13 +18,11 @@ import android.widget.ListView;
 
 public class SearchActivity extends Activity implements Observer {
 	
-	ListView list;
-	ListViewAdapter adapter;
-	EditText editsearch;
-	String[] name;
-	String[] id;
-	String[] password;
-	ArrayList<Account> listOfAcc = new ArrayList<Account>();
+	private ListView list;
+	private ListViewAdapter adapter;
+	private EditText editsearch;
+	private String[] name, id, password;
+	private ArrayList<Account> listOfAcc = new ArrayList<Account>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

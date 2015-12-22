@@ -8,14 +8,14 @@ import android.content.DialogInterface;
 
 public class MessageDialogBox {
 
-	Context context;
-	String title;
-	String message;
-	String buttonText;
-	Boolean changeActivity = false;
-	Activity oldActivity;
-	Context packageContext;
-	Class nextClass;
+	private Context context;
+	private String title;
+	private String message;
+	private String buttonText;
+	private Boolean changeActivity = false;
+	private Activity oldActivity;
+	private Context packageContext;
+	private Class nextClass;
 
 	/* MessageDialogBox Constructor */
 	public MessageDialogBox(Context context, String title, String message,

@@ -20,14 +20,11 @@ import com.example.wps.encryption.PasswordGenerator;
 
 public class PasswordGenViewActivity extends Activity {
 
-	EditText mEtPwd;
-	CheckBox mCbShowPwd;
-	CheckBox mCbWithNumbers;
-	CheckBox mCbWithSpecial;
-	CheckBox mCbWithAlphabet;
-	NumberPicker np;
-	PasswordGenerator pwdGen = new PasswordGenerator();
-	final Context context = this;
+	private EditText mEtPwd;
+	private CheckBox mCbShowPwd, mCbWithNumbers, mCbWithSpecial, mCbWithAlphabet;
+	private NumberPicker np;
+	private PasswordGenerator pwdGen = new PasswordGenerator();
+	private final Context context = this;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

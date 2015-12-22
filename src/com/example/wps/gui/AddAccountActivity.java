@@ -21,18 +21,14 @@ import android.widget.Spinner;
 
 public class AddAccountActivity extends Activity {
 
-	EditText mEtName;
-	EditText mEtId;
-	EditText mEtPassword;
-	EditText mEtUrl;
+	private EditText mEtName, mEtId, mEtPassword, mEtUrl, mEtNote;
 	Spinner categorySpinner;
-	EditText mEtNote;
 	CheckBox mCbIsFavorite;
-	final Context context = this;
+	private final Context context = this;
 
 	// For the account modification
-	Bundle bundle;
-	String oldAccountName;
+	private Bundle bundle;
+	private String oldAccountName;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

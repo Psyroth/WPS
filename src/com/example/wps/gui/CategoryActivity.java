@@ -13,11 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class CategoryActivity extends Activity {
-	TextView gamingTv;
-	TextView internetTv;
-	TextView socialTv;
-	TextView workTv;
-	TextView otherTv;
+	private TextView gamingTv, internetTv, socialTv, workTv, otherTv;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

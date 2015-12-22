@@ -18,8 +18,8 @@ import android.view.View.OnClickListener;
 
 public class ListViewAdapter extends BaseAdapter {
 
-	Context mContext;
-	LayoutInflater inflater;
+	private Context mContext;
+	private LayoutInflater inflater;
 	private List<Account> accountList = null;
 	private ArrayList<Account> arraylist;
 

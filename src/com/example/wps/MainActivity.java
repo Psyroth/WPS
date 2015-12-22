@@ -38,7 +38,7 @@ public class MainActivity extends ActionBarActivity {
 	private static String filename = "database.xml";
 	private static String serialNumber = null;
 	private static String nfcTag = null;
-	final Context mainContext = this;
+	private final Context mainContext = this;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

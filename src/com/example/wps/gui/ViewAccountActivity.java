@@ -24,17 +24,12 @@ import android.widget.EditText;
 
 public class ViewAccountActivity extends Activity {
 
-	EditText vEtName;
-	EditText vEtId;
-	EditText vEtPassword;
-	EditText vEtUrl;
-	EditText vEtCategory;
-	EditText vEtNote;
-	CheckBox vCbIsFavorite;
+	private EditText vEtName, vEtId, vEtPassword, vEtUrl, vEtCategory, vEtNote;
+	private CheckBox vCbIsFavorite;
 	final Context context = this;
 
 	// To disable fields to avoid mistyping
-	KeyListener idKeyListener, passwordKeyListener, urlKeyListener,
+	private KeyListener idKeyListener, passwordKeyListener, urlKeyListener,
 			categoryKeyListener, noteKeyListener, favoriteKeyListener;
 
 	@Override
