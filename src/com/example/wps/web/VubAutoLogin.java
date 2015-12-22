@@ -12,13 +12,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import com.example.wps.R;
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-
+/**
+ * Parser for Pointcarre that autofill user and password fields.
+ */
 public class VubAutoLogin extends Thread {
 	
 	protected String url, username, pass;
@@ -73,8 +69,6 @@ public class VubAutoLogin extends Thread {
 		login.get(0).attr("value", username);
 		Elements pwd = doc.select("#password");
 		pwd.get(0).attr("value", pass);
-		//Elements form = doc.select("#fm1");
-		//form.get(0).attr("action", "https://cas.vub.ac.be/cas/login?service=https%3A%2F%2Fpointcarre.vub.ac.be%2F");
 		
 		html = doc.html();
 		return html;

@@ -16,6 +16,9 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.ListView;
 
+/**
+ * Search among accounts.
+ */
 public class SearchActivity extends Activity implements Observer {
 	
 	private ListView list;

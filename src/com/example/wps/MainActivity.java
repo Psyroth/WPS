@@ -1,6 +1,5 @@
 package com.example.wps;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 
 import javax.xml.transform.TransformerFactoryConfigurationError;
@@ -9,26 +8,17 @@ import com.example.wps.db.AccountDatabase;
 import com.example.wps.gui.AccountsTab;
 import com.example.wps.gui.MessageDialogBox;
 import com.example.wps.gui.PasswordGenViewActivity;
-import com.example.wps.gui.ViewAccountActivity;
 import com.example.wps.nfc.NfcReader;
 import com.example.wps.nfc.NfcWriter;
 
 import android.support.v7.app.ActionBarActivity;
-import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
 import android.nfc.Tag;
-import android.nfc.tech.MifareUltralight;
-import android.nfc.tech.Ndef;
-import android.nfc.tech.NfcA;
-import android.nfc.tech.NfcV;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -135,7 +125,6 @@ public class MainActivity extends ActionBarActivity {
 					Toast.LENGTH_LONG).show();
 			startActivity(new Intent(
 					android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-			// TODO dialog box to make sure he wants to go to settings maybe ?
 		}
 	}
 

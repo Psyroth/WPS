@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+/**
+ * Help populating list view.
+ */
 public class ListViewAdapter extends BaseAdapter {
 
 	private Context context;

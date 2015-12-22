@@ -426,10 +426,6 @@ public class AccountDatabase extends Observable {
 		outputStream.close();
 	}
 
-	/* Makes the AccountDatabase inaccessible by nullifying the Document */
-	private void flushDatabase() {
-		document = null;
-	}
 
 	/* Delete the file containing the AccountDatabase */
 	private void deleteDatabase() {

@@ -12,6 +12,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/**
+ * Display accounts by category.
+ */
 public class CategoryActivity extends Activity {
 	private TextView gamingTv, internetTv, socialTv, workTv, otherTv;
 

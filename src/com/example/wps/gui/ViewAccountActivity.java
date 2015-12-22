@@ -7,7 +7,6 @@ import org.joda.time.format.DateTimeFormatter;
 import com.example.wps.R;
 import com.example.wps.db.Account;
 import com.example.wps.db.AccountDatabase;
-import com.example.wps.web.VubAutoLogin;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,6 +21,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+/**
+ * Display a single account with all its attributes.
+ */
 public class ViewAccountActivity extends Activity {
 
 	private EditText vEtName, vEtId, vEtPassword, vEtUrl, vEtCategory, vEtNote;
@@ -184,6 +186,7 @@ public class ViewAccountActivity extends Activity {
 		alertDialog.show();
 	}
 	
+	/* Called when the user wants to show/hide the password */
 	public void togglePassword(View view) {
 		String pass = vEtPassword.getText().toString();
 		Button button = (Button) findViewById(R.id.showPasswordButton);

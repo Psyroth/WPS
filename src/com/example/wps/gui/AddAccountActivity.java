@@ -19,6 +19,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+/**
+ * Form which create an account.
+ */
 public class AddAccountActivity extends Activity {
 
 	private EditText mEtName, mEtId, mEtPassword, mEtUrl, mEtNote;

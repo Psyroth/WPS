@@ -1,8 +1,6 @@
 package com.example.wps.gui;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -11,19 +9,12 @@ import com.example.wps.db.Account;
 import com.example.wps.db.AccountDatabase;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
+/**
+ * Parent class of classes that display accounts in a list style.
+ */
 public abstract class ListOfAccountsActivity extends Activity implements Observer {
 	
 	protected ArrayList<Account> listOfAcc;

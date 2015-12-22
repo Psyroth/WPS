@@ -6,6 +6,9 @@ import java.util.Arrays;
 import android.nfc.Tag;
 import android.nfc.tech.MifareUltralight;
 
+/**
+ * Write a NFC tag in a different thread.
+ */
 public class NfcWriter extends Thread {
 	
 	private Tag tag;
@@ -33,7 +36,6 @@ public class NfcWriter extends Thread {
 			System.out.println("Writing completed");
 			ultralight.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

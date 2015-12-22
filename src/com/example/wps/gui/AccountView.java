@@ -11,6 +11,9 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.TextView;
 
+/**
+ * Graphical representation of an account in a list.
+ */
 public class AccountView extends TextView {
 
 	public AccountView(final Context context, final Account account, final int id) {

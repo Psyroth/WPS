@@ -9,6 +9,9 @@ import org.apache.commons.lang3.ArrayUtils;
 import android.nfc.Tag;
 import android.nfc.tech.MifareUltralight;
 
+/**
+ * Read NFC tag in a different thread.
+ */
 public class NfcReader extends Thread {
 	
 	private Tag tag;
@@ -38,7 +41,6 @@ public class NfcReader extends Thread {
 			System.out.println("Reading completed");
 			ultralight.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

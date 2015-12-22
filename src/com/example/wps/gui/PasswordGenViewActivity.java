@@ -18,6 +18,9 @@ import android.widget.NumberPicker;
 
 import com.example.wps.encryption.PasswordGenerator;
 
+/**
+ * Generate random passwords.
+ */
 public class PasswordGenViewActivity extends Activity {
 
 	private EditText mEtPwd;

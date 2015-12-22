@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.example.wps.encryption;
 
 import java.io.UnsupportedEncodingException;
@@ -15,14 +10,15 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 /**
- *
- * @author Arnaud Rosette <arnaudrosette@gmail.com>
+ * Class providing static methods that help encrypting and decrypting byte streams.
+ * The algorithm used to encrypt is AES. 
  */
 public class Encryption {
 
     private static String algorithm = "AES";
 
 
+    /* Bitwise xor between two byte streams of the same length */
     public static byte[] xor(byte[] array1, byte[] array2) throws Exception {
         if(array1.length != array2.length) {
             throw new Exception("Arrays not with the same length");

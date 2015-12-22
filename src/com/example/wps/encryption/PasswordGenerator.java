@@ -1,7 +1,5 @@
 package com.example.wps.encryption;
 
-import java.util.Scanner;
-
 import org.apache.commons.lang3.RandomStringUtils;
 
 public class PasswordGenerator {
