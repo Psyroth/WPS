@@ -2,6 +2,7 @@ package com.example.wps.gui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -15,22 +16,28 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public abstract class ListOfAccountsActivity extends Activity implements Observer {
 	
 	protected ArrayList<Account> listOfAcc;
+	protected ListView list;
+	protected ListViewAdapter adapter;
 	
 	protected abstract ArrayList<Account> getSortedAccounts();
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.account_list_scrollview_layout);
+		setContentView(R.layout.account_list_view);
 
-		addAccountsToLinearLayout();
+		addAccountsToListView();
 
 		AccountDatabase.getInstance().addObserver(this);
 	}
@@ -51,7 +58,7 @@ public abstract class ListOfAccountsActivity extends Activity implements Observe
 		}
 	}
 
-	public void addAccountsToLinearLayout() {
+	public void addAccountsToListView() {
 		Bundle bundle = getIntent().getExtras();
 		String category = bundle.getString("WithCategory");
 
@@ -60,85 +67,15 @@ public abstract class ListOfAccountsActivity extends Activity implements Observe
 
 		listOfAcc = getSortedAccounts();
 
-		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutAccountsList);
-		linearLayout.removeAllViews();
+		// Locate the ListView in listview_main.xml
+		list = (ListView) findViewById(R.id.accountListView);
 
-		for (int acc = 0; acc < listOfAcc.size(); acc++) {
-			String userTitle = listOfAcc.get(acc).getName();
-			String userID = listOfAcc.get(acc).getId();
-			String userPass = "******";
+		// Pass results to ListViewAdapter Class
+		adapter = new ListViewAdapter(this, listOfAcc);
 
-			TextView tv = new TextView(this);
-			tv.setId(acc);
-			tv.setText(userTitle + "\n" + userID + "\n" + userPass);
-			tv.setClickable(true);
-			tv.setLines(3);
-			tv.setOnClickListener(new View.OnClickListener() {
+		// Binds the Adapter to the ListView
+		list.setAdapter(adapter);
 
-				@Override
-				public void onClick(View v) {
-					System.out.println("Clicked on element : " + v.getId());
-					// Launch viewAccountActivity
-					Intent viewAccountIntent = new Intent(
-							ListOfAccountsActivity.this, ViewAccountActivity.class);
-
-					viewAccountIntent.putExtra("AccountName",
-							listOfAcc.get(v.getId()).getName());
-					viewAccountIntent.putExtra("AccountId",
-							listOfAcc.get(v.getId()).getId());
-					viewAccountIntent.putExtra("AccountPassword", listOfAcc
-							.get(v.getId()).getPassword());
-					viewAccountIntent.putExtra("AccountUrl",
-							listOfAcc.get(v.getId()).getUrl());
-					viewAccountIntent.putExtra("AccountLastAccess", listOfAcc
-							.get(v.getId()).getLastAccess());
-					viewAccountIntent.putExtra("AccountCategory", listOfAcc
-							.get(v.getId()).getCategory());
-					viewAccountIntent.putExtra("AccountNote",
-							listOfAcc.get(v.getId()).getNote());
-					viewAccountIntent.putExtra("AccountIsFavorite", listOfAcc
-							.get(v.getId()).getIsFavorite());
-					startActivity(viewAccountIntent);
-				}
-			});
-
-			Resources res = getResources();
-			Drawable drawable = setCategoryIcon(listOfAcc.get(acc)
-					.getCategory(), res);
-
-			if (acc % 2 == 0) {
-				tv.setBackgroundColor(Color.WHITE);
-			} else {
-				tv.setBackgroundColor(Color.LTGRAY);
-			}
-			tv.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null,
-					null, null);
-
-			linearLayout.addView(tv);
-		}
-	}
-
-	/* Adds the corresponding Icon to each category */
-	public Drawable setCategoryIcon(String category, Resources res) {
-		Drawable drawable = null;
-		switch (category) {
-		case "Gaming":
-			drawable = res.getDrawable(R.drawable.ic_games);
-			break;
-		case "Internet Sites":
-			drawable = res.getDrawable(R.drawable.ic_internet);
-			break;
-		case "Social Network":
-			drawable = res.getDrawable(R.drawable.ic_fb);
-			break;
-		case "Work":
-			drawable = res.getDrawable(R.drawable.ic_work);
-			break;
-		default: // other
-			drawable = res.getDrawable(R.drawable.ic_other);
-			break;
-		}
-		return drawable;
 	}
 
 	@Override
@@ -149,7 +86,7 @@ public abstract class ListOfAccountsActivity extends Activity implements Observe
 
 	@Override
 	public void update(Observable observable, Object data) {
-		addAccountsToLinearLayout();
+		addAccountsToListView();
 	}
 
 }

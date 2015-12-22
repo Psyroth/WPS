@@ -21,13 +21,12 @@ public class SearchActivity extends Activity implements Observer {
 	private ListView list;
 	private ListViewAdapter adapter;
 	private EditText editsearch;
-	private String[] name, id, password;
 	private ArrayList<Account> listOfAcc = new ArrayList<Account>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.listview_main);
+		setContentView(R.layout.search_layout);
 
 		addAccountsOnLayout();
 		AccountDatabase.getInstance().addObserver(this);

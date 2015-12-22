@@ -31,7 +31,6 @@
         <activity android:name=".gui.AddAccountActivity" />
         <activity android:name=".gui.ViewAccountActivity" />
         <activity android:name=".gui.FavoriteActivity" />
-        <activity android:name=".gui.SingleItemView" />
         <activity android:name=".gui.WebBrowserActivity" />
         <activity
             android:name=".MainActivity"

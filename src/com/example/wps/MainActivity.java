@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity {
 		serialNumber = Build.SERIAL;
 
 		// shows initial app window
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.main_layout);
 
 		// Retrieve data from NFC tag
 		getNfcTag();

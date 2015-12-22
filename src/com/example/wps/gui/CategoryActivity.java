@@ -18,9 +18,9 @@ public class CategoryActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.account_list_scrollview_layout);
+		setContentView(R.layout.linear_layout);
 
-		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutAccountsList);
+		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
 
 		Resources res = getResources();
 		Drawable drawable = null;

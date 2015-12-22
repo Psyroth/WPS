@@ -16,7 +16,7 @@ public class AccountsTab extends TabActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.search_or_category_layout);
+		setContentView(R.layout.tab_layout);
 
 		Resources ressources = getResources();
 		TabHost tabHost = getTabHost();
